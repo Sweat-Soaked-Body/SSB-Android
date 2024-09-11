@@ -51,7 +51,7 @@ jobs:
           status: ${{ job.status }}
           image: ${{ secrets.SUCCESS_IMAGE }}
           description: 정답이다, 연금술사!
-          color: 00FF00
+          color: 65280
           url: "https://github.com/sarisia/actions-status-discord"
           username: 땀에 젖은 CI 봇
 
@@ -64,6 +64,6 @@ jobs:
           status: ${{ job.status }}
           image: ${{ secrets.FAILED_IMAGE }}
           description: CI 실패...
-          color: 00FF00
+          color: 16711680
           url: "https://github.com/sarisia/actions-status-discord"
           username: 땀에 젖은 CI 봇
