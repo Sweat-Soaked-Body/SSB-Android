@@ -62,7 +62,7 @@ jobs:
           title: ❗️ SSB-Android-CI 실패! ❗️
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          #image: ${{ secrets.FAILED_IMAGE }}
+          image: ${{ secrets.FAILED_IMAGE }}
           description: CI 실패...
           color: 00FF00
           url: "https://github.com/sarisia/actions-status-discord"
