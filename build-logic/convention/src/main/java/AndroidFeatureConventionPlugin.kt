@@ -11,9 +11,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             // Apply necessary core, Compose, and Hilt plugins for Android
             with(pluginManager) {
-                apply("build.android.core")  // Apply core Android settings from custom plugin
-                apply("build.android.compose")  // Apply Compose settings from custom plugin
-                apply("build.android.hilt")  // Apply Hilt for dependency injection
+                apply("sweat.android.core")  // Apply core Android settings from custom plugin
+                apply("sweat.android.compose")  // Apply Compose settings from custom plugin
+                apply("sweat.android.hilt")  // Apply Hilt for dependency injection
             }
 
             // Add necessary dependencies from Version Catalog
