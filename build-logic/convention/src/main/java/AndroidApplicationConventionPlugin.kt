@@ -14,9 +14,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         with(target) {
             // Apply necessary plugins for Android and Kotlin
             with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
-                // todo : apply("*.android.lint")
+                apply("com.android.application") // Apply Android library plugin
+                apply("org.jetbrains.kotlin.android") // Apply Kotlin Android plugin
+                apply("sweat.android.lint") // Apply custom lint plugin (if available)
             }
 
             // Configure Android application extension settings
