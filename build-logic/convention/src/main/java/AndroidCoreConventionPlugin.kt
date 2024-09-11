@@ -16,7 +16,7 @@ class AndroidCoreConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")  // Apply Android library plugin
                 apply("org.jetbrains.kotlin.android")  // Apply Kotlin Android plugin
-                // todo : apply("*.android.lint")  // Apply custom lint plugin (if available)
+                apply("sweat.android.lint")  // Apply custom lint plugin (if available)
             }
 
             // Configure the Android Library extension
