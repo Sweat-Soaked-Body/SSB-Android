@@ -9,5 +9,5 @@ android {
 }
 
 dependencies {
-    // Add Implementation
+    implementation(libs.coil.kt)
 }
