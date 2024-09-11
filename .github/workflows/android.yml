@@ -38,7 +38,7 @@ jobs:
         run: chmod +x gradlew
 
       #- name: Create LOCAL_PROPERTIES
-      #  run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
+      #   run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
 
       - name: Build with Gradle
         run: ./gradlew build
