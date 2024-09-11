@@ -49,7 +49,7 @@ jobs:
           title: ✅ SSB-Android-CI 성공! ✅
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          #image: ${{ secrets.SUCCESS_IMAGE }}
+          image: ${{ secrets.SUCCESS_IMAGE }}
           description: 정답이다, 연금술사!
           color: 00FF00
           url: "https://github.com/sarisia/actions-status-discord"
