@@ -18,6 +18,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "SSB-Android"
 include(":app")
+
 include(":core")
 include(":core:common")
 include(":core:data")
@@ -27,3 +28,6 @@ include(":core:domain")
 include(":core:model")
 include(":core:network")
 include(":core:ui")
+
+include(":feature")
+include(":feature:splash")
