@@ -11,7 +11,15 @@ android {
 
 dependencies {
     // todo : Add Other Project Implementation -> ex) implementation(project(":core:___")) / (project(":feature:____"))
-    // todo : Add Implementation Library
+
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.retrofit.moshi.converter)
+    implementation(libs.moshi)
+    ksp(libs.retrofit.moshi.codegen)
 }
 
 // todo : Create getApiKey
