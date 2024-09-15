@@ -8,9 +8,5 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LocalDataSourceModule {
-
-    @Binds
-    abstract fun bindAuthTokenDataSource(
-        // todo : Add AuthTokenDataSource Implementation
-    )
+    // todo : Add bindLocalDataSource Elements
 }
