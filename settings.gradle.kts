@@ -31,3 +31,5 @@ include(":core:ui")
 
 include(":feature")
 include(":feature:splash")
+
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
