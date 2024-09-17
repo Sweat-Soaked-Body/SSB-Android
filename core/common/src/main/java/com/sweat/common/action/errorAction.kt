@@ -1,53 +1,53 @@
 package com.sweat.common.action
 
-fun badRequestExceptionAction() {
+internal fun badRequestExceptionAction() {
     println("Handling BadRequest")
 }
 
-fun unauthorizedExceptionAction() {
+internal fun unauthorizedExceptionAction() {
     println("Handling Unauthorized")
 }
 
-fun tokenExpirationExceptionAction() {
+internal fun tokenExpirationExceptionAction() {
     println("Handling TokenExpiration")
 }
 
-fun forbiddenExceptionAction() {
+internal fun forbiddenExceptionAction() {
     println("Handling Forbidden")
 }
 
-fun notFoundExceptionAction() {
+internal fun notFoundExceptionAction() {
     println("Handling NotFound")
 }
 
-fun notAcceptableExceptionAction() {
+internal fun notAcceptableExceptionAction() {
     println("Handling NotAcceptable")
 }
 
-fun timeOutExceptionAction() {
+internal fun timeOutExceptionAction() {
     println("Handling TimeOut")
 }
 
-fun conflictExceptionAction() {
+internal fun conflictExceptionAction() {
     println("Handling Conflict")
 }
 
-fun tooManyRequestExceptionAction() {
+internal fun tooManyRequestExceptionAction() {
     println("Handling TooManyRequest")
 }
 
-fun serverExceptionAction() {
+internal fun serverExceptionAction() {
     println("Handling Server")
 }
 
-fun noInternetExceptionAction() {
+internal fun noInternetExceptionAction() {
     println("Handling NoInternet")
 }
 
-fun otherHttpExceptionAction() {
+internal fun otherHttpExceptionAction() {
     println("Handling OtherHttpException")
 }
 
-fun unKnownExceptionAction() {
+internal fun unKnownExceptionAction() {
     println("Handling UnKnown")
 }
