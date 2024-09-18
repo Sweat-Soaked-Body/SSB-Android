@@ -1,6 +1,5 @@
 package com.sweat.network.util
 
-import android.net.http.NetworkException
 import com.sweat.common.exception.*
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
