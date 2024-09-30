@@ -6,6 +6,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+/**
+* @param S : State
+* @param E : SideEffect
+* @param I : Intent
+*/
 abstract class BaseViewModel<S, E, I>(initalState: S) : ViewModel() {
     private val _state: MutableStateFlow<S> = MutableStateFlow(initalState)
     val state = _state.asStateFlow()
