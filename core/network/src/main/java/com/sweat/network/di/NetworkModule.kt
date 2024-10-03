@@ -1,6 +1,8 @@
 package com.sweat.network.di
 
+import android.content.Context
 import android.util.Log
+import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sweat.network.util.AuthInterceptor
@@ -8,6 +10,7 @@ import com.sweat.network.util.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.CookieJar
 import okhttp3.OkHttpClient
@@ -28,6 +31,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        @ApplicationContext context: Context,
         httpLoggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         tokenAuthenticator: TokenAuthenticator
@@ -40,6 +44,12 @@ object NetworkModule {
             .addInterceptor(httpLoggingInterceptor)
             .authenticator(tokenAuthenticator)
             .addInterceptor(authInterceptor)
+            .addInterceptor(
+                ChuckInterceptor(context)
+                    .showNotification(true)
+                    .maxContentLength(250)
+                    .retainDataFor(ChuckInterceptor.Period.ONE_HOUR)
+            )
             .build()
     }
 
