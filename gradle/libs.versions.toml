@@ -63,6 +63,7 @@ room = "2.6.1"
 swiperefresh = "0.27.0"
 turbine = "1.0.0"
 zxing = "3.5.1"
+chuck = "1.1.0"
 
 
 [libraries]
@@ -145,6 +146,8 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swiperefresh" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
+debug-chuck = { group = "com.readystatesoftware.chuck", name = "library", version.ref = "chuck" }
+release-chuck = { group = "com.readystatesoftware.chuck", name = "library-no-op", version.ref = "chuck" }
 
 #Define Dependeicies used in build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
