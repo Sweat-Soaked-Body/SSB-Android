@@ -24,16 +24,6 @@ fun AddFriendIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun CameraImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.camera),
-        contentDescription = "",
-        modifier = modifier
-    )
-}
-
-@Stable
-@Composable
 fun CheckIcon(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.check),
@@ -154,11 +144,47 @@ fun PhotoImage(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
+fun CameraImage(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.camera),
+        contentDescription = "",
+        modifier = modifier
+    )
+}
+
+@Stable
+@Composable
 fun ProfileSquareImage(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.profile_square),
         contentDescription = "",
         modifier = modifier
+    )
+}
+
+@Composable
+fun ManImage(
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false
+) {
+    Image(
+        painter = if (isSelected) painterResource(id = R.drawable.man_face_selected)
+        else painterResource(id = R.drawable.man_face),
+        contentDescription = "",
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun WomanImage(
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false
+) {
+    Image(
+        painter = if (isSelected) painterResource(id = R.drawable.woman_face_selected)
+        else painterResource(id = R.drawable.woman_face),
+        contentDescription = "",
+        modifier = modifier,
     )
 }
 
@@ -243,7 +269,7 @@ fun HomeIcon(
 ) {
     Icon(
         painter = painterResource(id = R.drawable.home),
-        contentDescription = "Show Profile Icon",
+        contentDescription = "",
         modifier = modifier.size(24.dp),
         tint = if (isSelected) SSBColor.main else Color.Unspecified
     )
@@ -251,7 +277,7 @@ fun HomeIcon(
 
 @Stable
 @Composable
-fun DumbbellImage(
+fun DumbbellIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false
 ) {
@@ -271,7 +297,7 @@ fun EyeIcon(
     Image(
         painter = if (isSelected) painterResource(id = R.drawable.eye_open)
         else painterResource(id = R.drawable.eye_close),
-        contentDescription = "Show Profile Icon",
+        contentDescription = "",
         modifier = modifier.size(24.dp),
     )
 }
@@ -284,33 +310,7 @@ fun HeartIcon(
     Image(
         painter = if (isSelected) painterResource(id = R.drawable.red_heart)
         else painterResource(id = R.drawable.outlined_heart),
-        contentDescription = "Show Profile Icon",
-        modifier = modifier.size(24.dp),
-    )
-}
-
-@Composable
-fun ManImage(
-    modifier: Modifier = Modifier,
-    isSelected: Boolean = false
-) {
-    Image(
-        painter = if (isSelected) painterResource(id = R.drawable.man_face_selected)
-        else painterResource(id = R.drawable.man_face),
-        contentDescription = "Show Profile Icon",
-        modifier = modifier.size(24.dp),
-    )
-}
-
-@Composable
-fun WomanImage(
-    modifier: Modifier = Modifier,
-    isSelected: Boolean = false
-) {
-    Image(
-        painter = if (isSelected) painterResource(id = R.drawable.woman_face_selected)
-        else painterResource(id = R.drawable.woman_face),
-        contentDescription = "Show Profile Icon",
+        contentDescription = "",
         modifier = modifier.size(24.dp),
     )
 }
