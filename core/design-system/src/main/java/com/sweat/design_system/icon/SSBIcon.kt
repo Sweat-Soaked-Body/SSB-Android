@@ -206,7 +206,7 @@ fun SwapIcon(modifier: Modifier = Modifier) {
 @Composable
 fun TrashIcon(modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.thrash),
+        painter = painterResource(id = R.drawable.trash),
         contentDescription = "",
         modifier = modifier
     )
