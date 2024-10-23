@@ -11,10 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sweat.ssb_android.navigation.TopLevelDestination
 
 @Composable
-fun SSBApp(
-    windowSizeClass: WindowSizeClass,
-    appState: SSBAppState = rememberSSBAppState(windowSizeClass = windowSizeClass)
-) {
+fun SSBApp(appState: SSBAppState) {
     val isBottomBarVisible = remember { mutableStateOf(true) }
     val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
     val topLevelDestinationRoute = arrayOf(
