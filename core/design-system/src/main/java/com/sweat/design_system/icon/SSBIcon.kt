@@ -104,16 +104,6 @@ fun HomeIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ImageImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.image),
-        contentDescription = "",
-        modifier = modifier
-    )
-}
-
-@Stable
-@Composable
 fun OutIcon(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.out),
@@ -147,6 +137,16 @@ fun SkipImage(modifier: Modifier = Modifier) {
 fun StopImage(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.stop),
+        contentDescription = "",
+        modifier = modifier
+    )
+}
+
+@Stable
+@Composable
+fun PhotoImage(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.photo),
         contentDescription = "",
         modifier = modifier
     )
