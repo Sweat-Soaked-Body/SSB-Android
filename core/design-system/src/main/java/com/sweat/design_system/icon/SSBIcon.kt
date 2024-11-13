@@ -191,7 +191,7 @@ fun WomanImage(
 @Stable
 @Composable
 fun PencilIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.pencil),
         contentDescription = "",
         modifier = modifier
@@ -201,7 +201,7 @@ fun PencilIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun SearchIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.search),
         contentDescription = "",
         modifier = modifier
@@ -211,7 +211,7 @@ fun SearchIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun SettingIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.settings),
         contentDescription = "",
         modifier = modifier
@@ -221,7 +221,7 @@ fun SettingIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun SwapIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.swap),
         contentDescription = "",
         modifier = modifier
@@ -231,7 +231,7 @@ fun SwapIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun TrashIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.trash),
         contentDescription = "",
         modifier = modifier
@@ -241,7 +241,7 @@ fun TrashIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun ThunderIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.thunder),
         contentDescription = "",
         modifier = modifier
@@ -294,7 +294,7 @@ fun EyeIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false
 ) {
-    Image(
+    Icon(
         painter = if (isSelected) painterResource(id = R.drawable.eye_open)
         else painterResource(id = R.drawable.eye_close),
         contentDescription = "",
@@ -307,7 +307,7 @@ fun HeartIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false
 ) {
-    Image(
+    Icon(
         painter = if (isSelected) painterResource(id = R.drawable.red_heart)
         else painterResource(id = R.drawable.outlined_heart),
         contentDescription = "",
