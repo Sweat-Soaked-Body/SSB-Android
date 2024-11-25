@@ -62,7 +62,8 @@ fun SigninScreen(
         ) {
             if(it != 8) {
                 ChevronLeftIcon(modifier = modifier.clickableSingle {
-                    if (pagerState.currentPage == 0) {/*TODO*/
+                    if (pagerState.currentPage == 0) {
+                    /*TODO*/
                     } else coroutine.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
