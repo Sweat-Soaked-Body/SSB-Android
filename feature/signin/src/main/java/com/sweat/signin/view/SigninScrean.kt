@@ -51,7 +51,7 @@ fun SigninScreen(
     val pagerState = rememberPagerState { 9 }
 
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         state = pagerState,
         userScrollEnabled = false,
     ) {
@@ -84,9 +84,9 @@ fun SigninScreen(
                         textState = nameTextState,
                         onTextChange = onNameTextChange
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (nameTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -112,9 +112,9 @@ fun SigninScreen(
                         onTextChange = onIdTextChange,
                         helperText = "한글, 영어, 숫자 4~12자"
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (idTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -140,9 +140,9 @@ fun SigninScreen(
                         onTextChange = onPassWordTextChange,
                         helperText = "영어, 숫자, 특수문자 1개 이상 8~24자"
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -169,9 +169,9 @@ fun SigninScreen(
                         helperText = if(checkPassWord) "영어, 숫자, 특수문자 1개 이상 8~24자" else "일치하지 않은 비밀번호예요",
                         isError = !checkPassWord
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (checkPassWordTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -210,7 +210,7 @@ fun SigninScreen(
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         Text(
-                            modifier = Modifier
+                            modifier = modifier
                                 .clickableSingle {
                                     onGenderSelected("남자")
                                 },
@@ -218,9 +218,9 @@ fun SigninScreen(
                             style = SSBTypography.titleMedium,
                             color = if (selectedGender == "남자") SSBColor.success else SSBColor.gray400
                         )
-                        Spacer(modifier = Modifier.width(90.dp))
+                        Spacer(modifier = modifier.width(90.dp))
                         Text(
-                            modifier = Modifier
+                            modifier = modifier
                                 .clickableSingle {
                                     onGenderSelected("여자")
                                 },
@@ -244,9 +244,9 @@ fun SigninScreen(
                         textState = ageState,
                         onTextChange = onAgeChange,
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -271,9 +271,9 @@ fun SigninScreen(
                         textState = heightState,
                         onTextChange = onHeightChange,
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -298,9 +298,9 @@ fun SigninScreen(
                         textState = weightState,
                         onTextChange = onWeightIChange,
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = modifier.weight(1f))
                     SSBButton(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         text = "다음",
                         state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
                         else ButtonState.Disable,
@@ -320,9 +320,9 @@ fun SigninScreen(
                             text = "오은찬 님\n이제 같이 땀흘리러 가시죠! ",
                             style = SSBTypography.titleSmall
                         )
-                        Spacer(modifier = Modifier.weight(1f))
+                        Spacer(modifier = modifier.weight(1f))
                         SSBButton(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = modifier.fillMaxWidth(),
                             text = "시작하기",
                             state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
                             else ButtonState.Disable,
