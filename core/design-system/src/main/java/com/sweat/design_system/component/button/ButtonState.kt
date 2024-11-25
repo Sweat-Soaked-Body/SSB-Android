@@ -1,8 +1,6 @@
 package com.sweat.design_system.component.button
 
-sealed class ButtonState {
-    object Enable: ButtonState()
-
-    object Disable: ButtonState()
-
+enum class ButtonState(val isEnabled: Boolean) {
+    Enabled(true),
+    Disabled(false)
 }

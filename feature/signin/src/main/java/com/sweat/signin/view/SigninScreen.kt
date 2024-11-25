@@ -30,7 +30,6 @@ import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.signin.view.component.SigninTextField
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -88,8 +87,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (nameTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (nameTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(1)
@@ -116,8 +115,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (idTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (idTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(2)
@@ -144,8 +143,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(3)
@@ -173,8 +172,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (checkPassWordTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (checkPassWordTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 if (checkPassWordTextState == passWordTextState) {
@@ -248,8 +247,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(6)
@@ -275,8 +274,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(7)
@@ -302,8 +301,8 @@ fun SigninScreen(
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
-                        else ButtonState.Disable,
+                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
                                 pagerState.animateScrollToPage(8)
@@ -324,8 +323,8 @@ fun SigninScreen(
                         SSBButton(
                             modifier = modifier.fillMaxWidth(),
                             text = "시작하기",
-                            state = if (passWordTextState.isNotEmpty()) ButtonState.Enable
-                            else ButtonState.Disable,
+                            state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                            else ButtonState.Disabled,
                             onClick = { /*TODO*/ }
                         )
                     }

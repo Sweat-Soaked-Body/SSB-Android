@@ -22,24 +22,17 @@ import com.sweat.design_system.theme.color.SSBColor
 
 @Composable
 fun SSBButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     text: String,
-    state: ButtonState = ButtonState.Enable,
+    state: ButtonState = ButtonState.Enabled,
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    val enabledState: (buttonState: ButtonState) -> Boolean = {
-        when (it) {
-            ButtonState.Enable -> true
-            ButtonState.Disable -> false
-        }
-    }
-
     Button(
         modifier = modifier,
         interactionSource = interactionSource,
-        enabled = enabledState(state),
+        enabled = state.isEnabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = SSBColor.main,
             contentColor = Color.White,
@@ -71,7 +64,7 @@ fun SSBButtonPreview() {
         SSBButton(
             text = "버튼",
             modifier = Modifier.fillMaxWidth(),
-            state = ButtonState.Disable
+            state = ButtonState.Disabled
         ) {}
 
     }
