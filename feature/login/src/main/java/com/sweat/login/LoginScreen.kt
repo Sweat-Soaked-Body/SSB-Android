@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +49,7 @@ fun LoginScreen(
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = modifier.height(55.dp))
+        Spacer(modifier = Modifier.height(55.dp))
 
         Text(
             text = "Sweet-soaked-body",
@@ -63,7 +64,7 @@ fun LoginScreen(
             color = SSBColor.gray600
         )
 
-        Spacer(modifier = modifier.height(34.dp))
+        Spacer(modifier = Modifier.height(34.dp))
 
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             SSBTextField(
@@ -89,16 +90,16 @@ fun LoginScreen(
             )
         }
 
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1f))
 
         SSBButton(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             text = "다음",
             state = if (idTextState.isEmpty() || passwordTextState.isEmpty()) ButtonState.Enabled else ButtonState.Disabled,
             onClick = { /*TODO*/ }
         )
 
-        Spacer(modifier = modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Text(
             text = "아직 계정이 없으신가요?",
@@ -107,13 +108,13 @@ fun LoginScreen(
         )
 
         Text(
-            modifier = modifier.clickableSingle { /*TODO*/ },
+            modifier = Modifier.clickableSingle { /*TODO*/ },
             text = "회원가입",
             style = SSBTypography.regularTextSM,
             color = SSBColor.main
         )
         
-        Spacer(modifier = modifier.height(38.dp))
+        Spacer(modifier = Modifier.height(38.dp))
     }
 }
 
