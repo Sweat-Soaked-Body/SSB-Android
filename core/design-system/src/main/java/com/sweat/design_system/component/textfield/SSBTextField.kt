@@ -37,9 +37,7 @@ fun SSBTextField(
     onTextChange: (String) -> Unit,
     icon: @Composable () -> Unit
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
             color = if (isError) SSBColor.error else Color.Black,
@@ -47,7 +45,7 @@ fun SSBTextField(
         )
 
         BasicTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .border(
                     width = 1.dp,
@@ -62,7 +60,7 @@ fun SSBTextField(
             textStyle = SSBTypography.bodySmall.copy(color = Color.Black),
             decorationBox = { innerTextField ->
                 Row(
-                    modifier = modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
