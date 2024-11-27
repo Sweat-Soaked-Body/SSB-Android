@@ -101,4 +101,22 @@ object SSBTypography {
         fontSize = 8.sp,
         lineHeight = 12.sp
     )
+
+    //RegularCaption
+    @Stable
+    val regularCaption = TextStyle(
+        fontFamily = pretendard,
+        fontWeight = FontWeight(400),
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    )
+
+    //RegularTextSM
+    @Stable
+    val regularTextSM = TextStyle(
+        fontFamily = pretendard,
+        fontWeight = FontWeight(400),
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    )
 }
