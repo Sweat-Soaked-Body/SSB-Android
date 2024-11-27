@@ -8,8 +8,8 @@ abstract class ColorTheme {
     abstract val main: Color
 
     // System ColorTheme
-    abstract val error: Color
-    abstract val success: Color
+    abstract val red: Color
+    abstract val blue: Color
 
     // Gray ColorTheme
     abstract val gray800: Color

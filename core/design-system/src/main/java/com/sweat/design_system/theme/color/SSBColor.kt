@@ -8,8 +8,8 @@ object SSBColor : ColorTheme() {
     override val main = Color(0xFFFFA500)
 
     // System Color
-    override val error = Color(0xFFDF454A)
-    override val success = Color(0xFF2756F1)
+    override val red = Color(0xFFDF454A)
+    override val blue = Color(0xFF2756F1)
 
     // Gray Color
     override val gray800 = Color(0xFF3C3C3E)
