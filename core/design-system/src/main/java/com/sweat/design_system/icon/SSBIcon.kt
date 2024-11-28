@@ -292,12 +292,13 @@ fun DumbbellIcon(
 @Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
 ) {
     Icon(
         painter = if (isSelected) painterResource(id = R.drawable.eye_open)
         else painterResource(id = R.drawable.eye_close),
         contentDescription = "",
+        tint = SSBColor.gray400,
         modifier = modifier.size(24.dp),
     )
 }
