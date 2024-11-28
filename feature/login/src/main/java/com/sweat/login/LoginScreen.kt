@@ -90,7 +90,7 @@ fun LoginScreen(
             SSBButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = "다음",
-                state = if (idTextState.isEmpty() || passwordTextState.isEmpty()) ButtonState.Enabled else ButtonState.Disabled,
+                state = if (idTextState.isNotEmpty() && passwordTextState.isNotEmpty()) ButtonState.Enabled else ButtonState.Disabled,
                 onClick = { /*TODO*/ }
             )
 
