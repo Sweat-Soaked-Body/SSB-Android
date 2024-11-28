@@ -22,8 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.EyeIcon
-import com.sweat.design_system.theme.SSBTypography
-import com.sweat.design_system.theme.color.SSBColor
+import com.sweat.design_system.theme.SSBAndroidTheme
 
 @Composable
 fun SSBTextField(
@@ -37,54 +36,56 @@ fun SSBTextField(
     onTextChange: (String) -> Unit,
     icon: @Composable () -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = label,
-            color = if (isError) SSBColor.error else Color.Black,
-            style = SSBTypography.bodySmall
-        )
+    SSBAndroidTheme { colors, typography ->
+        Column(modifier = modifier.fillMaxWidth()) {
+            Text(
+                text = label,
+                color = if (isError) colors.error else Color.Black,
+                style = typography.bodySmall
+            )
 
-        BasicTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = if (isError) SSBColor.error else SSBColor.gray100,
-                    shape = RoundedCornerShape(size = 8.dp)
-                )
-                .padding(vertical = 14.dp, horizontal = 16.dp),
-            value = textState,
-            onValueChange = { newText -> onTextChange(newText) },
-            visualTransformation = visualTransformation,
-            singleLine = true,
-            textStyle = SSBTypography.bodySmall.copy(color = Color.Black),
-            decorationBox = { innerTextField ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        if (textState.isEmpty()) {
-                            Text(
-                                text = placeHolder,
-                                color = SSBColor.gray400,
-                                style = SSBTypography.bodySmall
-                            )
+            BasicTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = if (isError) colors.error else colors.gray100,
+                        shape = RoundedCornerShape(size = 8.dp)
+                    )
+                    .padding(vertical = 14.dp, horizontal = 16.dp),
+                value = textState,
+                onValueChange = { newText -> onTextChange(newText) },
+                visualTransformation = visualTransformation,
+                singleLine = true,
+                textStyle = typography.bodySmall.copy(color = Color.Black),
+                decorationBox = { innerTextField ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            if (textState.isEmpty()) {
+                                Text(
+                                    text = placeHolder,
+                                    color = colors.gray400,
+                                    style = typography.bodySmall
+                                )
+                            }
+                            innerTextField()
                         }
-                        innerTextField()
+
+                        icon()
                     }
-
-                    icon()
                 }
-            }
-        )
+            )
 
-        Text(
-            text = helperText,
-            color = SSBColor.error,
-            style = SSBTypography.label
-        )
+            Text(
+                text = helperText,
+                color = colors.error,
+                style = typography.label
+            )
+        }
     }
 }
 
