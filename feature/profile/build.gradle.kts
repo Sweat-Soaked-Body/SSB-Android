@@ -6,3 +6,6 @@ plugins {
 android {
     namespace = "com.meister.profile"
 }
+dependencies {
+    implementation(project(":core:common"))
+}
