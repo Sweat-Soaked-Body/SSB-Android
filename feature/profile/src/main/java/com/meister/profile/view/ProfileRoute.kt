@@ -49,3 +49,26 @@ fun ProfileScreen(
 ) {
 
 }
+
+@Composable
+fun ProfileTopAppBar(
+    modifier: Modifier = Modifier,
+    startText: String,
+    endIcon: @Composable () -> Unit
+) {
+    Row(
+        modifier = modifier.padding(
+            vertical = 13.dp,
+            horizontal = 24.dp
+        ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = startText,
+            style = SSBTypography.titleSmall,
+            fontWeight = FontWeight(600),
+            color = Color(0xFF000000),
+        )
+        endIcon()
+    }
+}
