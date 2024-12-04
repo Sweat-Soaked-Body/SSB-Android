@@ -48,6 +48,15 @@ fun ProfileScreen(
     handleIntent: KFunction1<ProfileIntent, Unit>
 ) {
 
+@DevicePreviews
+@Composable
+fun ProfileScreenPreview() {
+    ProfileScreen(
+        state = ProfileScreenState.getInitialState(),
+        handleIntent = { _ -> },
+    )
+}
+
 @Composable
 fun getProfileImage(base64Image: String): Painter {
     return if (base64Image.isEmpty()) {
