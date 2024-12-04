@@ -70,6 +70,8 @@ data class ChatListItemState(
     val name: String,
     val message: String,
     val date: String,
+    val image: String,
+    val isReadMessage: Boolean,
 )
 
 sealed class ProfileScreenSideEffect {
