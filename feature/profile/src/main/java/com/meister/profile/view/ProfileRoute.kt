@@ -48,6 +48,15 @@ fun ProfileScreen(
     handleIntent: KFunction1<ProfileIntent, Unit>
 ) {
 
+@Composable
+fun getProfileImage(base64Image: String): Painter {
+    return if (base64Image.isEmpty()) {
+        painterResource(com.sweat.design_system.R.drawable.profile_square)
+    } else {
+        decodeBase64Image(base64Image)?.asImageBitmap()?.let {
+            BitmapPainter(it)
+        } ?: painterResource(com.sweat.design_system.R.drawable.profile_square)
+    }
 }
 
 @Composable
