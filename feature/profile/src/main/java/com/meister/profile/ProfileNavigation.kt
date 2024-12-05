@@ -12,8 +12,20 @@ fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
     this.navigate(ProfileRoute, navOptions)
 }
 
-fun NavGraphBuilder.profileRoute() {
+fun NavGraphBuilder.profileRoute(
+    navigateToAddFriendWithQR: () -> Unit,
+    navigateToAddFriendWithNFC: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToMyQR: () -> Unit,
+    navigateToChat: (String) -> Unit,
+) {
     composable(ProfileRoute) {
-        ProfileRoute()
+        ProfileRoute(
+            navigateToAddFriendWithQR = navigateToAddFriendWithQR,
+            navigateToAddFriendWithNFC = navigateToAddFriendWithNFC,
+            navigateToLogin = navigateToLogin,
+            navigateToMyQR = navigateToMyQR,
+            navigateToChat = navigateToChat,
+        )
     }
 }
