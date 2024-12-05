@@ -267,3 +267,79 @@ fun ChatListItem(
         }
     }
 }
+
+@Composable
+fun ProfileActionItem(
+    icon: @Composable () -> Unit,
+    title: String,
+    textColor: Color,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        icon()
+        Text(
+            text = title,
+            style = SSBTypography.bodySmall,
+            fontWeight = FontWeight(400),
+            color = textColor
+        )
+    }
+}
+
+@Composable
+fun AddFriendBottomSheet(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(31.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 40.dp)
+    ) {
+        ProfileActionItem(
+            icon = { PencilIcon() },
+            title = "프로필 수정",
+            textColor = SSBColor.gray600
+        )
+        ProfileActionItem(
+            icon = { OutIcon() },
+            title = "로그 아웃",
+            textColor = SSBColor.gray600
+        )
+        ProfileActionItem(
+            icon = { TrashIcon() },
+            title = "프로필 삭제",
+            textColor = SSBColor.error
+        )
+    }
+}
+
+@Composable
+fun SettingsBottomSheet(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(31.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 40.dp)
+    ) {
+        ProfileActionItem(
+            icon = { OutIcon() }, // TODO: 아이콘 변경
+            title = "내 QR코드 보기",
+            textColor = SSBColor.gray600
+        )
+        ProfileActionItem(
+            icon = { OutIcon() },// TODO: 아이콘 변경
+            title = "QR 코드로 친구 추가",
+            textColor = SSBColor.gray600
+        )
+        ProfileActionItem(
+            icon = { TrashIcon() },// TODO: 아이콘 변경
+            title = "NFC로 친구 추가",
+            textColor = SSBColor.gray600
+        )
+    }
+}
