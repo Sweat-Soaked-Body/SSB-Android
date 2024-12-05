@@ -17,5 +17,6 @@ fun SSBNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+        profileRoute()
     }
 }
