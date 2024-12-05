@@ -17,6 +17,12 @@ fun SSBNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        profileRoute()
+        profileRoute(
+            navigateToAddFriendWithQR = {},
+            navigateToChat = {},
+            navigateToLogin = {},
+            navigateToMyQR = {},
+            navigateToAddFriendWithNFC = {},
+        )
     }
 }
