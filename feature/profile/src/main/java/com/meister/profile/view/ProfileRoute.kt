@@ -59,23 +59,26 @@ fun ProfileRoute(
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
+    val bottomSheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
-                ProfileScreenSideEffect.LaunchAddFriendBottomSheet -> TODO()
                 is ProfileScreenSideEffect.LaunchImagePicker -> TODO()
-                ProfileScreenSideEffect.LaunchSettingBottomSheet -> TODO()
-                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> TODO()
-                ProfileScreenSideEffect.NavigateToAddFriendWithQR -> TODO()
-                is ProfileScreenSideEffect.NavigateToChat -> TODO()
-                ProfileScreenSideEffect.NavigateToLogin -> TODO()
-                ProfileScreenSideEffect.NavigateToMyQR -> TODO()
                 ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
                 ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
                 ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
                 is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                 ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
                 ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
+                ProfileScreenSideEffect.HideBottomSheet -> {
+                    coroutineScope.launch { bottomSheetState.hide() }
+                }
+
+                ProfileScreenSideEffect.ShowBottomSheet -> {
+                    coroutineScope.launch { bottomSheetState.expand() }
+                }
             }
         }
     }
