@@ -48,10 +48,16 @@ import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.ui.DevicePreviews
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
+    navigateToAddFriendWithQR: () -> Unit,
+    navigateToAddFriendWithNFC: () -> Unit,
+    navigateToLogin: () -> Unit,
+    navigateToMyQR: () -> Unit,
+    navigateToChat: (String) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
@@ -65,6 +71,11 @@ fun ProfileRoute(
                 ProfileScreenSideEffect.NavigateToLogin -> TODO()
                 ProfileScreenSideEffect.NavigateToMyQR -> TODO()
                 ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
+                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
+                ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
+                is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
+                ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
+                ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
             }
         }
     }
