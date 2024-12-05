@@ -18,8 +18,8 @@ abstract class BaseViewModel<S, E, I>(initialState: S) : ViewModel() {
     private val _sideEffect: MutableSharedFlow<E> = MutableSharedFlow()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    protected fun setState(newState: () -> S) {
-        _state.update { newState() }
+    protected fun setState(update: S.() -> S) {
+        _state.update { it.update() }
     }
 
     protected fun postSideEffect(sideEffect: E) {
