@@ -16,15 +16,15 @@ class ProfileViewModel @Inject constructor(
             ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
             ProfileIntent.AddProfilePicture -> postSideEffect(ProfileScreenSideEffect.LaunchImagePicker(200))
-            ProfileIntent.StartEditProfile -> { setState { state.value.copy(isProfileEditing = true) } }
+            ProfileIntent.StartEditProfile -> { setState { copy(isProfileEditing = true) } }
             ProfileIntent.EndEditProfile -> postProfileEdit()
             ProfileIntent.Logout -> logout()
             ProfileIntent.Secession -> postSideEffect(ProfileScreenSideEffect.ShowSecessionPopup)
             ProfileIntent.Setting -> postSideEffect(ProfileScreenSideEffect.LaunchSettingBottomSheet)
             ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR)
             is ProfileIntent.StartChat -> postSideEffect(ProfileScreenSideEffect.NavigateToChat(id = intent.id))
-            is ProfileIntent.SetMyIntro -> setState { state.value.copy(myIntro = intent.state) }
-            is ProfileIntent.SetProfileImage -> setState { state.value.copy(image = intent.image) }
+            is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
+            is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
         }
     }
 
