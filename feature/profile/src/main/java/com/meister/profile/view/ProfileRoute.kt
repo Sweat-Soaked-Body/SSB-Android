@@ -82,20 +82,37 @@ fun ProfileRoute(
             }
         }
     }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ProfileScreen(
         modifier = modifier,
+        bottomSheetState = bottomSheetState,
         state = state,
-        handleIntent = viewModel::handleIntent
+        handleIntent = viewModel::handleIntent,
+        bottomSheetContent = {
+            when (state.currentBottomSheetType) {
+                BottomSheetType.None -> {}
+                BottomSheetType.AddFriend -> {
+                    AddFriendBottomSheet()
+                }
+
+                BottomSheetType.Settings -> {
+                    SettingsBottomSheet()
+                }
+            }
+        }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    bottomSheetState: SheetState,
     state: ProfileScreenState,
     handleIntent: (ProfileIntent) -> Unit,
+    bottomSheetContent: @Composable () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -187,16 +204,28 @@ fun ProfileScreen(
                     ChatListItem(state = state)
                 }
             }
+
+            ModalBottomSheet(
+                sheetState = bottomSheetState,
+                onDismissRequest = {
+                    handleIntent(ProfileIntent.HideBottomSheet)
+                },
+            ) {
+                bottomSheetContent()
+            }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @DevicePreviews
 @Composable
 fun ProfileScreenPreview() {
     ProfileScreen(
         state = ProfileScreenState.getInitialState(),
         handleIntent = { _ -> },
+        bottomSheetState = rememberModalBottomSheetState(),
+        bottomSheetContent = {},
     )
 }
 
