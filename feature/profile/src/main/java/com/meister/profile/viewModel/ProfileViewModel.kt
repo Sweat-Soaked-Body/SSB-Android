@@ -12,7 +12,6 @@ class ProfileViewModel @Inject constructor(
 ) : BaseViewModel<ProfileScreenState, ProfileScreenSideEffect, ProfileIntent>(ProfileScreenState.getInitialState()) {
     override fun handleIntent(intent: ProfileIntent) {
         when (intent) {
-            ProfileIntent.AddFriend -> postSideEffect(ProfileScreenSideEffect.LaunchAddFriendBottomSheet)
             ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
             ProfileIntent.AddProfilePicture -> postSideEffect(ProfileScreenSideEffect.LaunchImagePicker(200))
@@ -20,8 +19,16 @@ class ProfileViewModel @Inject constructor(
             ProfileIntent.EndEditProfile -> postProfileEdit()
             ProfileIntent.Logout -> logout()
             ProfileIntent.Secession -> postSideEffect(ProfileScreenSideEffect.ShowSecessionPopup)
-            ProfileIntent.Setting -> postSideEffect(ProfileScreenSideEffect.LaunchSettingBottomSheet)
             ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR)
+            ProfileIntent.HideBottomSheet -> postSideEffect(ProfileScreenSideEffect.HideBottomSheet)
+            ProfileIntent.Setting -> {
+                setState { copy(currentBottomSheetType = BottomSheetType.Settings) }
+                postSideEffect(ProfileScreenSideEffect.ShowBottomSheet)
+            }
+            ProfileIntent.AddFriend -> {
+                setState { copy(currentBottomSheetType = BottomSheetType.AddFriend) }
+                postSideEffect(ProfileScreenSideEffect.ShowBottomSheet)
+            }
             is ProfileIntent.StartChat -> postSideEffect(ProfileScreenSideEffect.NavigateToChat(id = intent.id))
             is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
             is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
@@ -38,7 +45,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun postProfileEdit() {
         // TODO: 통신이 성공하면 실행시키도록 변경
-        setState { state.value.copy(isProfileEditing = false) }
+        setState { copy(isProfileEditing = false) }
     }
 
     private fun logout() {
@@ -52,6 +59,7 @@ data class ProfileScreenState(
     val myIntro: String,
     val image: String,
     val isProfileEditing: Boolean,
+    val currentBottomSheetType: BottomSheetType,
     val chatList: ImmutableList<ChatListItemState>,
 ) {
     companion object {
@@ -61,6 +69,7 @@ data class ProfileScreenState(
             myIntro = "",
             image = "",
             isProfileEditing = false,
+            currentBottomSheetType = BottomSheetType.None,
             chatList = persistentListOf(),
         )
     }
@@ -74,11 +83,17 @@ data class ChatListItemState(
     val isReadMessage: Boolean,
 )
 
+enum class BottomSheetType {
+    None,
+    AddFriend,
+    Settings
+}
+
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
-    object LaunchAddFriendBottomSheet : ProfileScreenSideEffect()
-    object LaunchSettingBottomSheet : ProfileScreenSideEffect()
+    object ShowBottomSheet : ProfileScreenSideEffect()
+    object HideBottomSheet : ProfileScreenSideEffect()
     object NavigateToLogin : ProfileScreenSideEffect()
     object NavigateToMyQR : ProfileScreenSideEffect()
     object NavigateToAddFriendWithQR : ProfileScreenSideEffect()
@@ -89,6 +104,7 @@ sealed class ProfileScreenSideEffect {
 
 sealed class ProfileIntent {
     object Setting : ProfileIntent()
+    object HideBottomSheet : ProfileIntent()
     data class StartChat(val id: String) : ProfileIntent()
     data class SetMyIntro(val state: String) : ProfileIntent()
     data class SetProfileImage(val image: String) : ProfileIntent()
