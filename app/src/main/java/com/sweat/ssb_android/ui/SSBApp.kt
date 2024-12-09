@@ -44,7 +44,7 @@ fun SSBApp(appState: SSBAppState) {
             bottomBar = {
                 // BottomBar가 보여져야 하는 경우에만 표시합니다.
                 if (isBottomBarVisible.value) {
-                    ExpoBottomBar(
+                    SSBBottomBar(
                         destinations = appState.topLevelDestination, // 최상위 목적지 목록을 전달
                         onNavigateToDestination = appState::navigationToTopLevelDestination, // 네비게이션 함수
                         currentDestination = appState.currentDestination // 현재 목적지 정보
@@ -61,7 +61,7 @@ fun SSBApp(appState: SSBAppState) {
 }
 
 @Composable
-fun ExpoBottomBar(
+fun SSBBottomBar(
     destinations: List<TopLevelDestination>, // BottomBar에 표시될 최상위 목적지 목록
     onNavigateToDestination: (TopLevelDestination) -> Unit, // 사용자가 클릭했을 때 호출될 콜백
     currentDestination: NavDestination? // 현재 네비게이션 목적지
