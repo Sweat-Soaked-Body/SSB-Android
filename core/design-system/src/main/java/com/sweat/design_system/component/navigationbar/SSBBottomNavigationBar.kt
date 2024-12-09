@@ -51,7 +51,7 @@ fun RowScope.SSBNavigationBarItem(
 }
 
 @Composable
-fun SSBNavigationBar(
+fun SSBBottomNavigationBar(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -77,7 +77,7 @@ fun SSBNavigationBar(
 
 @Preview
 @Composable
-fun ExpoNavigationPreview() {
+fun SSBBottomNavigationPreview() {
     val items = listOf(
         "운동",
         "홈",
@@ -89,7 +89,7 @@ fun ExpoNavigationPreview() {
         R.drawable.profile_circle
     )
     SSBAndroidTheme { colors, typography ->
-        SSBNavigationBar {
+        SSBBottomNavigationBar {
             items.forEachIndexed { index, item ->
                 SSBNavigationBarItem(
                     icon = {

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sweat.design_system.component.navigationbar.SSBNavigationBar
+import com.sweat.design_system.component.navigationbar.SSBBottomNavigationBar
 import com.sweat.design_system.component.navigationbar.SSBNavigationBarItem
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.ssb_android.navigation.TopLevelDestination
@@ -69,7 +68,7 @@ fun ExpoBottomBar(
 ) {
     SSBAndroidTheme { _, typography ->
         // 커스텀 네비게이션 바 구성 요소
-        SSBNavigationBar {
+        SSBBottomNavigationBar {
             // 각 최상위 목적지에 대한 아이템을 생성합니다.
             destinations.forEach { destination ->
                 // 현재 목적지가 선택된 상태인지 확인
