@@ -165,67 +165,64 @@ fun ProfileScreen(
             )
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 24.dp),
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 24.dp),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
+                Image(
+                    painter = getProfileImage(state.image),
+                    contentDescription = "profileImage",
+                    modifier = Modifier
+                        .padding(15.dp)
+                        .size(60.dp),
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
                 ) {
-                    Image(
-                        painter = getProfileImage(state.image),
-                        contentDescription = "profileImage",
-                        modifier = Modifier
-                            .padding(15.dp)
-                            .size(60.dp),
+                    Text(
+                        text = state.myName,
+                        style = SSBTypography.subTitle,
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFF000000),
                     )
-                    Column(
+                    Spacer(modifier = Modifier.height(7.dp))
+                    BasicTextField(
+                        value = state.myIntro,
+                        onValueChange = {
+                            handleIntent(ProfileIntent.SetMyIntro(it))
+                        },
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                        cursorBrush = SolidColor(Color.Black),
+                        decorationBox = { innerTextField ->
+                            if (state.myIntro.isEmpty()) {
+                                Text("한 줄 소개를 적어주세요", color = Color.Gray)
+                            }
+                            innerTextField()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(15.dp),
-                    ) {
-                        Text(
-                            text = state.myName,
-                            style = SSBTypography.subTitle,
-                            fontWeight = FontWeight(600),
-                            color = Color(0xFF000000),
-                        )
-                        Spacer(modifier = Modifier.height(7.dp))
-                        BasicTextField(
-                            value = state.myIntro,
-                            onValueChange = {
-                                handleIntent(ProfileIntent.SetMyIntro(it))
-                            },
-                            textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
-                            cursorBrush = SolidColor(Color.Black),
-                            decorationBox = { innerTextField ->
-                                if (state.myIntro.isEmpty()) {
-                                    Text("한 줄 소개를 적어주세요", color = Color.Gray)
-                                }
-                                innerTextField()
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 8.dp)
-                                .background(Color.Transparent, shape = RectangleShape)
-                        )
-                        Text(
-                            text = state.myIntro,
-                            style = SSBTypography.bodySmall,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF000000),
-                        )
-                    }
-                }
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(state.chatList) { state ->
-                        ChatListItem(state = state)
-                    }
+                            .padding(top = 8.dp)
+                            .background(Color.Transparent, shape = RectangleShape)
+                    )
+                    Text(
+                        text = state.myIntro,
+                        style = SSBTypography.bodySmall,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF000000),
+                    )
                 }
             }
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(state.chatList) { state ->
+                    ChatListItem(state = state)
+                }
             }
         }
     }
@@ -251,170 +248,5 @@ fun getProfileImage(base64Image: String): Painter {
         decodeBase64Image(base64Image)?.asImageBitmap()?.let {
             BitmapPainter(it)
         } ?: painterResource(com.sweat.design_system.R.drawable.profile_square)
-    }
-}
-
-@Composable
-fun ProfileTopAppBar(
-    modifier: Modifier = Modifier,
-    startText: String,
-    endIcon: @Composable () -> Unit
-) {
-    Row(
-        modifier = modifier.padding(
-            vertical = 13.dp,
-            horizontal = 24.dp
-        ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(
-            text = startText,
-            style = SSBTypography.titleSmall,
-            fontWeight = FontWeight(600),
-            color = Color(0xFF000000),
-        )
-        endIcon()
-    }
-}
-
-
-@Composable
-fun ChatListItem(
-    modifier: Modifier = Modifier,
-    state: ChatListItemState,
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Row {
-            Image(
-                painter = getProfileImage(state.image),
-                contentDescription = "chat partner profile",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(45.dp),
-            )
-            Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 5.dp)) {
-                Text(
-                    text = state.name,
-                    style = SSBTypography.bodyMedium,
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFF000000),
-                )
-                Text(
-                    text = state.message,
-                    style = SSBTypography.label,
-                    fontWeight = FontWeight(400),
-                    color = if (state.isReadMessage) Color(0xFF000000)
-                    else SSBColor.gray600
-                )
-            }
-        }
-        Column {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = state.date,
-                style = SSBTypography.label,
-                fontWeight = FontWeight(400),
-                color = SSBColor.gray500,
-                textAlign = TextAlign.Right,
-            )
-        }
-    }
-}
-
-@Composable
-fun ProfileActionItem(
-    icon: @Composable () -> Unit,
-    title: String,
-    textColor: Color,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        icon()
-        Text(
-            text = title,
-            style = SSBTypography.bodySmall,
-            fontWeight = FontWeight(400),
-            color = textColor
-        )
-    }
-}
-
-@Composable
-fun AddFriendBottomSheet(modifier: Modifier = Modifier) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(31.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFFFFFFFF), // TODO: 컬러 추가
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                )
-            )
-            .padding(vertical = 40.dp)
-    ) {
-        ProfileActionItem(
-            icon = { PencilIcon() },
-            title = "프로필 수정",
-            textColor = SSBColor.gray600
-        )
-        ProfileActionItem(
-            icon = { OutIcon() },
-            title = "로그 아웃",
-            textColor = SSBColor.gray600
-        )
-        ProfileActionItem(
-            icon = { TrashIcon() },
-            title = "프로필 삭제",
-            textColor = SSBColor.error
-        )
-    }
-}
-
-@Composable
-fun SettingsBottomSheet(modifier: Modifier = Modifier) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(31.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFFFFFFFF), // TODO: 컬러 추가
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                )
-            )
-            .padding(vertical = 40.dp)
-    ) {
-        ProfileActionItem(
-            icon = { OutIcon() }, // TODO: 아이콘 변경
-            title = "내 QR코드 보기",
-            textColor = SSBColor.gray600
-        )
-        ProfileActionItem(
-            icon = { OutIcon() },// TODO: 아이콘 변경
-            title = "QR 코드로 친구 추가",
-            textColor = SSBColor.gray600
-        )
-        ProfileActionItem(
-            icon = { TrashIcon() },// TODO: 아이콘 변경
-            title = "NFC로 친구 추가",
-            textColor = SSBColor.gray600
-        )
     }
 }
