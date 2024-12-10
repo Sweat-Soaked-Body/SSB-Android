@@ -1,4 +1,4 @@
-package com.meister.profile.component.bottomSheet
+package com.sweat.design_system.component.bottomSheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.sweat.design_system.theme.SSBTypography
 
 @Composable
-fun ProfileBottomSheetItem(
+fun BottomSheetItem(
     icon: @Composable () -> Unit,
     title: String,
     textColor: Color,
