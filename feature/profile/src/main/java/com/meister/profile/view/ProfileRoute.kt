@@ -1,9 +1,9 @@
 package com.meister.profile.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -35,14 +34,19 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.meister.profile.component.ChatListItem
+import com.meister.profile.component.ProfileTopAppBar
+import com.meister.profile.component.bottomSheet.AddFriendBottomSheet
+import com.meister.profile.component.bottomSheet.SettingsBottomSheet
 import com.meister.profile.viewModel.BottomSheetType
-import com.meister.profile.viewModel.ChatListItemState
 import com.meister.profile.viewModel.ProfileIntent
 import com.meister.profile.viewModel.ProfileScreenSideEffect
 import com.meister.profile.viewModel.ProfileScreenState
@@ -51,12 +55,8 @@ import com.sweat.common.utill.decodeBase64Image
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.AddFriendIcon
 import com.sweat.design_system.icon.CheckIcon
-import com.sweat.design_system.icon.OutIcon
-import com.sweat.design_system.icon.PencilIcon
 import com.sweat.design_system.icon.SettingIcon
-import com.sweat.design_system.icon.TrashIcon
 import com.sweat.design_system.theme.SSBTypography
-import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.ui.DevicePreviews
 import kotlinx.coroutines.launch
 
@@ -73,23 +73,27 @@ fun ProfileRoute(
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is ProfileScreenSideEffect.LaunchImagePicker -> TODO()
-                ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
-                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
-                ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
-                is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
-                ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
-                ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                ProfileScreenSideEffect.HideBottomSheet -> {
-                    coroutineScope.launch { bottomSheetState.hide() }
-                }
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileScreenSideEffect.LaunchImagePicker -> {}
 
-                ProfileScreenSideEffect.ShowBottomSheet -> {
-                    coroutineScope.launch { bottomSheetState.expand() }
+                    ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
+                    ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
+                    ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
+                    is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
+                    ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
+                    ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
+                    ProfileScreenSideEffect.HideBottomSheet -> {
+                        coroutineScope.launch { bottomSheetState.hide() }
+                    }
+
+                    ProfileScreenSideEffect.ShowBottomSheet -> {
+                        coroutineScope.launch { bottomSheetState.show() }
+                    }
                 }
             }
         }
