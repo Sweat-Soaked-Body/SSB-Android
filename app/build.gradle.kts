@@ -16,6 +16,7 @@ android {
 
 dependencies {
     // todo : Add Other Project Implementation -> ex) implementation(project(":core:___")) / (project(":feature:____"))
+    implementation(project(":core:design-system"))
     implementation(project(":core:ui"))
 
     implementation(libs.junit)

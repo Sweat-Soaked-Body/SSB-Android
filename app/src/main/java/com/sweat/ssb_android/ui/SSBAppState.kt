@@ -45,12 +45,6 @@ class SSBAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            // add route
-            else -> null
-        }
-
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
@@ -64,7 +58,7 @@ class SSBAppState(
                 restoreState = true
             }
             when (topLevelDestination) {
-                // add route
+                // TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions) <- example code
                 else -> null
             }
         }
