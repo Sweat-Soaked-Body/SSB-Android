@@ -1,6 +1,5 @@
 package com.meister.profile.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,6 +56,7 @@ import com.sweat.design_system.icon.AddFriendIcon
 import com.sweat.design_system.icon.CheckIcon
 import com.sweat.design_system.icon.SettingIcon
 import com.sweat.design_system.theme.SSBTypography
+import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.ui.DevicePreviews
 import kotlinx.coroutines.launch
 
@@ -206,7 +206,7 @@ fun ProfileScreen(
                         cursorBrush = SolidColor(Color.Black),
                         decorationBox = { innerTextField ->
                             if (state.myIntro.isEmpty()) {
-                                Text("한 줄 소개를 적어주세요", color = Color.Gray)
+                                Text("한 줄 소개를 적어주세요", color = SSBColor.gray200)
                             }
                             innerTextField()
                         },
