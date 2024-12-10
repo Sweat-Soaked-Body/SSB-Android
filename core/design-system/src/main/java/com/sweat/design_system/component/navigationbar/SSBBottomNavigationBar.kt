@@ -1,6 +1,7 @@
 package com.sweat.design_system.component.navigationbar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -56,13 +57,7 @@ fun SSBBottomNavigationBar(
     content: @Composable RowScope.() -> Unit
 ) {
     SSBAndroidTheme { colors, _ ->
-        Column {
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .width(1.dp)
-                    .background(color = colors.gray100)
-            )
+        Column(modifier = Modifier.border(width = 0.8.dp, color = Color(0xFFEFF0F2))) {
 
             NavigationBar(
                 modifier = modifier,
