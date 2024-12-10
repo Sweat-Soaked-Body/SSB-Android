@@ -126,6 +126,14 @@ fun ProfileScreen(
     handleIntent: (ProfileIntent) -> Unit,
     bottomSheetContent: @Composable () -> Unit,
 ) {
+    ModalBottomSheet(
+        sheetState = bottomSheetState,
+        onDismissRequest = {
+            handleIntent(ProfileIntent.HideBottomSheet)
+        },
+    ) {
+        bottomSheetContent()
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -218,14 +226,6 @@ fun ProfileScreen(
                     }
                 }
             }
-
-            ModalBottomSheet(
-                sheetState = bottomSheetState,
-                onDismissRequest = {
-                    handleIntent(ProfileIntent.HideBottomSheet)
-                },
-            ) {
-                bottomSheetContent()
             }
         }
     }
