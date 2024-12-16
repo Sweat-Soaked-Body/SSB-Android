@@ -1,4 +1,4 @@
-package com.sweat.login
+package com.sweat.login.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +27,16 @@ import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.component.textfield.SSBTextField
 import com.sweat.design_system.icon.EyeIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
+
+@Composable
+fun LoginRoute(
+    modifier: Modifier = Modifier,
+    navigateToMain: () -> Unit,
+    navigateToSignup: () -> Unit
+) {
+    LoginScreen(modifier = modifier)
+}
+
 
 @Composable
 fun LoginScreen(
