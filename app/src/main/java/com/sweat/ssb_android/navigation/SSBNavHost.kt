@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.meister.profile.profileRoute
+import com.sweat.profile.profileRoute
 
 @Composable
 fun SSBNavHost(

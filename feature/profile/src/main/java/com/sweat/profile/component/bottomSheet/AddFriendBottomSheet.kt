@@ -1,4 +1,4 @@
-package com.meister.profile.component.bottomSheet
+package com.sweat.profile.component.bottomSheet
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
