@@ -1,4 +1,4 @@
-package com.sweat.signin.view
+package com.sweat.signup.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -29,8 +29,17 @@ import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
-import com.sweat.signin.component.SignupTextField
+import com.sweat.signup.component.SignupTextField
 import kotlinx.coroutines.launch
+
+@Composable
+fun SignupRoute(
+    modifier: Modifier = Modifier,
+    navigateToMain: () -> Unit,
+    navigateToLogin: () -> Unit
+) {
+    SignupScreen(modifier = modifier)
+}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
