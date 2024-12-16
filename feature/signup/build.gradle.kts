@@ -6,3 +6,8 @@ plugins {
 android {
     namespace = "com.sweat.signup"
 }
+
+dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:ui"))
+}
