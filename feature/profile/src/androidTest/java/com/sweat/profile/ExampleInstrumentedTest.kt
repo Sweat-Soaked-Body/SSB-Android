@@ -1,4 +1,4 @@
-package com.meister.profile
+package com.sweat.profile
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

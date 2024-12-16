@@ -1,4 +1,4 @@
-package com.meister.profile.component
+package com.sweat.profile.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

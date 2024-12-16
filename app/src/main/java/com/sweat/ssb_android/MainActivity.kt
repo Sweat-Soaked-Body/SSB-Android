@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import com.meister.profile.ProfileRoute
+import com.sweat.profile.ProfileRoute
 import com.sweat.ssb_android.navigation.SSBNavHost
 import com.sweat.ssb_android.ui.rememberSSBAppState
 import dagger.hilt.android.AndroidEntryPoint

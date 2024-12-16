@@ -4,8 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.meister.profile"
+    namespace = "com.sweat.profile"
 }
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))

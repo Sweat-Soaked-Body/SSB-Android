@@ -1,4 +1,4 @@
-package com.meister.profile
+package com.sweat.profile
 
 import org.junit.Test
 

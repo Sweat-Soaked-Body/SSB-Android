@@ -1,4 +1,4 @@
-package com.meister.profile.view
+package com.sweat.profile.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,15 +41,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.meister.profile.component.ChatListItem
-import com.meister.profile.component.ProfileTopAppBar
-import com.meister.profile.component.bottomSheet.AddFriendBottomSheet
-import com.meister.profile.component.bottomSheet.SettingsBottomSheet
-import com.meister.profile.viewModel.BottomSheetType
-import com.meister.profile.viewModel.ProfileIntent
-import com.meister.profile.viewModel.ProfileScreenSideEffect
-import com.meister.profile.viewModel.ProfileScreenState
-import com.meister.profile.viewModel.ProfileViewModel
+import com.sweat.profile.component.ChatListItem
+import com.sweat.profile.component.ProfileTopAppBar
+import com.sweat.profile.component.bottomSheet.AddFriendBottomSheet
+import com.sweat.profile.component.bottomSheet.SettingsBottomSheet
+import com.sweat.profile.viewModel.BottomSheetType
+import com.sweat.profile.viewModel.ProfileIntent
+import com.sweat.profile.viewModel.ProfileScreenSideEffect
+import com.sweat.profile.viewModel.ProfileScreenState
+import com.sweat.profile.viewModel.ProfileViewModel
 import com.sweat.common.utill.decodeBase64Image
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.AddFriendIcon

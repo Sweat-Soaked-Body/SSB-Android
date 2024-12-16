@@ -1,4 +1,4 @@
-package com.meister.profile.component
+package com.sweat.profile.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.meister.profile.view.getProfileImage
-import com.meister.profile.viewModel.ChatListItemState
+import com.sweat.profile.view.getProfileImage
+import com.sweat.profile.viewModel.ChatListItemState
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 

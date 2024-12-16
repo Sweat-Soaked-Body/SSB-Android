@@ -1,4 +1,4 @@
-package com.meister.profile.viewModel
+package com.sweat.profile.viewModel
 
 import com.sweat.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

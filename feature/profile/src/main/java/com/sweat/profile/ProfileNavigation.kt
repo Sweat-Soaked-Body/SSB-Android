@@ -1,10 +1,10 @@
-package com.meister.profile
+package com.sweat.profile
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.meister.profile.view.ProfileRoute
+import com.sweat.profile.view.ProfileRoute
 
 const val ProfileRoute = "ProfileRoute"
 
