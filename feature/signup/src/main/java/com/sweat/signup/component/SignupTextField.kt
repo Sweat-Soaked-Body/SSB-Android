@@ -1,4 +1,4 @@
-package com.sweat.signin.component
+package com.sweat.signup.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
