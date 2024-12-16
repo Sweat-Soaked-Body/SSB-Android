@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.sweat.signin"
+    namespace = "com.sweat.signup"
 }
