@@ -6,17 +6,17 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.login.view.LoginRoute
 
-const val LoginRoute = "LoginRoute"
+const val loginRoute = "loginRoute"
 
 fun NavController.navigateToLoginRouteRoute(navOptions: NavOptions? = null) {
-    this.navigate(LoginRoute, navOptions)
+    this.navigate(loginRoute, navOptions)
 }
 
 fun NavGraphBuilder.loginRoute(
     navigateToSignup: () -> Unit,
     navigateToMain: () -> Unit
 ) {
-    composable(LoginRoute) {
+    composable(loginRoute) {
         LoginRoute(
             navigateToSignup = navigateToSignup,
             navigateToMain = navigateToMain
