@@ -5,6 +5,7 @@ import android.util.Log
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sweat.network.api.AuthApi
 import com.sweat.network.util.AuthInterceptor
 import com.sweat.network.util.TokenAuthenticator
 import dagger.Module
@@ -79,4 +80,7 @@ object NetworkModule {
     }
 
     // todo : Add API
+    @Provides
+    fun provideAuthApi(retrofit: Retrofit): AuthApi =
+        retrofit.create(AuthApi::class.java)
 }
