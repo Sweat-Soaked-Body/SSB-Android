@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import com.sweat.login.loginRoute
 import com.sweat.ssb_android.navigation.SSBNavHost
 import com.sweat.ssb_android.ui.rememberSSBAppState
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 val appState = rememberSSBAppState(windowSizeClass = calculateWindowSizeClass(activity = this))
                 SSBNavHost(
                     navController = appState.navController,
-                    startDestination = "",
+                    startDestination = loginRoute,
                 )
             }
         }
