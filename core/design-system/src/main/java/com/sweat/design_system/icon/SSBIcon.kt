@@ -335,11 +335,13 @@ fun EyeIcon(
 @Composable
 fun HeartIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    tint: Color = Color.Unspecified
 ) {
     Icon(
         painter = if (isSelected) painterResource(id = R.drawable.red_heart)
         else painterResource(id = R.drawable.outlined_heart),
+        tint = tint,
         contentDescription = "",
         modifier = modifier.size(24.dp),
     )
