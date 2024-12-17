@@ -33,8 +33,7 @@ include(":feature")
 include(":feature:splash")
 include(":feature:signup")
 include(":feature:login")
-
-
-gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
 include(":feature:profile")
 include(":feature:main")
+
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
