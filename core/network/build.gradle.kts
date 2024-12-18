@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:model"))
 
+
     debugImplementation(libs.debug.chuck)
     releaseImplementation(libs.release.chuck)
 
