@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +23,10 @@ import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.ssb_android.navigation.TopLevelDestination
 
 @Composable
-fun SSBApp(appState: SSBAppState) {
+fun SSBApp(
+    windowSizeClass: WindowSizeClass,
+    appState: SSBAppState = rememberSSBAppState(windowSizeClass = windowSizeClass)
+) {
     val isBottomBarVisible = remember { mutableStateOf(true) }
 
     val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
