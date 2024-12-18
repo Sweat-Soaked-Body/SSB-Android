@@ -1,13 +1,24 @@
 package com.sweat.network.util
 
+import com.squareup.moshi.Moshi
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
-    // todo : Add LocalDataSource
-) : Interceptor {
+    private val moshi: Moshi,
+): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        TODO("Not yet implemented")
+        val request = chain.request()
+        val builder = request.newBuilder()
+        val ignorePath = listOf("auth/signin")
+        val path = request.url.encodedPath
+
+        if (ignorePath.contains(path)) {
+            return chain.proceed(request)
+        }
+
+        return chain.proceed(builder.build())
     }
 }
