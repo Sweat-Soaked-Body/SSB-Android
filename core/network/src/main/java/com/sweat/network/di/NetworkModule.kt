@@ -2,6 +2,7 @@ package com.sweat.network.di
 
 import android.content.Context
 import android.util.Log
+import com.sweat.network.BuildConfig
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -81,7 +82,7 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.gsm-ssb.shop") // todo : Add BaseUrl - Use BuildConfig
+            .baseUrl(BuildConfig.BASE_URL) // todo : Add BaseUrl - Use BuildConfig
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
