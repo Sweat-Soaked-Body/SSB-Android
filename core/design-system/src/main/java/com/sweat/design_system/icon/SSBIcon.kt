@@ -104,31 +104,57 @@ fun OutIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun PauseImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.pause),
+fun PauseIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_pause),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
 @Stable
 @Composable
-fun SkipImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.skip),
+fun PlayIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_play_circle),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
 @Stable
 @Composable
-fun StopImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.stop),
+fun SkipIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_skip_previous_circle),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Stable
+@Composable
+fun StopIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_stop_circle),
+        contentDescription = "",
+        modifier = modifier,
+        tint = tint
     )
 }
 
