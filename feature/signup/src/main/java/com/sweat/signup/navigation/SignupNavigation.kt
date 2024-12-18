@@ -1,4 +1,4 @@
-package com.sweat.signup
+package com.sweat.signup.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
