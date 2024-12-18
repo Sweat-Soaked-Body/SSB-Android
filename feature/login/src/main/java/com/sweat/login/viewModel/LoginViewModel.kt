@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun login(body: LoginRequestParam) {
+    private fun login(body: LoginRequestParam) {
         viewModelScope.launch {
             loginRequestUseCase(body = body).onSuccess {
                 it.catch {
