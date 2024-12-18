@@ -1,4 +1,4 @@
-package com.sweat.network.datasource.auth
+package com.sweat.network.datasource.friend
 
 import com.sweat.network.dto.friend.AddFriendRequest
 import com.sweat.network.dto.friend.FriendCheckRequest
