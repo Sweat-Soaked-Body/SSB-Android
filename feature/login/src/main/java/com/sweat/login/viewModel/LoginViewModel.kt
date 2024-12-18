@@ -20,12 +20,6 @@ class LoginViewModel @Inject constructor(
     override fun handleIntent(intent: LoginIntent) {
         when (intent) {
             is LoginIntent.Login -> {
-                setState {
-                    copy(
-                        username = intent.username,
-                        password = intent.password
-                    )
-                }
                 login(LoginRequestParam(username = intent.username, password = intent.password))
             }
             is LoginIntent.TogglePasswordVisibility -> {
@@ -40,9 +34,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun login(
-        body: LoginRequestParam
-    ) {
+    fun login(body: LoginRequestParam) {
         viewModelScope.launch {
             loginRequestUseCase(body = body).onSuccess {
                 it.catch {
