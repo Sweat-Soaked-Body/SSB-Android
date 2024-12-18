@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sweat.design_system.component.navigationbar.SSBBottomNavigationBar
 import com.sweat.design_system.component.navigationbar.SSBNavigationBarItem
 import com.sweat.design_system.theme.SSBAndroidTheme
+import com.sweat.ssb_android.navigation.SSBNavHost
 import com.sweat.ssb_android.navigation.TopLevelDestination
 
 @Composable
@@ -58,7 +59,7 @@ fun SSBApp(
         ) { paddingValues ->
             // 네비게이션 호스트
             Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
-                // SSBNavHost(appState = appState) <- example code
+                SSBNavHost(appState = appState)
             }
         }
     }
