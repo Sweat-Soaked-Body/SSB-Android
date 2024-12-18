@@ -39,10 +39,20 @@ import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
 
 @Composable
+fun ExerciseRoute(
+    modifier: Modifier = Modifier,
+    navigateToAddExerciseScreen: () -> Unit
+){
+   ExerciseScreen(
+       modifier = modifier,
+       exerciseItems = listOf()
+   )
+}
+
+@Composable
 fun ExerciseScreen(
     modifier: Modifier = Modifier,
     exerciseItems: List<Pair<String, Boolean>>
-
 ){
     val exerciseList = listOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타")
     val selectedButton = remember { mutableStateOf(exerciseList.first()) }
@@ -111,7 +121,7 @@ fun ExerciseScreen(
                             .padding(1.dp)
                             .width(24.dp)
                             .height(24.dp)
-                            .clickable(onClick = {})
+                            .clickable(onClick = { /*TODO*/ })
                     )
                     SearchIcon(
                         modifier = modifier
