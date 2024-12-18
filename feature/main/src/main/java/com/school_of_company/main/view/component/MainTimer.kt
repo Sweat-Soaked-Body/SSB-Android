@@ -39,6 +39,7 @@ import com.sweat.design_system.theme.SSBAndroidTheme
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Timer
 import kotlin.math.atan2
 
 @Composable
@@ -170,6 +171,11 @@ internal fun MainTimer(
                 if (timerState == TimerState.STARTED) {
                     PlayIcon(
                         tint = colors.gray300,
+                        modifier = Modifier.clickableSingle { timerState = TimerState.STOPPED }
+                    )
+                } else {
+                    PauseIcon(
+                        tint = colors.gray300,
                         modifier = Modifier.clickableSingle {
                             timerState = TimerState.STARTED
                             if (timerValue == 0) {
@@ -177,11 +183,6 @@ internal fun MainTimer(
                                 coroutineScope.launch { progress.snapTo(1f) }
                             }
                         }
-                    )
-                } else {
-                    PauseIcon(
-                        tint = colors.gray300,
-                        modifier = Modifier.clickableSingle { timerState = TimerState.STOPPED }
                     )
                 }
 
