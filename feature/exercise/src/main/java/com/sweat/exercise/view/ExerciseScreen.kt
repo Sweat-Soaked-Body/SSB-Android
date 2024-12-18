@@ -33,8 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.icon.PlusIcon
 import com.sweat.design_system.icon.SearchIcon
-import com.sweat.design_system.theme.SSBTypography
-import com.sweat.design_system.theme.color.SSBColor
+import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
 
@@ -60,114 +59,116 @@ fun ExerciseScreen(
     val isSearching = remember { mutableStateOf(false) }
     val (searchTextState, onSearchTextChange) = remember { mutableStateOf("") }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        Row(
+    SSBAndroidTheme { colors, typography ->
+        Column(
             modifier = modifier
-                .fillMaxWidth()
-                .height(57.dp)
-                .padding(
-                    vertical = 13.dp,
-                    horizontal = 24.dp
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(Color.White)
         ) {
-            if (isSearching.value) {
-                BasicTextField(
-                    modifier = modifier.fillMaxWidth(),
-                    value = searchTextState,
-                    onValueChange = { newText -> onSearchTextChange(newText) },
-                    textStyle = SSBTypography.bodySmall.copy(
-                        textAlign = TextAlign.Start
+            Row(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(57.dp)
+                    .padding(
+                        vertical = 13.dp,
+                        horizontal = 24.dp
                     ),
-                    singleLine = true,
-                    decorationBox = { innerTextField ->
-                        Box(
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            if (searchTextState.isEmpty()) {
-                                Text(
-                                    text = "운동을 적어주세요",
-                                    color = SSBColor.gray200,
-                                    style = SSBTypography.bodySmall,
-                                )
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (isSearching.value) {
+                    BasicTextField(
+                        modifier = modifier.fillMaxWidth(),
+                        value = searchTextState,
+                        onValueChange = { newText -> onSearchTextChange(newText) },
+                        textStyle = typography.bodySmall.copy(
+                            textAlign = TextAlign.Start
+                        ),
+                        singleLine = true,
+                        decorationBox = { innerTextField ->
+                            Box(
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                if (searchTextState.isEmpty()) {
+                                    Text(
+                                        text = "운동을 적어주세요",
+                                        color = colors.gray200,
+                                        style = typography.bodySmall,
+                                    )
+                                }
+                                innerTextField()
                             }
-                            innerTextField()
                         }
-                    }
-                )
-            } else {
-                Text(
-                    text = "운동",
-                    style = SSBTypography.titleSmall
-                )
-                Spacer(modifier = modifier.weight(1f))
-                Row(
-                    modifier = modifier
-                        .width(72.dp)
-                        .height(24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        24.dp,
-                        Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.Top,
-                ) {
-                    PlusIcon(
-                        modifier = modifier
-                            .padding(1.dp)
-                            .width(24.dp)
-                            .height(24.dp)
-                            .clickable(onClick = { /*TODO*/ })
                     )
-                    SearchIcon(
+                } else {
+                    Text(
+                        text = "운동",
+                        style = typography.titleSmall
+                    )
+                    Spacer(modifier = modifier.weight(1f))
+                    Row(
                         modifier = modifier
-                            .padding(1.dp)
-                            .width(24.dp)
-                            .height(24.dp)
-                            .clickable(onClick = { isSearching.value = !isSearching.value })
+                            .width(72.dp)
+                            .height(24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            24.dp,
+                            Alignment.CenterHorizontally
+                        ),
+                        verticalAlignment = Alignment.Top,
+                    ) {
+                        PlusIcon(
+                            modifier = modifier
+                                .padding(1.dp)
+                                .width(24.dp)
+                                .height(24.dp)
+                                .clickable(onClick = { /*TODO*/ })
+                        )
+                        SearchIcon(
+                            modifier = modifier
+                                .padding(1.dp)
+                                .width(24.dp)
+                                .height(24.dp)
+                                .clickable(onClick = { isSearching.value = !isSearching.value })
+                        )
+                    }
+                }
+            }
+            Divider(thickness = 1.dp, color = colors.gray100)
+            Spacer(modifier = modifier.height(10.dp))
+            LazyRow(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
+                verticalAlignment = Alignment.Top,
+            ) {
+                items(exerciseList){ text ->
+                    val isSelected = selectedButton.value == text
+                    ExerciseButton(
+                        modifier = modifier,
+                        text = text,
+                        state = if (isSelected) ButtonState.Disabled else ButtonState.Enabled,
+                        onClick = {selectedButton.value = text }
                     )
                 }
             }
-        }
-        Divider(thickness = 1.dp, color = Color(0xFFEFF0F2))
-        Spacer(modifier = modifier.height(10.dp))
-        LazyRow(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.Top,
-        ) {
-            items(exerciseList){ text ->
-                val isSelected = selectedButton.value == text
-                ExerciseButton(
-                    modifier = modifier,
-                    text = text,
-                    state = if (isSelected) ButtonState.Disabled else ButtonState.Enabled,
-                    onClick = {selectedButton.value = text }
-                )
-            }
-        }
-        Spacer(modifier = modifier.height(12.dp))
-        LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(horizontal = 24.dp)
-        ) {
-            itemsIndexed(exerciseStateList) { index, item ->
-                ExerciseItem(
-                    modifier = modifier,
-                    text = item.first,
-                    isSelected = item.second,
-                    onHeartClick = {
-                        exerciseStateList[index] = item.copy(second = !item.second)
-                    }
-                )
+            Spacer(modifier = modifier.height(12.dp))
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(horizontal = 24.dp)
+            ) {
+                itemsIndexed(exerciseStateList) { index, item ->
+                    ExerciseItem(
+                        modifier = modifier,
+                        text = item.first,
+                        isSelected = item.second,
+                        onHeartClick = {
+                            exerciseStateList[index] = item.copy(second = !item.second)
+                        }
+                    )
+                }
             }
         }
     }
