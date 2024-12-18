@@ -1,4 +1,4 @@
-package com.sweat.network.datasource
+package com.sweat.network.datasource.auth
 
 import com.sweat.network.dto.auth.request.LoginRequest
 import kotlinx.coroutines.flow.Flow
