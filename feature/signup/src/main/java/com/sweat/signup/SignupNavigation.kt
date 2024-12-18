@@ -14,12 +14,10 @@ fun NavController.navigateToSignupRoute(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.signupRoute(
     navigateToMain: () -> Unit,
-    navigateToLogin: () -> Unit
 ) {
     composable(signupRoute) {
         SignupRoute(
             navigateToMain = navigateToMain,
-            navigateToLogin = navigateToLogin
         )
     }
 }
