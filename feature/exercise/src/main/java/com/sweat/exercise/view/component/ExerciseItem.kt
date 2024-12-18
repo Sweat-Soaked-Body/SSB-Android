@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweat.design_system.icon.HeartIcon
-import com.sweat.design_system.theme.SSBTypography
+import com.sweat.design_system.theme.SSBAndroidTheme
 
 @Composable
 fun ExerciseItem(
@@ -27,31 +27,33 @@ fun ExerciseItem(
     isSelected: Boolean = false,
     onHeartClick: () -> Unit
 ){
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(
-                vertical = 17.dp,
-            ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = text,
-            style = SSBTypography.bodySmall
-        )
-        Spacer(modifier = modifier.weight(1f))
-        HeartIcon(
+    SSBAndroidTheme { colors, typography ->
+        Row(
             modifier = modifier
-                .padding(1.dp)
-                .width(24.dp)
-                .height(24.dp)
-                .clickable{ onHeartClick() },
-            isSelected = isSelected
-        )
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(
+                    vertical = 17.dp,
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = typography.bodySmall
+            )
+            Spacer(modifier = modifier.weight(1f))
+            HeartIcon(
+                modifier = modifier
+                    .padding(1.dp)
+                    .width(24.dp)
+                    .height(24.dp)
+                    .clickable { onHeartClick() },
+                isSelected = isSelected
+            )
+        }
+        Divider(thickness = 1.dp, color = colors.gray100)
     }
-    Divider(thickness = 1.dp, color = Color(0xFFEFF0F2))
 }
 
 @Preview
