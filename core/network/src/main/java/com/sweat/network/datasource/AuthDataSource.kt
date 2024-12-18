@@ -4,5 +4,5 @@ import com.sweat.network.dto.auth.request.LoginRequest
 import kotlinx.coroutines.flow.Flow
 
 interface AuthDataSource {
-    suspend fun authLogin(body: LoginRequest): Flow<Unit>
+    fun authLogin(body: LoginRequest): Flow<Unit>
 }

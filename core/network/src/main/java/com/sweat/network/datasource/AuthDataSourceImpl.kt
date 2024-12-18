@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AuthDataSourceImpl @Inject constructor(
     private val serviceAuth: AuthApi
-): com.sweat.network.datasource.AuthDataSource {
-    override suspend fun authLogin(body: LoginRequest): Flow<Unit> =
+): AuthDataSource {
+    override fun authLogin(body: LoginRequest): Flow<Unit> =
         performApiRequest { serviceAuth.login(body = body) }
 }

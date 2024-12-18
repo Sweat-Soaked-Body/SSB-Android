@@ -10,7 +10,7 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthDataSource
 ): AuthRepository {
-    override suspend fun login(body: LoginRequestParam): Flow<Unit> {
+    override fun login(body: LoginRequestParam): Flow<Unit> {
         return remoteDataSource.authLogin(
             body = body.toDto()
         )

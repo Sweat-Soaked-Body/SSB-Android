@@ -12,7 +12,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.newBuilder()
-        val ignorePath = listOf("auth/signin")
+        val ignorePath = listOf("/auth")
         val path = request.url.encodedPath
 
         if (ignorePath.contains(path)) {

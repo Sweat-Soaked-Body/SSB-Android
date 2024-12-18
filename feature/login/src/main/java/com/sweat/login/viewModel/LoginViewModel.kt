@@ -43,25 +43,29 @@ class LoginViewModel @Inject constructor(
                     postSideEffect(LoginSideEffect.LoginSuccess)
                 }
             }.onFailure {
-                postSideEffect(LoginSideEffect.LoginFailed("Login Failed"))
+                postSideEffect(LoginSideEffect.LoginFailed)
             }
         }
     }
 }
 
 data class LoginState(
-    val username: String = "",
-    val password: String = "",
-    val isPasswordVisible: Boolean = false
+    val username: String,
+    val password: String,
+    val isPasswordVisible: Boolean
 ) {
     companion object {
-        fun getDefaultState() = LoginState()
+        fun getDefaultState() = LoginState(
+            username = "",
+            password = "",
+            isPasswordVisible = false
+        )
     }
 }
 
 sealed class LoginSideEffect {
     object LoginSuccess : LoginSideEffect()
-    data class LoginFailed(val message: String) : LoginSideEffect()
+    object LoginFailed : LoginSideEffect()
 }
 
 sealed class LoginIntent {
