@@ -52,7 +52,7 @@ internal fun SignUpRoute(
         modifier = modifier,
         navigateToMain = navigateToMain,
         signUpState = signUpState,
-        signUpIntent = { viewModel.handleIntent(it) }
+        signUpIntent = viewModel::handleIntent
     )
 }
 
