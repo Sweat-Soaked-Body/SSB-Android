@@ -76,7 +76,7 @@ fun AddExerciseScreen(
                 )
                 Spacer(modifier = modifier.width(24.dp))
             }
-            Divider(thickness = 1.dp, color = Color(0xFFEFF0F2))
+            Divider(thickness = 1.dp, color = colors.gray100)
             Spacer(modifier = modifier.height(24.dp))
             Column(
                 modifier = modifier
