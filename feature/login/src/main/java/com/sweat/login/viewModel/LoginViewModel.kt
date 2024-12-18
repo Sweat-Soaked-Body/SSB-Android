@@ -38,7 +38,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             loginRequestUseCase(body = body).onSuccess {
                 it.catch {
-
+                    postSideEffect(LoginSideEffect.LoginFailed)
                 }.collect {
                     postSideEffect(LoginSideEffect.LoginSuccess)
                 }
