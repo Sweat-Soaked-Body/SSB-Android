@@ -22,4 +22,5 @@ object SSBColor : ColorTheme() {
     override val gray100 = Color(0xFFEFF0F2)
     override val gray50 = Color(0xFFF5F6F8)
 
+    override val blue = Color(0xFF4A70EB)
 }
