@@ -16,4 +16,8 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.retrofit.moshi.converter)
+
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+
 }

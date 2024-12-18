@@ -2,10 +2,13 @@ package com.sweat.network.di
 
 import android.content.Context
 import android.util.Log
+import com.sweat.network.BuildConfig
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sweat.network.api.AuthApi
 import com.sweat.network.util.AuthInterceptor
+import com.sweat.network.util.SimpleCookieJar
 import com.sweat.network.util.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -34,10 +37,11 @@ object NetworkModule {
         @ApplicationContext context: Context,
         httpLoggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        tokenAuthenticator: TokenAuthenticator
+        tokenAuthenticator: TokenAuthenticator,
+        cookieJar: CookieJar
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .cookieJar(CookieJar.NO_COOKIES)
+            .cookieJar(cookieJar)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
@@ -51,6 +55,12 @@ object NetworkModule {
                     .retainDataFor(ChuckInterceptor.Period.ONE_HOUR)
             )
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCookieJar(): CookieJar {
+        return SimpleCookieJar() // 쿠키 저장소
     }
 
     @Provides
@@ -72,11 +82,14 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("") // todo : Add BaseUrl - Use BuildConfig
+            .baseUrl(BuildConfig.BASE_URL) // todo : Add BaseUrl - Use BuildConfig
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
     // todo : Add API
+    @Provides
+    fun provideAuthApi(retrofit: Retrofit): AuthApi =
+        retrofit.create(AuthApi::class.java)
 }
