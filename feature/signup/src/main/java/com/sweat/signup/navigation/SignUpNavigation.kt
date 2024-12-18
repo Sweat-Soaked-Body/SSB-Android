@@ -4,19 +4,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sweat.signup.view.SignupRoute
+import com.sweat.signup.view.SignUpRoute
 
-const val signupRoute = "signupRoute"
+const val signUpRoute = "sign_up_route"
 
 fun NavController.navigateToSignupRoute(navOptions: NavOptions? = null) {
-    this.navigate(signupRoute, navOptions)
+    this.navigate(signUpRoute, navOptions)
 }
 
 fun NavGraphBuilder.signupRoute(
     navigateToMain: () -> Unit,
 ) {
-    composable(signupRoute) {
-        SignupRoute(
+    composable(signUpRoute) {
+        SignUpRoute(
             navigateToMain = navigateToMain,
         )
     }
