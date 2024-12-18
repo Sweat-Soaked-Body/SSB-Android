@@ -67,6 +67,7 @@ fun AddExerciseScreen(
                     .padding(1.dp)
                     .width(24.dp)
                     .height(24.dp)
+                    .clickable(onClick = { /*TODO*/ })
             )
             Text(
                 text = "운동 추가",
@@ -165,7 +166,7 @@ fun AddExerciseScreen(
                         color = Color(0xFFEFF0F2),
                         shape = RoundedCornerShape(size = 8.dp)
                     )
-                    .width(312.dp)
+                    .fillMaxWidth()
                     .height(54.dp)
                     .padding(start = 16.dp, top = 14.dp, end = 149.dp, bottom = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
