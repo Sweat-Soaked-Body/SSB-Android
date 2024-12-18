@@ -168,11 +168,6 @@ internal fun MainTimer(
                 )
 
                 if (timerState == TimerState.STARTED) {
-                    PauseIcon(
-                        tint = colors.gray300,
-                        modifier = Modifier.clickableSingle { timerState = TimerState.STOPPED }
-                    )
-                } else {
                     PlayIcon(
                         tint = colors.gray300,
                         modifier = Modifier.clickableSingle {
@@ -182,6 +177,11 @@ internal fun MainTimer(
                                 coroutineScope.launch { progress.snapTo(1f) }
                             }
                         }
+                    )
+                } else {
+                    PauseIcon(
+                        tint = colors.gray300,
+                        modifier = Modifier.clickableSingle { timerState = TimerState.STOPPED }
                     )
                 }
 
@@ -207,7 +207,7 @@ private fun MainTimerPreview() {
     ) {
         MainTimer(
             modifier = Modifier,
-            initialTime = 10,
+            initialTime = 100,
             index = 1
         )
     }
