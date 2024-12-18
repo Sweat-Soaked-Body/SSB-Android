@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import com.sweat.login.loginRoute
 import com.sweat.signup.signupRoute
 import com.sweat.profile.profileRoute
+import com.sweat.signup.navigateToSignupRoute
 import com.sweat.ssb_android.ui.SSBAppState
 
 @Composable
@@ -31,12 +32,11 @@ fun SSBNavHost(
 
         signupRoute(
             navigateToMain = {},
-            navigateToLogin = {}
         )
 
         loginRoute(
             navigateToMain = {},
-            navigateToSignup = {}
+            navigateToSignup = navController::navigateToSignupRoute
         )
     }
 }
