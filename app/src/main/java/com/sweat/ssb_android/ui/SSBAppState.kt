@@ -10,6 +10,7 @@ import androidx.compose.ui.util.trace
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
@@ -20,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 fun rememberSSBAppState(
     windowSizeClass: WindowSizeClass,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavController = rememberNavController()
+    navController: NavHostController = rememberNavController()
 ) : SSBAppState {
     return remember(
         navController,
@@ -37,19 +38,13 @@ fun rememberSSBAppState(
 
 @Stable
 class SSBAppState(
-    val navController: NavController,
+    val navController: NavHostController,
     val windowSizeClass: WindowSizeClass,
     val coroutineScope: CoroutineScope
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
-
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            // add route
-            else -> null
-        }
 
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
@@ -64,7 +59,7 @@ class SSBAppState(
                 restoreState = true
             }
             when (topLevelDestination) {
-                // add route
+                // TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions) <- example code
                 else -> null
             }
         }

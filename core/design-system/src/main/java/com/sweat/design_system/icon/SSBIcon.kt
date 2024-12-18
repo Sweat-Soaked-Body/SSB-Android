@@ -134,31 +134,57 @@ fun OutIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun PauseImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.pause),
+fun PauseIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_pause),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
 @Stable
 @Composable
-fun SkipImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.skip),
+fun PlayIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_play_circle),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
 @Stable
 @Composable
-fun StopImage(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.stop),
+fun SkipIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_skip_previous_circle),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Stable
+@Composable
+fun StopIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_stop_circle),
+        contentDescription = "",
+        modifier = modifier,
+        tint = tint
     )
 }
 
@@ -220,9 +246,13 @@ fun WomanImage(
 
 @Stable
 @Composable
-fun PencilIcon(modifier: Modifier = Modifier) {
+fun PencilIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.pencil),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -230,9 +260,13 @@ fun PencilIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun SearchIcon(modifier: Modifier = Modifier) {
+fun SearchIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.search),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -240,9 +274,13 @@ fun SearchIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun SettingIcon(modifier: Modifier = Modifier) {
+fun SettingIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.settings),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -250,9 +288,13 @@ fun SettingIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun SwapIcon(modifier: Modifier = Modifier) {
+fun SwapIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.swap),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -260,9 +302,13 @@ fun SwapIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun TrashIcon(modifier: Modifier = Modifier) {
+fun TrashIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.trash),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -270,9 +316,13 @@ fun TrashIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ThunderIcon(modifier: Modifier = Modifier) {
+fun ThunderIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
     Icon(
         painter = painterResource(id = R.drawable.thunder),
+        tint = color,
         contentDescription = "",
         modifier = modifier
     )
@@ -282,7 +332,7 @@ fun ThunderIcon(modifier: Modifier = Modifier) {
 @Composable
 fun ProfileCircleIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
 ) {
     Icon(
         painter = painterResource(id = R.drawable.profile_circle),
@@ -295,7 +345,7 @@ fun ProfileCircleIcon(
 @Composable
 fun HomeIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
 ) {
     Icon(
         painter = painterResource(id = R.drawable.home),
@@ -309,7 +359,7 @@ fun HomeIcon(
 @Composable
 fun DumbbellIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
 ) {
     Icon(
         painter = painterResource(id = R.drawable.dumbbell),
@@ -322,11 +372,13 @@ fun DumbbellIcon(
 @Composable
 fun EyeIcon(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    color: Color = Color.Unspecified,
 ) {
     Icon(
         painter = if (isSelected) painterResource(id = R.drawable.eye_open)
         else painterResource(id = R.drawable.eye_close),
+        tint = color,
         contentDescription = "",
         modifier = modifier.size(24.dp),
     )
@@ -336,12 +388,12 @@ fun EyeIcon(
 fun HeartIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    tint: Color = Color.Unspecified
+    color: Color = Color.Unspecified,
 ) {
     Icon(
         painter = if (isSelected) painterResource(id = R.drawable.red_heart)
         else painterResource(id = R.drawable.outlined_heart),
-        tint = tint,
+        tint = color,
         contentDescription = "",
         modifier = modifier.size(24.dp),
     )

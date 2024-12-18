@@ -7,7 +7,7 @@ import com.sweat.design_system.theme.color.SSBColor
 @Composable
 fun SSBAndroidTheme(
     colors: ColorTheme = SSBColor,
-    typography: SSBTypography,
+    typography: SSBTypography = SSBTypography,
     content: @Composable (colors: ColorTheme, typography: SSBTypography) -> Unit
 ){
     content(colors, typography)

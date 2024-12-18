@@ -16,7 +16,11 @@ android {
 
 dependencies {
     // todo : Add Other Project Implementation -> ex) implementation(project(":core:___")) / (project(":feature:____"))
+    implementation(project(":core:design-system"))
     implementation(project(":core:ui"))
+    implementation(project(":feature:signup"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:login"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)

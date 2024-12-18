@@ -7,23 +7,23 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
-* @param S : State
-* @param E : SideEffect
-* @param I : Intent
-*/
-abstract class BaseViewModel<S, E, I>(initalState: S) : ViewModel() {
-    private val _state: MutableStateFlow<S> = MutableStateFlow(initalState)
+ * @param S : State
+ * @param E : SideEffect
+ * @param I : Intent
+ */
+abstract class BaseViewModel<S, E, I>(initialState: S) : ViewModel() {
+    private val _state: MutableStateFlow<S> = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
     private val _sideEffect: MutableSharedFlow<E> = MutableSharedFlow()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    protected fun setState(newState: () -> S) {
-        _state.update { newState() }
+    protected fun setState(update: S.() -> S) {
+        _state.update { it.update() }
     }
 
     protected fun postSideEffect(sideEffect: E) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             _sideEffect.emit(sideEffect)
         }
     }
