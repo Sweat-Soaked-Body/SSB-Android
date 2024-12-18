@@ -2,7 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 카메라 하드웨어 기능 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- NFC 기능 -->
+    <uses-permission android:name="android.permission.NFC" />
+
+    <!-- 네트워크 접근 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 플래시 권한 (카메라를 통해 조명 사용 시 필요) -->
+    <uses-feature android:name="android.hardware.camera.flash" />
 
     <application
         android:name=".SSBApplication"
