@@ -81,7 +81,7 @@ fun AddExerciseScreen(
                     expanded = remember { mutableStateOf(state.exerciseTypeExpanded) },
                     noItemText = "",
                     onItemSelected = { selectedCategory ->
-                        handleIntent(AddExerciseIntent.SetExerciseCategory(selectedCategory))
+                        handleIntent(AddExerciseIntent.ExerciseCategory(selectedCategory))
                     }
                 )
                 Spacer(modifier = modifier.height(2.dp))
@@ -91,7 +91,7 @@ fun AddExerciseScreen(
                     textState = state.textState,
                     placeHolder = "운동 이름을 적어주세요",
                     onTextChange = { newText ->
-                        handleIntent(AddExerciseIntent.SetExerciseName(newText))
+                        handleIntent(AddExerciseIntent.ExerciseName(newText))
                     }
                 )
                 Spacer(modifier = modifier.height(2.dp))
@@ -103,7 +103,7 @@ fun AddExerciseScreen(
                     expanded = remember { mutableStateOf(state.exerciseStyleExpanded) },
                     noItemText = "시간/세트 선택해주세요",
                     onItemSelected = { selectedStyle ->
-                        handleIntent(AddExerciseIntent.SetExerciseStyle(selectedStyle))
+                        handleIntent(AddExerciseIntent.ExerciseStyle(selectedStyle))
                     }
                 )
             }
@@ -140,13 +140,13 @@ fun AddExerciseScreenPreview() {
         state = previewState.value,
         handleIntent = { intent ->
             when (intent) {
-                is AddExerciseIntent.SetExerciseName -> {
-                    previewState.value = previewState.value.copy(textState = intent.state)
+                is AddExerciseIntent.ExerciseName -> {
+                    previewState.value = previewState.value.copy(textState = intent.name)
                 }
-                is AddExerciseIntent.SetExerciseCategory -> {
+                is AddExerciseIntent.ExerciseCategory -> {
                     previewState.value = previewState.value.copy(selectedCategory = intent.category)
                 }
-                is AddExerciseIntent.SetExerciseStyle -> {
+                is AddExerciseIntent.ExerciseStyle -> {
                     previewState.value = previewState.value.copy(selectedStyle = intent.style)
                 }
                 is AddExerciseIntent.ToggleExerciseTypeDropdown -> {

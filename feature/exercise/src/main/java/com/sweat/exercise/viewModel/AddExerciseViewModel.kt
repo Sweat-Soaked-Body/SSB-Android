@@ -10,9 +10,9 @@ class AddExerciseViewModel @Inject constructor(
 ) : BaseViewModel<AddExerciseScreenState, AddExerciseScreenSideEffect, AddExerciseIntent>(AddExerciseScreenState.getInitialState()) {
     override fun handleIntent(intent: AddExerciseIntent) {
         when (intent) {
-            is AddExerciseIntent.SetExerciseName -> setState { copy(textState = intent.state) }
-            is AddExerciseIntent.SetExerciseCategory -> setState { copy(selectedCategory = intent.category) }
-            is AddExerciseIntent.SetExerciseStyle -> setState { copy(selectedStyle = intent.style) }
+            is AddExerciseIntent.ExerciseName -> setState { copy(textState = intent.name) }
+            is AddExerciseIntent.ExerciseCategory -> setState { copy(selectedCategory = intent.category) }
+            is AddExerciseIntent.ExerciseStyle -> setState { copy(selectedStyle = intent.style) }
             is AddExerciseIntent.ToggleExerciseTypeDropdown -> setState { copy(exerciseTypeExpanded = !exerciseTypeExpanded) }
             is AddExerciseIntent.ToggleExerciseStyleDropdown -> setState { copy(exerciseStyleExpanded = !exerciseStyleExpanded) }
         }
@@ -43,9 +43,9 @@ sealed class AddExerciseScreenSideEffect {
 }
 
 sealed class AddExerciseIntent {
-    data class SetExerciseName(val state: String) : AddExerciseIntent()
-    data class SetExerciseCategory(val category: String) : AddExerciseIntent()
-    data class SetExerciseStyle(val style: String) : AddExerciseIntent()
+    data class ExerciseName(val name: String) : AddExerciseIntent()
+    data class ExerciseCategory(val category: String) : AddExerciseIntent()
+    data class ExerciseStyle(val style: String) : AddExerciseIntent()
     object ToggleExerciseTypeDropdown : AddExerciseIntent()
     object ToggleExerciseStyleDropdown : AddExerciseIntent()
 }
