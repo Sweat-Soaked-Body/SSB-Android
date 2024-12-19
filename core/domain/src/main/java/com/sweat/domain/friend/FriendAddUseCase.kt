@@ -6,7 +6,7 @@ import javax.inject.Inject
 class FriendAddUseCase @Inject constructor(
     private val friendRepository: FriendRepository
 ) {
-    operator fun invoke(toUser: Int) = runCatching {
-        friendRepository.friendAdd(toUser = toUser)
+    operator fun invoke(name: String) = runCatching {
+        friendRepository.friendAdd(name = name)
     }
 }

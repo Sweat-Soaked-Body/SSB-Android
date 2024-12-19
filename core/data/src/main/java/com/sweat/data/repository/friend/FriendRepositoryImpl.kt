@@ -13,8 +13,8 @@ class FriendRepositoryImpl @Inject constructor(
         return friendDataSource.friendCheck().map { it.friend }
     }
 
-    override fun friendAdd(toUser: Int): Flow<Unit> {
-        return friendDataSource.friendAdd(body = AddFriendRequest(toUser = toUser))
+    override fun friendAdd(name: String): Flow<Unit> {
+        return friendDataSource.friendAdd(body = AddFriendRequest(name = name))
     }
 
     override fun friendDelete(id: String): Flow<Unit> {
