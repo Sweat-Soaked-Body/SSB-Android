@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.theme.SSBTypography
+import com.sweat.design_system.theme.color.SSBColor
 
 @Composable
 fun ExerciseButton(
@@ -34,7 +35,7 @@ fun ExerciseButton(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = if (state == ButtonState.Enabled) Color(0xFFEFF0F2) else Color.Black,
+                color = if (state == ButtonState.Enabled) SSBColor.gray100 else SSBColor.black,
                 shape = RoundedCornerShape(size = 12.dp)
             )
             .width(48.dp)
