@@ -1,6 +1,5 @@
 package com.sweat.exercise.view
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +26,8 @@ import com.sweat.design_system.component.button.SSBButton
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
-import com.sweat.exercise.view.component.ExerciseSelector
-import com.sweat.exercise.view.component.ExerciseTextField
+import com.sweat.exercise.view.component.AddExerciseSelector
+import com.sweat.exercise.view.component.AddExerciseTextField
 import com.sweat.exercise.viewModel.AddExerciseIntent
 import com.sweat.exercise.viewModel.AddExerciseScreenState
 import kotlinx.collections.immutable.persistentListOf
@@ -74,7 +73,7 @@ fun AddExerciseScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
-                ExerciseSelector(
+                AddExerciseSelector(
                     modifier = modifier,
                     text = "운동종류",
                     items = persistentListOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
@@ -86,7 +85,7 @@ fun AddExerciseScreen(
                     }
                 )
                 Spacer(modifier = modifier.height(2.dp))
-                ExerciseTextField(
+                AddExerciseTextField(
                     modifier = modifier,
                     text = "운동 이름",
                     textState = state.textState,
@@ -96,7 +95,7 @@ fun AddExerciseScreen(
                     }
                 )
                 Spacer(modifier = modifier.height(2.dp))
-                ExerciseSelector(
+                AddExerciseSelector(
                     modifier = modifier,
                     text = "시간으로 운동할까요? 세트로 운동할까요?",
                     items = persistentListOf("시간", "세트"),

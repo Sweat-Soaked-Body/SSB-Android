@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.sweat.design_system.theme.SSBAndroidTheme
 
 @Composable
-fun ExerciseTextField(
+fun AddExerciseTextField(
     modifier: Modifier,
     text: String,
     textState: String,
@@ -82,7 +82,7 @@ fun ExerciseTextField(
 fun ExerciseTextFieldPreview(){
     val (textState, onTextChange) = remember { mutableStateOf("") }
 
-    ExerciseTextField(
+    AddExerciseTextField(
         modifier = Modifier,
         text = "운동 이름",
         textState = textState,

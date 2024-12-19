@@ -29,7 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun ExerciseSelector(
+fun AddExerciseSelector(
     modifier: Modifier,
     text: String,
     items: ImmutableList<String>,
@@ -142,7 +142,7 @@ fun ExerciseSelectorPreview() {
     val selectedItem = remember { mutableStateOf("어깨") }
     val expanded = remember { mutableStateOf(false) }
 
-    ExerciseSelector(
+    AddExerciseSelector(
         modifier = Modifier,
         text = "운동종류",
         items = persistentListOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
