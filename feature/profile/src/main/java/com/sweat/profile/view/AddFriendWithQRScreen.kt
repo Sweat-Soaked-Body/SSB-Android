@@ -56,6 +56,7 @@ fun AddFriendWithQRRoute(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddFriendWithQRScreen(
     modifier: Modifier = Modifier,
@@ -67,31 +68,6 @@ fun AddFriendWithQRScreen(
     val lifecycleOwner = context as? LifecycleOwner
         ?: throw IllegalStateException("Context is not a LifecycleOwner")
 
-    // 권한이 허용된 경우에만 AndroidView 실행
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        // QR 스캐너 뷰
-        AndroidView(
-            modifier = Modifier.fillMaxSize(),
-            factory = { ctx ->
-                PreviewView(ctx).apply {
-                    post {
-                        setupCamera(
-                            previewView = this,
-                            lifecycleOwner = lifecycleOwner,
-                            onQrcodeScanned = {
-                                handleIntent(
-                                    AddFriendWithQRIntent.AddFriend(
-                                        it ?: ""
-                                    )
-                                )
-                            },
-                        )
-                    }
-                }
-            }
-        )
     // 카메라 권한 상태 관리
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
@@ -102,26 +78,69 @@ fun AddFriendWithQRScreen(
         }
     }
 
-        // Compose로 Top Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .align(Alignment.TopStart),
-            horizontalArrangement = Arrangement.Start,
-        ) {
-            ChevronLeftIcon(modifier = Modifier.clickableSingle(onClick = popupBackStack))
+    if (state.isFinishAddFriend) {
+        Column(modifier = modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                ChevronLeftIcon(modifier = Modifier.clickableSingle(onClick = popupBackStack))
+            }
+            Spacer(modifier = Modifier.height(34.dp))
+            AddFriendSuccessCard(friendName = state.friendName, context = context)
         }
+    } else if (
+        cameraPermissionState.status.isGranted
+        && !state.isFinishAddFriend
+    ) {
+        // 권한이 허용된 경우에만 AndroidView 실행
+        Box(
+            modifier = modifier.fillMaxSize()
+        ) {
+            // QR 스캐너 뷰
+            AndroidView(
+                modifier = Modifier.fillMaxSize(),
+                factory = { ctx ->
+                    PreviewView(ctx).apply {
+                        post {
+                            setupCamera(
+                                previewView = this,
+                                lifecycleOwner = lifecycleOwner,
+                                onQrcodeScanned = {
+                                    handleIntent(
+                                        AddFriendWithQRIntent.AddFriend(
+                                            it ?: ""
+                                        )
+                                    )
+                                },
+                            )
+                        }
+                    }
+                }
+            )
 
-        // QR 가이드 이미지
-        Icon(
-            painter = painterResource(R.drawable.qr_guide),
-            contentDescription = "QR Guide",
-            modifier = Modifier
-                .align(Alignment.Center)
-                .zIndex(1f)
-        )
+            // Compose로 Top Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .align(Alignment.TopStart),
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                ChevronLeftIcon(modifier = Modifier.clickableSingle(onClick = popupBackStack))
+            }
 
+            // QR 가이드 이미지
+            Icon(
+                painter = painterResource(R.drawable.qr_guide),
+                contentDescription = "QR Guide",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .zIndex(1f)
+            )
+        }
     }
 }
 
