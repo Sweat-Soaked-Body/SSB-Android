@@ -138,7 +138,7 @@ fun AddExerciseSelector(
 
 @Preview(showBackground = true)
 @Composable
-fun ExerciseSelectorPreview() {
+fun AddExerciseSelectorPreview() {
     val selectedItem = remember { mutableStateOf("어깨") }
     val expanded = remember { mutableStateOf(false) }
 
