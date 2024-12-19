@@ -13,7 +13,6 @@ class FriendDataSourceImpl @Inject constructor(
     override fun friendCheck(): Flow<FriendResponse> =
         performApiRequest { serviceAuth.friendCheck() }
 
-
     override fun friendAdd(body: AddFriendRequest): Flow<Unit> =
         performApiRequest { serviceAuth.friendAdd(body = body) }
 
