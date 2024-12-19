@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -68,7 +68,6 @@ fun ExerciseScreen(
         ) {
             Row(
                 modifier = modifier
-                    .fillMaxWidth()
                     .height(57.dp)
                     .padding(
                         vertical = 13.dp,
@@ -105,29 +104,26 @@ fun ExerciseScreen(
                         style = typography.titleSmall,
                         color = colors.black
                     )
-                    Spacer(modifier = modifier.weight(1f))
-                    Row(
-                        modifier = modifier
-                            .width(72.dp)
-                            .height(24.dp),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            24.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        verticalAlignment = Alignment.Top,
+                    Box(
+                        modifier = modifier.fillMaxWidth()
                     ) {
-                        PlusIcon(
+                        Row(
                             modifier = modifier
-                                .width(24.dp)
-                                .height(24.dp)
-                                .clickable(onClick = { /*TODO*/ })
-                        )
-                        SearchIcon(
-                            modifier = modifier
-                                .width(24.dp)
-                                .height(24.dp)
-                                .clickable(onClick = { isSearching.value = !isSearching.value })
-                        )
+                                .align(Alignment.CenterEnd),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            PlusIcon(
+                                modifier = modifier
+                                    .size(24.dp)
+                                    .clickable(onClick = { /*TODO*/ })
+                            )
+                            SearchIcon(
+                                modifier = modifier
+                                    .size(24.dp)
+                                    .clickable(onClick = { isSearching.value = !isSearching.value })
+                            )
+                        }
                     }
                 }
             }
