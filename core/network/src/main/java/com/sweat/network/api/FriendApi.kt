@@ -1,7 +1,6 @@
 package com.sweat.network.api
 
 import com.sweat.network.dto.friend.AddFriendRequest
-import com.sweat.network.dto.friend.FriendCheckRequest
 import com.sweat.network.dto.friend.FriendResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,9 +11,7 @@ import retrofit2.http.Query
 
 interface FriendApi {
     @GET("/friend")
-    suspend fun friendCheck(
-        @Body body: FriendCheckRequest,
-    ): FriendResponse
+    suspend fun friendCheck(): FriendResponse
 
     @POST("/friend")
     suspend fun friendAdd(

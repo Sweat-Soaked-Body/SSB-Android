@@ -6,7 +6,7 @@ import javax.inject.Inject
 class FriendCheckUseCase @Inject constructor(
     private val friendRepository: FriendRepository
 ) {
-    operator fun invoke(id: Int, fromUser: Int, toUser: Int) = runCatching {
-        friendRepository.friendCheck(id = id, fromUser = fromUser, toUser = toUser)
+    operator fun invoke() = runCatching {
+        friendRepository.friendCheck()
     }
 }
