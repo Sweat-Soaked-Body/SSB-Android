@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.sweat.login.loginRoute
+import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.signup.navigation.signupRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
@@ -37,6 +38,11 @@ fun SSBNavHost(
         loginRoute(
             navigateToMain = {},
             navigateToSignup = navController::navigateToSignupRoute
+        )
+
+        addFriendWithQRRoute(
+            navigateToProfile = {},
+            popUpBackStack = {},
         )
     }
 }
