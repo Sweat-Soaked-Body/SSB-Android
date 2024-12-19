@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.HeartIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
 
@@ -32,9 +34,7 @@ fun ExerciseItem(
             modifier = modifier
                 .fillMaxWidth()
                 .background(Color.White)
-                .padding(
-                    vertical = 17.dp,
-                ),
+                .padding(vertical = 17.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -46,13 +46,15 @@ fun ExerciseItem(
             HeartIcon(
                 modifier = modifier
                     .padding(1.dp)
-                    .width(24.dp)
-                    .height(24.dp)
-                    .clickable { onHeartClick() },
+                    .size(24.dp)
+                    .clickableSingle { onHeartClick() },
                 isSelected = isSelected
             )
         }
-        Divider(thickness = 1.dp, color = colors.gray100)
+        Divider(
+            thickness = 1.dp,
+            color = colors.gray100
+        )
     }
 }
 
