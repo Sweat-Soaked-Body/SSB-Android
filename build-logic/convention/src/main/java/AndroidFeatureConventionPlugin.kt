@@ -18,11 +18,16 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             // Add necessary dependencies from Version Catalog
             dependencies {
+                add("implementation", project(":core:common"))
+                add("implementation", project(":core:model"))
+                add("implementation", project(":core:ui"))
+                add("implementation", project(":core:design-system"))
+                add("implementation", project(":core:domain"))
+
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())  // Add Lifecycle runtime for Compose
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())  // Add ViewModel support for Compose
                 add("implementation", libs.findLibrary("kotlinx.datetime").get())  // Add KotlinX DateTime library
                 add("implementation", libs.findLibrary("kotlinx.immutable").get())  // Add KotlinX Immutable collections library
-                add("implementation", project(":core:design-system"))
             }
         }
     }
