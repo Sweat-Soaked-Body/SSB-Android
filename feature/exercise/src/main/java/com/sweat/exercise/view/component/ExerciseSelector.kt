@@ -38,6 +38,7 @@ fun ExerciseSelector(
     selectedItem: MutableState<String>,
     expanded: MutableState<Boolean>,
     noItemText: String,
+    onItemSelected: (String) -> Unit,
 ){
 
     SSBAndroidTheme { colors, typography ->
@@ -69,6 +70,7 @@ fun ExerciseSelector(
                                         .fillMaxWidth()
                                         .clickableSingle {
                                             selectedItem.value = item
+                                            onItemSelected(item)
                                             expanded.value = false
                                         }
                                         .padding(horizontal = 16.dp, vertical = 9.dp),
@@ -81,8 +83,7 @@ fun ExerciseSelector(
                                     )
                                     ChevronSmallUpLightIcon(
                                         modifier = Modifier
-                                            .width(24.dp)
-                                            .height(24.dp)
+                                            .size(24.dp)
                                             .clickable { expanded.value = false }
                                     )
                                 }
@@ -122,7 +123,10 @@ fun ExerciseSelector(
                                     color = colors.gray100,
                                     shape = RoundedCornerShape(size = 8.dp)
                                 )
-                                .padding(horizontal = 16.dp, vertical = 14.dp),
+                                .padding(
+                                    horizontal = 16.dp,
+                                    vertical = 14.dp
+                                ),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -154,7 +158,7 @@ fun ExerciseSelector(
 
 @Preview(showBackground = true)
 @Composable
-fun ExerciseSelectorPreview(){
+fun ExerciseSelectorPreview() {
     val selectedItem = remember { mutableStateOf("어깨") }
     val expanded = remember { mutableStateOf(false) }
 
@@ -165,5 +169,6 @@ fun ExerciseSelectorPreview(){
         selectedItem = selectedItem,
         expanded = expanded,
         noItemText = "",
+        onItemSelected = { selectedCategory -> selectedItem.value = selectedCategory }
     )
 }

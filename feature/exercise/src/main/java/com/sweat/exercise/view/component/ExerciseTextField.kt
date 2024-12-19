@@ -42,13 +42,12 @@ fun ExerciseTextField(
             )
             Row(
                 modifier = modifier
+                    .fillMaxWidth()
                     .border(
                         width = 1.dp,
                         color = colors.gray100,
                         shape = RoundedCornerShape(size = 8.dp)
                     )
-                    .fillMaxWidth()
-                    .height(54.dp)
                     .padding(start = 16.dp, top = 14.dp, end = 149.dp, bottom = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
                 verticalAlignment = Alignment.CenterVertically,
