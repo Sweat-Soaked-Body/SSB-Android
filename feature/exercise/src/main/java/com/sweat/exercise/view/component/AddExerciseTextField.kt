@@ -79,7 +79,7 @@ fun AddExerciseTextField(
 
 @Preview(showBackground = true)
 @Composable
-fun ExerciseTextFieldPreview(){
+fun AddExerciseTextFieldPreview(){
     val (textState, onTextChange) = remember { mutableStateOf("") }
 
     AddExerciseTextField(
