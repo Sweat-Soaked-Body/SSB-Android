@@ -1,10 +1,10 @@
 package com.sweat.data.repository.auth
 
 import com.sweat.model.param.auth.LoginRequestParam
-import com.sweat.network.datasource.AuthDataSource
-import com.sweat.network.mapper.request.toDto
+import com.sweat.model.param.auth.SignUpRequestParam
+import com.sweat.network.datasource.auth.AuthDataSource
+import com.sweat.network.mapper.auth.request.toDto
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -12,6 +12,12 @@ class AuthRepositoryImpl @Inject constructor(
 ): AuthRepository {
     override fun login(body: LoginRequestParam): Flow<Unit> {
         return remoteDataSource.authLogin(
+            body = body.toDto()
+        )
+    }
+
+    override fun signUp(body: SignUpRequestParam): Flow<Unit> {
+        return remoteDataSource.authSignUp(
             body = body.toDto()
         )
     }
