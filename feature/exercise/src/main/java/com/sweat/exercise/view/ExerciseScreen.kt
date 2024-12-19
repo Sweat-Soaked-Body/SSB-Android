@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +36,7 @@ import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ExerciseRoute(
@@ -45,14 +45,14 @@ fun ExerciseRoute(
 ){
    ExerciseScreen(
        modifier = modifier,
-       exerciseItems = listOf()
+       exerciseItems = persistentListOf()
    )
 }
 
 @Composable
 fun ExerciseScreen(
     modifier: Modifier = Modifier,
-    exerciseItems: List<Pair<String, Boolean>>
+    exerciseItems: ImmutableList<Pair<String, Boolean>>
 ){
     val exerciseList = listOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타")
     val selectedButton = remember { mutableStateOf(exerciseList.first()) }
@@ -175,7 +175,7 @@ fun ExerciseScreen(
 @Composable
 fun ExercisePreview(){
     ExerciseScreen(
-        exerciseItems = listOf(
+        exerciseItems = persistentListOf(
             "바벨 백스쿼트" to false,
             "바벨 백스쿼트" to false,
             "바벨 백스쿼트" to false,

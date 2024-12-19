@@ -27,12 +27,14 @@ import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronSmallDownLightIcon
 import com.sweat.design_system.icon.ChevronSmallUpLightIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ExerciseSelector(
     modifier: Modifier,
     text: String,
-    items: List<String>,
+    items: ImmutableList<String>,
     selectedItem: MutableState<String>,
     expanded: MutableState<Boolean>,
     noItemText: String,
@@ -159,7 +161,7 @@ fun ExerciseSelectorPreview(){
     ExerciseSelector(
         modifier = Modifier,
         text = "운동종류",
-        items = listOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
+        items = persistentListOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
         selectedItem = selectedItem,
         expanded = expanded,
         noItemText = "",
