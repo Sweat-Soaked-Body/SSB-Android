@@ -1,7 +1,8 @@
 package com.sweat.network.dto.friend
 
-import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class AddFriendRequest(
-    @Json(name = "to_user") val toUser: Int
+     val name: String
 )
