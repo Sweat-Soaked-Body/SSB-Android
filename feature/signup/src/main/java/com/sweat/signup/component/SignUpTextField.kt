@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -20,13 +21,14 @@ import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 
 @Composable
-fun SignupTextField(
+fun SignUpTextField(
     modifier: Modifier,
     textState: String,
     placeHolder: String,
     helperText: String = "",
     isError: Boolean = false,
     onTextChange: (String) -> Unit,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -52,7 +54,8 @@ fun SignupTextField(
                     }
                     innerTextField()
                 }
-            }
+            },
+            keyboardOptions = keyboardOptions
         )
         Text(
             text = helperText,
@@ -71,14 +74,14 @@ fun SignupTextFieldPreview() {
         modifier = Modifier.height(250.dp),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        SignupTextField(
+        SignUpTextField(
             modifier = Modifier.width(312.dp),
             placeHolder = "이름",
             textState = textState,
             onTextChange = onTextChange
         )
 
-        SignupTextField(
+        SignUpTextField(
             modifier = Modifier.width(312.dp),
             placeHolder = "이름",
             helperText = "실패",
@@ -87,7 +90,7 @@ fun SignupTextFieldPreview() {
             onTextChange = onTextChange
         )
 
-        SignupTextField(
+        SignUpTextField(
             modifier = Modifier.width(312.dp),
             placeHolder = "이dldldlldlsdsdsddlld름",
             helperText = "이름 4~16",
