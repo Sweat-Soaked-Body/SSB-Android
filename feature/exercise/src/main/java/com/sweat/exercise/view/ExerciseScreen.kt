@@ -37,6 +37,7 @@ import com.sweat.exercise.view.component.ExerciseItem
 import com.sweat.exercise.view.component.ExerciseTextField
 import com.sweat.exercise.viewModel.ExerciseIntent
 import com.sweat.exercise.viewModel.ExerciseScreenState
+import com.sweat.ui.DevicePreviews
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -150,7 +151,7 @@ fun ExerciseScreen(
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 fun ExercisePreview() {
     var previewState by remember { mutableStateOf(

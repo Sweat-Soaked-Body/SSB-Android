@@ -30,6 +30,7 @@ import com.sweat.exercise.view.component.AddExerciseSelector
 import com.sweat.exercise.view.component.AddExerciseTextField
 import com.sweat.exercise.viewModel.AddExerciseIntent
 import com.sweat.exercise.viewModel.AddExerciseScreenState
+import com.sweat.ui.DevicePreviews
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -123,7 +124,7 @@ fun AddExerciseScreen(
 
 
 
-@Preview
+@DevicePreviews
 @Composable
 fun AddExerciseScreenPreview() {
     val previewState = remember { mutableStateOf(
