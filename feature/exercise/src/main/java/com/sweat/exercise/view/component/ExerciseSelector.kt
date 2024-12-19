@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,11 +33,10 @@ fun ExerciseSelector(
     modifier: Modifier,
     text: String,
     items: List<String>,
-    defaultItem: String,
+    selectedItem: MutableState<String>,
+    expanded: MutableState<Boolean>,
     noItemText: String,
 ){
-    val selectedItem = remember { mutableStateOf(defaultItem) }
-    val expanded = remember { mutableStateOf(false) }
 
     SSBAndroidTheme { colors, typography ->
         Column(
@@ -153,11 +153,15 @@ fun ExerciseSelector(
 @Preview(showBackground = true)
 @Composable
 fun ExerciseSelectorPreview(){
+    val selectedItem = remember { mutableStateOf("어깨") }
+    val expanded = remember { mutableStateOf(false) }
+
     ExerciseSelector(
         modifier = Modifier,
         text = "운동종류",
         items = listOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-        defaultItem = "어깨",
+        selectedItem = selectedItem,
+        expanded = expanded,
         noItemText = "",
     )
 }
