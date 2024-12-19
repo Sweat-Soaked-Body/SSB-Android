@@ -36,6 +36,7 @@ import com.sweat.design_system.icon.SearchIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun ExerciseRoute(
@@ -81,9 +82,7 @@ fun ExerciseScreen(
                         modifier = modifier.fillMaxWidth(),
                         value = searchTextState,
                         onValueChange = { newText -> onSearchTextChange(newText) },
-                        textStyle = typography.bodySmall.copy(
-                            textAlign = TextAlign.Start
-                        ),
+                        textStyle = typography.bodySmall.copy(textAlign = TextAlign.Start),
                         singleLine = true,
                         decorationBox = { innerTextField ->
                             Box(
@@ -103,7 +102,8 @@ fun ExerciseScreen(
                 } else {
                     Text(
                         text = "운동",
-                        style = typography.titleSmall
+                        style = typography.titleSmall,
+                        color = colors.black
                     )
                     Spacer(modifier = modifier.weight(1f))
                     Row(
@@ -118,14 +118,12 @@ fun ExerciseScreen(
                     ) {
                         PlusIcon(
                             modifier = modifier
-                                .padding(1.dp)
                                 .width(24.dp)
                                 .height(24.dp)
                                 .clickable(onClick = { /*TODO*/ })
                         )
                         SearchIcon(
                             modifier = modifier
-                                .padding(1.dp)
                                 .width(24.dp)
                                 .height(24.dp)
                                 .clickable(onClick = { isSearching.value = !isSearching.value })
@@ -155,8 +153,7 @@ fun ExerciseScreen(
             Spacer(modifier = modifier.height(12.dp))
             LazyColumn(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
+                    .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
                 itemsIndexed(exerciseStateList) { index, item ->
