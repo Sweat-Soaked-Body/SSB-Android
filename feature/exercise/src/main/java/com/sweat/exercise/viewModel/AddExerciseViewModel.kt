@@ -5,10 +5,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AddExerciseViewModel @Inject constructor() :
-    BaseViewModel<AddExerciseScreenState, AddExerciseScreenSideEffect, AddExerciseIntent>(
-        AddExerciseScreenState.getInitialState()
-    ) {
+class AddExerciseViewModel @Inject constructor(
+
+) : BaseViewModel<AddExerciseScreenState, AddExerciseScreenSideEffect, AddExerciseIntent>(AddExerciseScreenState.getInitialState()) {
     override fun handleIntent(intent: AddExerciseIntent) {
         when (intent) {
             is AddExerciseIntent.SetExerciseName -> setState { copy(textState = intent.state) }
