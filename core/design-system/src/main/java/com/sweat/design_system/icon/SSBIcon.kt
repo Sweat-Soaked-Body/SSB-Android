@@ -35,7 +35,7 @@ fun CheckIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun PlusIcon(modifier: Modifier = Modifier){
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.plus),
         contentDescription = "",
         modifier = modifier
@@ -65,7 +65,7 @@ fun CheckBoxSelectedIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun ChevronLeftIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.chevron_left),
         contentDescription = "",
         modifier = modifier
@@ -75,7 +75,7 @@ fun ChevronLeftIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun ChevronRightIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.chevron_right),
         contentDescription = "",
         modifier = modifier
@@ -85,7 +85,7 @@ fun ChevronRightIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun ChevronSmallDownLightIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.chevron_small_down_light),
         contentDescription = "",
         modifier = modifier
@@ -95,7 +95,7 @@ fun ChevronSmallDownLightIcon(modifier: Modifier = Modifier) {
 @Stable
 @Composable
 fun ChevronSmallUpLightIcon(modifier: Modifier = Modifier) {
-    Image(
+    Icon(
         painter = painterResource(id = R.drawable.chevron_small_up_light),
         contentDescription = "",
         modifier = modifier
