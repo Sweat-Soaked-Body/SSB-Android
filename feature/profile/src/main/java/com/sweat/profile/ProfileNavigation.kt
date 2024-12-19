@@ -8,14 +8,14 @@ import com.sweat.profile.view.AddFriendWithQRRoute
 import com.sweat.profile.view.ProfileRoute
 
 const val profileRoute = "profileRoute"
-const val addFriendWithQR = "addFriendWithQR"
+const val addFriendWithQRRoute = "addFriendWithQRRoute"
 
 fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
     this.navigate(profileRoute, navOptions)
 }
 
 fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
-    this.navigate(addFriendWithQR, navOptions)
+    this.navigate(addFriendWithQRRoute, navOptions)
 }
 
 fun NavGraphBuilder.profileRoute(
@@ -40,7 +40,7 @@ fun NavGraphBuilder.addFriendWithQRRoute(
     navigateToProfile: () -> Unit,
     popUpBackStack: () -> Unit,
 ) {
-    composable(addFriendWithQR) {
+    composable(addFriendWithQRRoute) {
         AddFriendWithQRRoute(
             navigateToProfile = navigateToProfile,
             popupBackStack = popUpBackStack,
