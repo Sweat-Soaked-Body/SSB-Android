@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -28,11 +29,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.button.SSBButton
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.icon.ChevronSmallDownLightIcon
 import com.sweat.design_system.icon.ChevronSmallUpLightIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.design_system.theme.SSBTypography
+import com.sweat.exercise.view.component.ExerciseSelector
+import com.sweat.exercise.view.component.ExerciseTextField
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun AddExerciseScreen(
@@ -41,7 +46,7 @@ fun AddExerciseScreen(
     val categories = listOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타")
     val exerciseTypeExpanded = remember { mutableStateOf(false) }
     val selectedCategory = remember { mutableStateOf("어깨") }
-    val (exerciseTextState, onExerciseTextChange) = remember { mutableStateOf("") }
+    val (textState, onTextChange) = remember { mutableStateOf("") }
     val exerciseStyleExpanded = remember { mutableStateOf(false) }
     val exerciseStyle = listOf("시간", "세트")
     val selectedStyle = remember { mutableStateOf("") }
@@ -66,220 +71,46 @@ fun AddExerciseScreen(
                 ChevronLeftIcon(
                     modifier = modifier
                         .padding(1.dp)
-                        .width(24.dp)
-                        .height(24.dp)
-                        .clickable(onClick = { /*TODO*/ })
+                        .size(24.dp)
+                        .clickableSingle(onClick = { /*TODO*/ })
                 )
                 Text(
                     text = "운동 추가",
-                    style = typography.subTitle
+                    style = typography.subTitle,
+                    color = colors.black
                 )
                 Spacer(modifier = modifier.width(24.dp))
             }
             Divider(thickness = 1.dp, color = colors.gray100)
-            Spacer(modifier = modifier.height(24.dp))
+            Spacer(modifier = modifier.height(2.dp))
             Column(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
-                Text(
-                    text = "운동 종류",
-                    style = typography.bodySmall
+                ExerciseSelector(
+                    modifier = modifier,
+                    text = "운동종류",
+                    items = listOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
+                    defaultItem = "어깨",
+                    noItemText = "",
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                ) {
-                    if (exerciseTypeExpanded.value) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                                .padding(vertical = 5.dp)
-                                .background(Color.White)
-                        ) {
-                            categories.forEachIndexed { index, category ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            selectedCategory.value = category
-                                            exerciseTypeExpanded.value = false
-                                        }
-                                        .padding(horizontal = 16.dp, vertical = 9.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = category,
-                                        style = typography.bodySmall
-                                    )
-                                    if (index == 0) {
-                                        ChevronSmallUpLightIcon(
-                                            modifier = Modifier
-                                                .width(24.dp)
-                                                .height(24.dp)
-                                                .clickable { exerciseTypeExpanded.value = false }
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else{
-                        Row(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(54.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = Color(0xFFEFF0F2),
-                                    shape = RoundedCornerShape(size = 8.dp)
-                                )
-                                .padding(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = selectedCategory.value,
-                                style = typography.bodySmall
-                            )
-                            ChevronSmallDownLightIcon(
-                                modifier = modifier
-                                    .width(24.dp)
-                                    .height(24.dp)
-                                    .clickable { exerciseTypeExpanded.value = true }
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = modifier.height(20.dp))
-                Text(
+                Spacer(modifier = modifier.height(2.dp))
+                ExerciseTextField(
+                    modifier = modifier,
                     text = "운동 이름",
-                    style = typography.bodySmall
+                    textState = textState,
+                    placeHolder = "운동 이름을 적어주세요",
+                    onTextChange = onTextChange,
                 )
-                Row(
-                    modifier = modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color(0xFFEFF0F2),
-                            shape = RoundedCornerShape(size = 8.dp)
-                        )
-                        .fillMaxWidth()
-                        .height(54.dp)
-                        .padding(start = 16.dp, top = 14.dp, end = 149.dp, bottom = 14.dp),
-                    horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.Start),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    BasicTextField(
-                        modifier = modifier.fillMaxWidth(),
-                        value = exerciseTextState,
-                        onValueChange = { newText -> onExerciseTextChange(newText) },
-                        textStyle = typography.bodySmall.copy(
-                            textAlign = TextAlign.Start
-                        ),
-                        singleLine = true,
-                        decorationBox = { innerTextField ->
-                            Box(
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                if (exerciseTextState.isEmpty()) {
-                                    Text(
-                                        text = "운동 이름을 적어주세요",
-                                        color = colors.gray400,
-                                        style = typography.bodySmall,
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
-                    )
-                }
-                Spacer(modifier = modifier.height(20.dp))
-                Text(
+                Spacer(modifier = modifier.height(2.dp))
+                ExerciseSelector(
+                    modifier = modifier,
                     text = "시간으로 운동할까요? 세트로 운동할까요?",
-                    style = SSBTypography.bodySmall
+                    items = listOf("시간", "세트"),
+                    defaultItem = "",
+                    noItemText = "시간/세트 선택해주세요"
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                ) {
-                    if (exerciseStyleExpanded.value) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                                .padding(vertical = 5.dp)
-                                .background(Color.White)
-                        ) {
-                            exerciseStyle.forEachIndexed { index, exerciseStyle ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            selectedStyle.value = exerciseStyle
-                                            exerciseStyleExpanded.value = false
-                                        }
-                                        .padding(horizontal = 16.dp, vertical = 9.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = exerciseStyle,
-                                        style = typography.bodySmall
-                                    )
-                                    if (index == 0) {
-                                        ChevronSmallUpLightIcon(
-                                            modifier = Modifier
-                                                .width(24.dp)
-                                                .height(24.dp)
-                                                .clickable { exerciseStyleExpanded.value = false }
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        Row(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .height(54.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = Color(0xFFEFF0F2),
-                                    shape = RoundedCornerShape(size = 8.dp)
-                                )
-                                .padding(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            if (selectedStyle.value.isEmpty()) {
-                                Text(
-                                    text = "시간/세트 선택해주세요",
-                                    color = colors.gray400,
-                                    style = typography.bodySmall
-                                )
-                            }
-                            else{
-                                Text(
-                                    text = selectedStyle.value,
-                                    style = typography.bodySmall
-                                )
-                            }
-                            ChevronSmallDownLightIcon(
-                                modifier = modifier
-                                    .width(24.dp)
-                                    .height(24.dp)
-                                    .clickable {
-                                        exerciseStyleExpanded.value = true
-                                    }
-                            )
-                        }
-                    }
-                }
             }
             Spacer(modifier = modifier.weight(1f))
             SSBButton(
@@ -287,7 +118,7 @@ fun AddExerciseScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 12.dp),
                 text = "추가",
-                state = if (exerciseTextState.isNotEmpty() && selectedStyle.value.isNotEmpty()) ButtonState.Enabled
+                state = if (textState.isNotEmpty() && selectedStyle.value.isNotEmpty()) ButtonState.Enabled
                 else ButtonState.Disabled,
                 onClick = { /*TODO*/ }
             )
