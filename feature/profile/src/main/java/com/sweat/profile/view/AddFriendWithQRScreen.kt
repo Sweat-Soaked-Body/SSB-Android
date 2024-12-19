@@ -92,6 +92,15 @@ fun AddFriendWithQRScreen(
                 }
             }
         )
+    // 카메라 권한 상태 관리
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+
+    // 권한 요청 처리
+    LaunchedEffect("cameraPermission") {
+        if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) {
+            cameraPermissionState.launchPermissionRequest()
+        }
+    }
 
         // Compose로 Top Bar
         Row(
