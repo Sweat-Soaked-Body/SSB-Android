@@ -35,6 +35,7 @@ import com.sweat.design_system.icon.SearchIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
+import com.sweat.exercise.view.component.ExerciseTextField
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -77,26 +78,11 @@ fun ExerciseScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (isSearching.value) {
-                    BasicTextField(
-                        modifier = modifier.fillMaxWidth(),
-                        value = searchTextState,
-                        onValueChange = { newText -> onSearchTextChange(newText) },
-                        textStyle = typography.bodySmall.copy(textAlign = TextAlign.Start),
-                        singleLine = true,
-                        decorationBox = { innerTextField ->
-                            Box(
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                if (searchTextState.isEmpty()) {
-                                    Text(
-                                        text = "운동을 적어주세요",
-                                        color = colors.gray200,
-                                        style = typography.bodySmall,
-                                    )
-                                }
-                                innerTextField()
-                            }
-                        }
+                    ExerciseTextField(
+                        modifier = modifier,
+                        text = "운동을 적어주세요",
+                        textState = searchTextState,
+                        onTextChange = onSearchTextChange
                     )
                 } else {
                     Text(
