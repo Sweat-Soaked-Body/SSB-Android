@@ -28,7 +28,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())  // Add ViewModel support for Compose
                 add("implementation", libs.findLibrary("kotlinx.datetime").get())  // Add KotlinX DateTime library
                 add("implementation", libs.findLibrary("kotlinx.immutable").get())  // Add KotlinX Immutable collections library
-                add("implementation", project(":core:design-system"))
             }
         }
     }
