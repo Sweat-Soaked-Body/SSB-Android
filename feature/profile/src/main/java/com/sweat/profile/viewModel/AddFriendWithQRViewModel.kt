@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
 import com.sweat.domain.friend.FriendAddUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +33,9 @@ class AddFriendWithQRViewModel @Inject constructor(
             friendAddUseCase(name)
                 .onSuccess {
                     setState { copy(isFinishAddFriend = true) }
-                         }
+                    delay(5000)
+                    postSideEffect(AddFriendWithQRScreenSideEffect.NavigateToProfile)
+                }
         }
     }
 }
