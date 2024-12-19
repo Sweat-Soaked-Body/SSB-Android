@@ -36,6 +36,7 @@ import com.sweat.profile.R
 import com.sweat.profile.component.AddFriendSuccessCard
 import com.sweat.profile.util.setupCamera
 import com.sweat.profile.viewModel.AddFriendWithQRIntent
+import com.sweat.profile.viewModel.AddFriendWithQRScreenSideEffect
 import com.sweat.profile.viewModel.AddFriendWithQRScreenState
 import com.sweat.profile.viewModel.AddFriendWithQRViewModel
 
@@ -46,6 +47,14 @@ fun AddFriendWithQRRoute(
     popupBackStack: () -> Unit,
     navigateToProfile: () -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                AddFriendWithQRScreenSideEffect.NavigateToProfile -> navigateToProfile()
+            }
+        }
+    }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     AddFriendWithQRScreen(
