@@ -10,41 +10,81 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.button.SSBButton
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.component.textfield.SSBTextField
 import com.sweat.design_system.icon.EyeIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
+import com.sweat.login.viewModel.LoginIntent
+import com.sweat.login.viewModel.LoginSideEffect
+import com.sweat.login.viewModel.LoginState
+import com.sweat.login.viewModel.LoginViewModel
+import com.sweat.model.param.auth.LoginRequestParam
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginRoute(
     modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToMain: () -> Unit,
     navigateToSignup: () -> Unit
 ) {
-    LoginScreen(modifier = modifier)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
+    LaunchedEffect(lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
+                when (sideEffect) {
+                    LoginSideEffect.LoginSuccess -> {/*TODO()*/}
+                    LoginSideEffect.LoginFailed -> {/*TODO()*/}
+                }
+            }
+        }
+    }
+
+    LoginScreen(
+        modifier = modifier,
+        state = state,
+        onUsernameChange = { viewModel.handleIntent(LoginIntent.UpdateUsername(it)) },
+        onPasswordChange = { viewModel.handleIntent(LoginIntent.UpdatePassword(it)) },
+        onTogglePasswordVisibility = { viewModel.handleIntent(LoginIntent.TogglePasswordVisibility) },
+        onLoginClick = {
+            viewModel.handleIntent(LoginIntent.Login(state.username, state.password))
+        }
+    )
 }
 
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: LoginState,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onTogglePasswordVisibility: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
-    val (idTextState, onIdTextChange) = remember { mutableStateOf("") }
-    val (passwordTextState, onPasswordTextChange) = remember { mutableStateOf("") }
-    val (isSelected, setIsSelected) = remember { mutableStateOf(false) }
 
     SSBAndroidTheme { colors, typography ->
         Column(
@@ -73,25 +113,25 @@ fun LoginScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 SSBTextField(
-                    textState = idTextState,
+                    textState = state.username,
                     label = "아이디",
                     placeHolder = "아이디를 입력해주세요",
-                    onTextChange = onIdTextChange,
+                    onTextChange = onUsernameChange,
                     icon = {}
                 )
 
                 SSBTextField(
-                    textState = passwordTextState,
+                    textState = state.password,
                     label = "비밀번호",
                     placeHolder = "비밀번호를 입력해주세요",
-                    onTextChange = onPasswordTextChange,
+                    onTextChange = onPasswordChange,
                     icon = {
                         EyeIcon(
-                            isSelected = isSelected,
-                            modifier = Modifier.clickableSingle { setIsSelected(!isSelected) }
+                            isSelected = state.isPasswordVisible,
+                            modifier = Modifier.clickableSingle { onTogglePasswordVisibility() }
                         )
                     },
-                    visualTransformation = if (isSelected) VisualTransformation.None else PasswordVisualTransformation()
+                    visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation()
                 )
             }
 
@@ -100,8 +140,8 @@ fun LoginScreen(
             SSBButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = "다음",
-                state = if (idTextState.isNotEmpty() && passwordTextState.isNotEmpty()) ButtonState.Enabled else ButtonState.Disabled,
-                onClick = { /*TODO*/ }
+                state = if (state.username.isNotEmpty() && state.password.isNotEmpty()) ButtonState.Enabled else ButtonState.Disabled,
+                onClick = onLoginClick
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -113,7 +153,7 @@ fun LoginScreen(
             )
 
             Text(
-                modifier = Modifier.clickableSingle { /*TODO*/ },
+                modifier = Modifier.clickableSingle { /*TODO: 회원가입 이동*/ },
                 text = "회원가입",
                 style = typography.regularTextSM,
                 color = colors.main
@@ -122,10 +162,4 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(38.dp))
         }
     }
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }

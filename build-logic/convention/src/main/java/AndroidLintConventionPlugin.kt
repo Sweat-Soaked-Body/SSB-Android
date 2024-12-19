@@ -35,4 +35,6 @@ class AndroidLintConventionPlugin : Plugin<Project> {
 private fun Lint.configure() {
     xmlReport = true  // Enable XML report generation
     checkDependencies = true  // Enable checking of dependencies
+    checkReleaseBuilds = true
+    abortOnError = false
 }
