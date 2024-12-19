@@ -51,10 +51,8 @@ fun ExerciseItem(
                 isSelected = isSelected
             )
         }
-        Divider(
-            thickness = 1.dp,
-            color = colors.gray100
-        )
+
+        Divider(thickness = 1.dp, color = colors.gray100)
     }
 }
 
