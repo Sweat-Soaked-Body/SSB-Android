@@ -71,7 +71,8 @@ fun LoginRoute(
         onTogglePasswordVisibility = { viewModel.handleIntent(LoginIntent.TogglePasswordVisibility) },
         onLoginClick = {
             viewModel.handleIntent(LoginIntent.Login(state.username, state.password))
-        }
+        },
+        navigateToSignup = navigateToSignup
     )
 }
 
@@ -83,7 +84,8 @@ fun LoginScreen(
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    navigateToSignup: () -> Unit
 ) {
 
     SSBAndroidTheme { colors, typography ->
@@ -153,7 +155,7 @@ fun LoginScreen(
             )
 
             Text(
-                modifier = Modifier.clickableSingle { /*TODO: 회원가입 이동*/ },
+                modifier = Modifier.clickableSingle { navigateToSignup() },
                 text = "회원가입",
                 style = typography.regularTextSM,
                 color = colors.main
