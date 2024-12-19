@@ -16,17 +16,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sweat.design_system.component.button.ButtonState
@@ -36,31 +35,25 @@ import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
 import com.sweat.exercise.view.component.ExerciseTextField
-import kotlinx.collections.immutable.ImmutableList
+import com.sweat.exercise.viewModel.ExerciseIntent
+import com.sweat.exercise.viewModel.ExerciseScreenState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
     navigateToAddExerciseScreen: () -> Unit
 ){
-   ExerciseScreen(
-       modifier = modifier,
-       exerciseItems = persistentListOf()
-   )
+
 }
 
 @Composable
 fun ExerciseScreen(
     modifier: Modifier = Modifier,
-    exerciseItems: ImmutableList<Pair<String, Boolean>>
+    state: ExerciseScreenState,
+    handleIntent: (ExerciseIntent) -> Unit,
 ){
-    val exerciseList = listOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타")
-    val selectedButton = remember { mutableStateOf(exerciseList.first()) }
-    val exerciseStateList = remember { mutableStateListOf<Pair<String, Boolean>>().apply { addAll(exerciseItems) } }
-    val isSearching = remember { mutableStateOf(false) }
-    val (searchTextState, onSearchTextChange) = remember { mutableStateOf("") }
-
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -77,12 +70,14 @@ fun ExerciseScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isSearching.value) {
+                if (state.isSearching) {
                     ExerciseTextField(
                         modifier = modifier,
-                        text = "운동을 적어주세요",
-                        textState = searchTextState,
-                        onTextChange = onSearchTextChange
+                        text = "운동 이름을 적어주세요",
+                        textState = state.searchTextState,
+                        onTextChange = { newText ->
+                            handleIntent(ExerciseIntent.SetExerciseName(newText))
+                        }
                     )
                 } else {
                     Text(
@@ -107,7 +102,7 @@ fun ExerciseScreen(
                             SearchIcon(
                                 modifier = modifier
                                     .size(24.dp)
-                                    .clickable(onClick = { isSearching.value = !isSearching.value })
+                                    .clickable(onClick = { handleIntent(ExerciseIntent.ToggleSearchMode) })
                             )
                         }
                     }
@@ -122,13 +117,13 @@ fun ExerciseScreen(
                 horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.Top,
             ) {
-                items(exerciseList){ text ->
-                    val isSelected = selectedButton.value == text
+                items(state.exerciseList){ text ->
+                    val isSelected = state.selectedButton == text
                     ExerciseButton(
                         modifier = modifier,
                         text = text,
                         state = if (isSelected) ButtonState.Disabled else ButtonState.Enabled,
-                        onClick = {selectedButton.value = text }
+                        onClick = { handleIntent(ExerciseIntent.SetExerciseCategory(text))  }
                     )
                 }
             }
@@ -138,13 +133,15 @@ fun ExerciseScreen(
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
-                itemsIndexed(exerciseStateList) { index, item ->
+                itemsIndexed(state.exerciseStateList) { index, item ->
                     ExerciseItem(
                         modifier = modifier,
                         text = item.first,
                         isSelected = item.second,
                         onHeartClick = {
-                            exerciseStateList[index] = item.copy(second = !item.second)
+                            val updatedList = state.exerciseStateList.toMutableList()
+                            updatedList[index] = item.copy(second = !item.second)
+                            handleIntent(ExerciseIntent.UpdateExerciseItems(updatedList.toImmutableList()))
                         }
                     )
                 }
@@ -155,13 +152,39 @@ fun ExerciseScreen(
 
 @Preview
 @Composable
-fun ExercisePreview(){
-    ExerciseScreen(
-        exerciseItems = persistentListOf(
-            "바벨 백스쿼트" to false,
-            "바벨 백스쿼트" to false,
-            "바벨 백스쿼트" to false,
-            "바벨 백스쿼트" to true,
+fun ExercisePreview() {
+    var previewState by remember { mutableStateOf(
+        ExerciseScreenState(
+            exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
+            selectedButton = "전체",
+            exerciseStateList = persistentListOf(
+                "바벨 백스쿼트" to false,
+                "덤벨 벤치프레스" to false,
+                "바벨 로우" to false,
+                "스쿼트" to true
+            ),
+            isSearching = false,
+            searchTextState = ""
         )
+    )}
+
+    ExerciseScreen(
+        modifier = Modifier,
+        state = previewState,
+        handleIntent = { intent ->
+            previewState = when (intent) {
+                is ExerciseIntent.ToggleSearchMode -> {
+                    previewState.copy(isSearching = !previewState.isSearching)
+                }
+                is ExerciseIntent.UpdateExerciseItems -> {
+                    val updatedList = intent.items
+                    previewState.copy(exerciseStateList = updatedList)
+                }
+                is ExerciseIntent.ToggleSearchMode -> {
+                    previewState.copy(selectedButton =  previewState.selectedButton)
+                }
+                else -> previewState
+            }
+        },
     )
 }
