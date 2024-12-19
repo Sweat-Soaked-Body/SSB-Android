@@ -13,48 +13,57 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.button.SSBButton
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
-import com.sweat.signup.component.SignupTextField
+import com.sweat.signup.component.SignUpTextField
+import com.sweat.signup.enum.GenderEnum
+import com.sweat.signup.viewmodel.SignUpIntent
+import com.sweat.signup.viewmodel.SignUpState
+import com.sweat.signup.viewmodel.SignUpViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun SignupRoute(
+internal fun SignUpRoute(
     modifier: Modifier = Modifier,
     navigateToMain: () -> Unit,
-    navigateToLogin: () -> Unit
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    SignupScreen(modifier = modifier)
+    val signUpState by viewModel.state.collectAsStateWithLifecycle()
+
+    SignUpScreen(
+        modifier = modifier,
+        navigateToMain = navigateToMain,
+        signUpState = signUpState,
+        signUpIntent = viewModel::handleIntent
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SignupScreen(
-    modifier: Modifier = Modifier
+private fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    navigateToMain: () -> Unit,
+    signUpState: SignUpState,
+    signUpIntent: (SignUpIntent) -> Unit
 ) {
-    val (nameTextState, onNameTextChange) = remember { mutableStateOf("") }
-    val (idTextState, onIdTextChange) = remember { mutableStateOf("") }
-    val (passWordTextState, onPassWordTextChange) = remember { mutableStateOf("") }
-    val (checkPassWordTextState, onCheckPassWordTextChange) = remember { mutableStateOf("") }
-    val (selectedGender, onGenderSelected) = remember { mutableStateOf<String?>(null) }
-    val (ageState, onAgeChange) = remember { mutableStateOf("") }
-    val (heightState, onHeightChange) = remember { mutableStateOf("") }
-    val (weightState, onWeightIChange) = remember { mutableStateOf("") }
-    val (checkPassWord, onCheckPassWordChange) = remember { mutableStateOf(true) }
     val coroutine = rememberCoroutineScope()
     val pagerState = rememberPagerState { 9 }
 
@@ -69,10 +78,10 @@ fun SignupScreen(
                 .background(color = Color.White)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            if(it != 8) {
+            if (it != 8) {
                 ChevronLeftIcon(modifier = modifier.clickableSingle {
                     if (pagerState.currentPage == 0) {
-                    /*TODO*/
+                        /*TODO*/
                     } else coroutine.launch {
                         pagerState.animateScrollToPage(pagerState.currentPage - 1)
                     }
@@ -87,17 +96,20 @@ fun SignupScreen(
                     )
                     Spacer(modifier = modifier.height(106.dp))
 
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "이름",
-                        textState = nameTextState,
-                        onTextChange = onNameTextChange
+                        textState = signUpState.name,
+                        onTextChange = { name ->
+                            signUpIntent(SignUpIntent.OnNameTextStateChange(name))
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (nameTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.name.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -114,18 +126,21 @@ fun SignupScreen(
                     )
                     Spacer(modifier = modifier.height(137.dp))
 
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "아이디",
-                        textState = idTextState,
-                        onTextChange = onIdTextChange,
-                        helperText = "한글, 영어, 숫자 4~12자"
+                        textState = signUpState.id,
+                        onTextChange = { id ->
+                            signUpIntent(SignUpIntent.OnIdTextStateChange(id))
+                        },
+                        helperText = "한글, 영어, 숫자 4~12자",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (idTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.id.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -141,19 +156,21 @@ fun SignupScreen(
                         style = SSBTypography.titleSmall
                     )
                     Spacer(modifier = modifier.height(137.dp))
-
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "비밀번호",
-                        textState = passWordTextState,
-                        onTextChange = onPassWordTextChange,
-                        helperText = "영어, 숫자, 특수문자 1개 이상 8~24자"
+                        textState = signUpState.password,
+                        onTextChange = { password ->
+                            signUpIntent(SignUpIntent.OnPasswordTextStateChange(password))
+                        },
+                        helperText = "영어, 숫자, 특수문자 1개 이상 8~24자",
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.password.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -169,29 +186,30 @@ fun SignupScreen(
                         style = SSBTypography.titleSmall
                     )
                     Spacer(modifier = modifier.height(137.dp))
-
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "비밀번호",
-                        textState = checkPassWordTextState,
-                        onTextChange = onCheckPassWordTextChange,
-                        helperText = if(checkPassWord) "영어, 숫자, 특수문자 1개 이상 8~24자" else "일치하지 않은 비밀번호예요",
-                        isError = !checkPassWord
+                        textState = signUpState.checkPassword,
+                        onTextChange = { checkPassword ->
+                            signUpIntent(SignUpIntent.OnCheckPasswordTextStateChange(checkPassword))
+                        },
+                        helperText = if (signUpState.checkPasswordState) "영어, 숫자, 특수문자 1개 이상 8~24자" else "일치하지 않은 비밀번호예요",
+                        isError = !signUpState.checkPasswordState,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (checkPassWordTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.checkPassword.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
-                                if (checkPassWordTextState == passWordTextState) {
-                                    onCheckPassWordChange(true)
+                                if (signUpState.password == signUpState.checkPassword) {
+                                    SignUpIntent.OnCheckPasswordStateChange(checkPasswordState = true)
                                     pagerState.animateScrollToPage(4)
-                                }
-                                else {
-                                    onCheckPassWordChange(false)
+                                } else {
+                                    SignUpIntent.OnCheckPasswordStateChange(checkPasswordState = false)
                                     pagerState.animateScrollToPage(3)
                                 }
                             }
@@ -200,10 +218,10 @@ fun SignupScreen(
                 }
 
                 4 -> {
-                    selectedGender?.let {
+                    signUpState.gender.let {
                         coroutine.launch {
-                            kotlinx.coroutines.delay(700)
-                            onGenderSelected("")
+                            delay(700L)
+                            signUpIntent(SignUpIntent.OnGenderSelected(GenderEnum.unlabeled))
                             pagerState.animateScrollToPage(5)
                         }
                     }
@@ -221,21 +239,21 @@ fun SignupScreen(
                         Text(
                             modifier = modifier
                                 .clickableSingle {
-                                    onGenderSelected("남자")
+                                    signUpIntent(SignUpIntent.OnGenderSelected(GenderEnum.male))
                                 },
                             text = "남자",
                             style = SSBTypography.titleMedium,
-                            color = if (selectedGender == "남자") SSBColor.success else SSBColor.gray400
+                            color = if (signUpState.gender == GenderEnum.male) SSBColor.success else SSBColor.gray400
                         )
                         Spacer(modifier = modifier.width(90.dp))
                         Text(
                             modifier = modifier
                                 .clickableSingle {
-                                    onGenderSelected("여자")
+                                    signUpIntent(SignUpIntent.OnGenderSelected(GenderEnum.female))
                                 },
                             text = "여자",
                             style = SSBTypography.titleMedium,
-                            color = if (selectedGender == "여자") SSBColor.error else SSBColor.gray400
+                            color = if (signUpState.gender == GenderEnum.female) SSBColor.error else SSBColor.gray400
                         )
                     }
                 }
@@ -247,17 +265,20 @@ fun SignupScreen(
                     )
                     Spacer(modifier = modifier.height(137.dp))
 
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "나이",
-                        textState = ageState,
-                        onTextChange = onAgeChange,
+                        textState = signUpState.age,
+                        onTextChange = { age ->
+                            signUpIntent(SignUpIntent.OnAgeTextStateChange(age))
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.password.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -274,17 +295,20 @@ fun SignupScreen(
                     )
                     Spacer(modifier = modifier.height(137.dp))
 
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "키",
-                        textState = heightState,
-                        onTextChange = onHeightChange,
+                        textState = signUpState.height,
+                        onTextChange = { height ->
+                            signUpIntent(SignUpIntent.OnHeightTextStateChange(height))
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.password.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -301,17 +325,20 @@ fun SignupScreen(
                     )
                     Spacer(modifier = modifier.height(137.dp))
 
-                    SignupTextField(
+                    SignUpTextField(
                         modifier = modifier.fillMaxWidth(),
                         placeHolder = "몸무게",
-                        textState = weightState,
-                        onTextChange = onWeightIChange,
+                        textState = signUpState.weight,
+                        onTextChange = { weight ->
+                            signUpIntent(SignUpIntent.OnWeightTextStateChange(weight))
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                     Spacer(modifier = modifier.weight(1f))
                     SSBButton(
                         modifier = modifier.fillMaxWidth(),
                         text = "다음",
-                        state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                        state = if (signUpState.password.isNotEmpty()) ButtonState.Enabled
                         else ButtonState.Disabled,
                         onClick = {
                             coroutine.launch {
@@ -320,6 +347,7 @@ fun SignupScreen(
                         }
                     )
                 }
+
                 8 -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -333,9 +361,9 @@ fun SignupScreen(
                         SSBButton(
                             modifier = modifier.fillMaxWidth(),
                             text = "시작하기",
-                            state = if (passWordTextState.isNotEmpty()) ButtonState.Enabled
+                            state = if (signUpState.password.isNotEmpty()) ButtonState.Enabled
                             else ButtonState.Disabled,
-                            onClick = { /*TODO*/ }
+                            onClick = navigateToMain
                         )
                     }
                 }
@@ -347,5 +375,9 @@ fun SignupScreen(
 @Preview
 @Composable
 fun SignupScreenPreview() {
-    SignupScreen()
+    SignUpScreen(
+        navigateToMain = {},
+        signUpState = SignUpState.getDefaultState(),
+        signUpIntent = {}
+    )
 }
