@@ -143,15 +143,12 @@ fun AddExerciseScreenPreview() {
             when (intent) {
                 is AddExerciseIntent.SetExerciseName -> {
                     previewState.value = previewState.value.copy(textState = intent.state)
-                    Log.d("Log", "Entered Exercise Name: ${intent.state}")  // 콘솔에 출력
                 }
                 is AddExerciseIntent.SetExerciseCategory -> {
                     previewState.value = previewState.value.copy(selectedCategory = intent.category)
-                    println("Selected Category: ${intent.category}")  // 콘솔에 출력
                 }
                 is AddExerciseIntent.SetExerciseStyle -> {
                     previewState.value = previewState.value.copy(selectedStyle = intent.style)
-                    println("Selected Style: ${intent.style}")  // 콘솔에 출력
                 }
                 is AddExerciseIntent.ToggleExerciseTypeDropdown -> {
                     previewState.value = previewState.value.copy(exerciseTypeExpanded = !previewState.value.exerciseTypeExpanded)

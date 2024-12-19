@@ -64,46 +64,29 @@ fun ExerciseSelector(
                             .background(Color.White)
                     ) {
                         items.forEachIndexed { index, item ->
-                            if (index == 0) {
-                                Row(
-                                    modifier = modifier
-                                        .fillMaxWidth()
-                                        .clickableSingle {
-                                            selectedItem.value = item
-                                            onItemSelected(item)
-                                            expanded.value = false
-                                        }
-                                        .padding(horizontal = 16.dp, vertical = 9.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = item,
-                                        style = typography.bodySmall
-                                    )
+
+                            Row(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    .clickableSingle {
+                                        selectedItem.value = item
+                                        onItemSelected(item)
+                                        expanded.value = false
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 9.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = item,
+                                    style = typography.bodySmall
+                                )
+                                if (selectedItem.value == item) {
                                     ChevronSmallUpLightIcon(
                                         modifier = Modifier
                                             .size(24.dp)
                                             .clickable { expanded.value = false }
                                     )
-                                }
-                            } else {
-                                Row(
-                                    modifier = modifier
-                                        .fillMaxWidth()
-                                        .clickableSingle {
-                                            selectedItem.value = item
-                                            expanded.value = false
-                                        }
-                                        .padding(start = 16.dp, bottom = 9.dp, end = 16.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = item,
-                                        style = typography.bodySmall
-                                    )
-
                                 }
                             }
                         }
@@ -117,7 +100,6 @@ fun ExerciseSelector(
                         Row(
                             modifier = modifier
                                 .fillMaxWidth()
-                                .height(54.dp)
                                 .border(
                                     width = 1.dp,
                                     color = colors.gray100,
