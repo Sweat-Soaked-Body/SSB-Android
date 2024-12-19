@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":feature:signup"))
     implementation(project(":feature:profile"))
     implementation(project(":feature:login"))
+    implementation(project(":core:common"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
