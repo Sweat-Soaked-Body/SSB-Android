@@ -92,7 +92,8 @@ fun AddExerciseScreen(
                     modifier = modifier,
                     text = "운동종류",
                     items = listOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-                    defaultItem = "어깨",
+                    selectedItem = selectedCategory,
+                    expanded = exerciseTypeExpanded,
                     noItemText = "",
                 )
                 Spacer(modifier = modifier.height(2.dp))
@@ -108,7 +109,8 @@ fun AddExerciseScreen(
                     modifier = modifier,
                     text = "시간으로 운동할까요? 세트로 운동할까요?",
                     items = listOf("시간", "세트"),
-                    defaultItem = "",
+                    selectedItem = selectedStyle,
+                    expanded = exerciseStyleExpanded,
                     noItemText = "시간/세트 선택해주세요"
                 )
             }
