@@ -118,13 +118,13 @@ fun ExerciseScreen(
                 horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.Top,
             ) {
-                items(state.exerciseList){ text ->
+                items(state.exerciseList) { text ->
                     val isSelected = state.selectedButton == text
                     ExerciseButton(
                         modifier = modifier,
                         text = text,
                         state = if (isSelected) ButtonState.Disabled else ButtonState.Enabled,
-                        onClick = { handleIntent(ExerciseIntent.SetExerciseCategory(text))  }
+                        onClick = { handleIntent(ExerciseIntent.SetExerciseCategory(text)) }
                     )
                 }
             }
@@ -154,20 +154,22 @@ fun ExerciseScreen(
 @DevicePreviews
 @Composable
 fun ExercisePreview() {
-    var previewState by remember { mutableStateOf(
-        ExerciseScreenState(
-            exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-            selectedButton = "전체",
-            exerciseStateList = persistentListOf(
-                "바벨 백스쿼트" to false,
-                "덤벨 벤치프레스" to false,
-                "바벨 로우" to false,
-                "스쿼트" to true
-            ),
-            isSearching = false,
-            searchTextState = ""
+    var previewState by remember {
+        mutableStateOf(
+            ExerciseScreenState(
+                exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
+                selectedButton = "전체",
+                exerciseStateList = persistentListOf(
+                    "바벨 백스쿼트" to false,
+                    "덤벨 벤치프레스" to false,
+                    "바벨 로우" to false,
+                    "스쿼트" to true
+                ),
+                isSearching = false,
+                searchTextState = ""
+            )
         )
-    )}
+    }
 
     ExerciseScreen(
         modifier = Modifier,
@@ -181,10 +183,12 @@ fun ExercisePreview() {
                     val updatedList = intent.items
                     previewState.copy(exerciseStateList = updatedList)
                 }
-                is ExerciseIntent.ToggleSearchMode -> {
-                    previewState.copy(selectedButton =  previewState.selectedButton)
+                is ExerciseIntent.SetExerciseCategory -> {
+                    previewState.copy(selectedButton = intent.category)
                 }
-                else -> previewState
+                is ExerciseIntent.SetExerciseName -> {
+                    previewState.copy(searchTextState = intent.text)
+                }
             }
         },
     )
