@@ -8,10 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:data"))
-    implementation(project(":core:domain"))
 
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
