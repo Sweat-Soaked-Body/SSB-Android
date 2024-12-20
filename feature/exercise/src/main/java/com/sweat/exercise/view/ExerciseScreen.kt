@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.icon.PlusIcon
 import com.sweat.design_system.icon.SearchIcon
@@ -36,6 +38,7 @@ import com.sweat.exercise.view.component.ExerciseItem
 import com.sweat.exercise.view.component.ExerciseTextField
 import com.sweat.exercise.viewModel.ExerciseIntent
 import com.sweat.exercise.viewModel.ExerciseScreenState
+import com.sweat.exercise.viewModel.ExerciseViewModel
 import com.sweat.ui.DevicePreviews
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -43,9 +46,16 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
+    viewModel: ExerciseViewModel = hiltViewModel(),
     navigateToAddExerciseScreen: () -> Unit
 ){
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    ExerciseScreen(
+        modifier = modifier,
+        state = state,
+        handleIntent = viewModel::handleIntent,
+    )
 }
 
 @Composable
@@ -188,6 +198,7 @@ fun ExercisePreview() {
                 is ExerciseIntent.SetExerciseName -> {
                     previewState.copy(searchTextState = intent.text)
                 }
+                else -> previewState
             }
         },
     )

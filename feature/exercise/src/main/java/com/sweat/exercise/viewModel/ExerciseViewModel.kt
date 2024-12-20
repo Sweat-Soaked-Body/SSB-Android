@@ -16,19 +16,12 @@ class ExerciseViewModel @Inject constructor(
             is ExerciseIntent.SetExerciseCategory -> setState { copy(selectedButton = intent.category) }
             is ExerciseIntent.ToggleSearchMode -> setState { copy(isSearching = !isSearching) }
             is ExerciseIntent.UpdateExerciseItems -> updateExerciseItems(intent.items)
+            is ExerciseIntent.AddExercise -> postSideEffect(ExerciseScreenSideEffect.NavigateToAddExercise)
         }
     }
 
-    fun updateExerciseItems(newItems: ImmutableList<Pair<String, Boolean>>) {
+    private fun updateExerciseItems(newItems: ImmutableList<Pair<String, Boolean>>) {
         setState { copy(exerciseStateList = newItems) }
-    }
-
-    fun selectCategory(category: String) {
-        setState { copy(selectedButton = category) }
-    }
-
-    fun setSearchText(text: String) {
-        setState { copy(searchTextState = text) }
     }
 }
 
@@ -52,7 +45,7 @@ data class ExerciseScreenState(
 
 
 sealed class ExerciseScreenSideEffect {
-    object ShowError : ExerciseScreenSideEffect()
+    object NavigateToAddExercise : ExerciseScreenSideEffect()
 }
 
 sealed class ExerciseIntent {
@@ -60,4 +53,5 @@ sealed class ExerciseIntent {
     data class SetExerciseCategory(val category: String) : ExerciseIntent()
     data class UpdateExerciseItems(val items: ImmutableList<Pair<String, Boolean>>) : ExerciseIntent()
     object ToggleSearchMode : ExerciseIntent()
+    object AddExercise : ExerciseIntent()
 }
