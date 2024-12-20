@@ -47,6 +47,20 @@ fun AddFriendWithQRRoute(
     popupBackStack: () -> Unit,
     navigateToProfile: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val lifecycleOwner = context as? LifecycleOwner
+        ?: throw IllegalStateException("Context is not a LifecycleOwner")
+
+    // 카메라 권한 상태 관리
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+
+    // 권한 요청 처리
+    LaunchedEffect("cameraPermission") {
+        if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) {
+            cameraPermissionState.launchPermissionRequest()
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
             when (it) {
