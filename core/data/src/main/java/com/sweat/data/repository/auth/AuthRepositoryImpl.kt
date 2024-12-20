@@ -1,8 +1,8 @@
 package com.sweat.data.repository.auth
 
 import com.sweat.model.param.auth.LoginRequestParam
-import com.sweat.model.param.auth.SignUpRequestParam
 import com.sweat.network.datasource.auth.AuthDataSource
+import com.sweat.model.param.auth.SignUpRequestParam
 import com.sweat.network.mapper.auth.request.toDto
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

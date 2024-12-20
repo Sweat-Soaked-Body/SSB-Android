@@ -6,5 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthDataSource {
     fun authLogin(body: LoginRequest): Flow<Unit>
+  
     fun authSignUp(body: SignUpRequest) : Flow<Unit>
 }

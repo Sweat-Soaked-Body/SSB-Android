@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import com.sweat.common.exception.*
 import com.sweat.login.loginRoute
+import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.signup.navigation.signupRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
@@ -58,6 +59,11 @@ fun SSBNavHost(
         loginRoute(
             navigateToMain = {},
             navigateToSignup = navController::navigateToSignupRoute
+        )
+
+        addFriendWithQRRoute(
+            navigateToProfile = {},
+            popUpBackStack = {},
         )
     }
 }
