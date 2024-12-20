@@ -14,10 +14,14 @@ fun NavController.navigateToSignupRoute(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.signupRoute(
     navigateToMain: () -> Unit,
+    popUpBackStack: () -> Unit,
+    makeErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(signUpRoute) {
         SignUpRoute(
             navigateToMain = navigateToMain,
+            popUpBackStack = popUpBackStack,
+            makeErrorToast = makeErrorToast
         )
     }
 }

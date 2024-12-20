@@ -1,16 +1,37 @@
 package com.sweat.signup.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.auth.SignUpRequestUseCase
+import com.sweat.model.param.auth.SignUpRequestParam
 import com.sweat.signup.enum.GenderEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-
+    private val signUpUseCase: SignUpRequestUseCase
 ) : BaseViewModel<SignUpState, SignUpSideEffect, SignUpIntent>(SignUpState.getDefaultState()) {
+
     override fun handleIntent(intent: SignUpIntent) {
         when (intent) {
+            is SignUpIntent.SignUp -> {
+                signUp(
+                    SignUpRequestParam(
+                        username = intent.name,
+                        name = intent.id,
+                        password = intent.password,
+                        sex = intent.gender.toString(),
+                        age = intent.age.toInt(),
+                        height = intent.height.toInt(),
+                        weight = intent.weight.toInt()
+                    )
+                )
+            }
+
             is SignUpIntent.OnNameTextStateChange -> setState { copy(name = intent.name) }
 
             is SignUpIntent.OnIdTextStateChange -> setState { copy(id = intent.id) }
@@ -31,10 +52,22 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    /**
-     * todo : SignUp Data Logic
-     * ex) -> private fun SignUp(body: SignUpParam) { ...
-     */
+    private fun signUp(body: SignUpRequestParam) {
+        viewModelScope.launch {
+            postSideEffect(SignUpSideEffect.Loading)
+            signUpUseCase(body = body)
+                .onSuccess {
+                    it.catch {
+                        postSideEffect(SignUpSideEffect.Failed)
+                    }.collect {
+                        postSideEffect(SignUpSideEffect.Success)
+                    }
+                }
+                .onFailure {
+                    postSideEffect(SignUpSideEffect.Failed)
+                }
+        }
+    }
 }
 
 data class SignUpState(
@@ -70,9 +103,16 @@ sealed interface SignUpSideEffect {
 }
 
 sealed interface SignUpIntent {
-    /** todo : SignUp Data Logic
-     * ex) data class SignIn(val id: String, val password: String, ...) : SignUpIntent
-     */
+    data class SignUp(
+        val name: String,
+        val id: String,
+        val password: String,
+        val gender: GenderEnum,
+        val age: String,
+        val height: String,
+        val weight: String,
+    ) : SignUpIntent
+
     data class OnNameTextStateChange(val name: String) : SignUpIntent
     data class OnIdTextStateChange(val id: String) : SignUpIntent
     data class OnPasswordTextStateChange(val password: String) : SignUpIntent
