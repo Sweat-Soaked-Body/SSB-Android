@@ -1,10 +1,10 @@
-package com.sweat.exercise.view
+package com.sweat.exercise
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.sweat.exercise.exerciseRoute
+import com.sweat.exercise.view.AddExerciseRoute
 
 const val addExerciseRoute = "addExerciseRoute"
 
