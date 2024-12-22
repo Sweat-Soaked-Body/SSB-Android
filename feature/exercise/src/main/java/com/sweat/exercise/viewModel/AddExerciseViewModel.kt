@@ -38,8 +38,7 @@ data class AddExerciseScreenState(
 }
 
 sealed class AddExerciseScreenSideEffect {
-    object ShowError : AddExerciseScreenSideEffect()
-    data class NavigateToSummary(val exerciseName: String, val category: String, val style: String) : AddExerciseScreenSideEffect()
+    object NavigateToExercise : AddExerciseScreenSideEffect()
 }
 
 sealed class AddExerciseIntent {
