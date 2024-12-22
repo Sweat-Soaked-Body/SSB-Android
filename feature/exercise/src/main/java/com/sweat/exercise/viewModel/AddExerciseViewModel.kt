@@ -15,6 +15,8 @@ class AddExerciseViewModel @Inject constructor(
             is AddExerciseIntent.ExerciseStyle -> setState { copy(selectedStyle = intent.style) }
             is AddExerciseIntent.ToggleExerciseTypeDropdown -> setState { copy(exerciseTypeExpanded = !exerciseTypeExpanded) }
             is AddExerciseIntent.ToggleExerciseStyleDropdown -> setState { copy(exerciseStyleExpanded = !exerciseStyleExpanded) }
+            AddExerciseIntent.Exercise -> postSideEffect(AddExerciseScreenSideEffect.NavigateToExercise)
+            AddExerciseIntent.PopUpBackStack -> postSideEffect(AddExerciseScreenSideEffect.PopUpBackStack)
         }
     }
 }
@@ -39,6 +41,7 @@ data class AddExerciseScreenState(
 
 sealed class AddExerciseScreenSideEffect {
     object NavigateToExercise : AddExerciseScreenSideEffect()
+    object PopUpBackStack : AddExerciseScreenSideEffect()
 }
 
 sealed class AddExerciseIntent {
@@ -47,4 +50,6 @@ sealed class AddExerciseIntent {
     data class ExerciseStyle(val style: String) : AddExerciseIntent()
     object ToggleExerciseTypeDropdown : AddExerciseIntent()
     object ToggleExerciseStyleDropdown : AddExerciseIntent()
+    object Exercise : AddExerciseIntent()
+    object PopUpBackStack : AddExerciseIntent()
 }
