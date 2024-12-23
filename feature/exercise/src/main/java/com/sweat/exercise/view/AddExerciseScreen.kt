@@ -14,19 +14,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.button.SSBButton
 import com.sweat.design_system.component.modifier.clickableSingle
@@ -35,7 +31,6 @@ import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.exercise.view.component.AddExerciseSelector
 import com.sweat.exercise.view.component.AddExerciseTextField
 import com.sweat.exercise.viewModel.AddExerciseIntent
-import com.sweat.exercise.viewModel.AddExerciseScreenSideEffect
 import com.sweat.exercise.viewModel.AddExerciseScreenState
 import com.sweat.exercise.viewModel.AddExerciseViewModel
 import com.sweat.ui.DevicePreviews
@@ -45,22 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun AddExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: AddExerciseViewModel = hiltViewModel(),
-    navigateToExercise: () -> Unit,
-    popUpBackStack: () -> Unit,
 ){
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-
-    LaunchedEffect(lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-            viewModel.sideEffect.collect { sideEffect ->
-                when(sideEffect) {
-                    AddExerciseScreenSideEffect.NavigateToExercise -> navigateToExercise()
-                    AddExerciseScreenSideEffect.PopUpBackStack -> popUpBackStack()
-                }
-            }
-        }
-    }
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     AddExerciseScreen(

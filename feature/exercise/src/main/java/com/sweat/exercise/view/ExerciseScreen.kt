@@ -19,17 +19,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.icon.PlusIcon
 import com.sweat.design_system.icon.SearchIcon
@@ -38,7 +34,6 @@ import com.sweat.exercise.view.component.ExerciseButton
 import com.sweat.exercise.view.component.ExerciseItem
 import com.sweat.exercise.view.component.ExerciseTextField
 import com.sweat.exercise.viewModel.ExerciseIntent
-import com.sweat.exercise.viewModel.ExerciseScreenSideEffect
 import com.sweat.exercise.viewModel.ExerciseScreenState
 import com.sweat.exercise.viewModel.ExerciseViewModel
 import com.sweat.ui.DevicePreviews
@@ -48,20 +43,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
-    navigateToAddExercise: () -> Unit,
 ){
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-
-    LaunchedEffect(lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-            viewModel.sideEffect.collect { sideEffect ->
-                when(sideEffect) {
-                    ExerciseScreenSideEffect.NavigateToAddExercise -> navigateToAddExercise()
-                }
-            }
-        }
-    }
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ExerciseScreen(
