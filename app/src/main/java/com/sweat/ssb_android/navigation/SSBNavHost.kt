@@ -11,6 +11,8 @@ import com.sweat.signup.navigation.signupRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.design_system.R
+import com.sweat.exercise.addExerciseRoute
+import com.sweat.exercise.exerciseRoute
 import com.sweat.ssb_android.ui.SSBAppState
 import com.sweat.ui.makeToast
 
@@ -63,6 +65,15 @@ fun SSBNavHost(
 
         addFriendWithQRRoute(
             navigateToProfile = {},
+            popUpBackStack = {},
+        )
+
+        exerciseRoute(
+            navigateToAddExerciseScreen = {},
+        )
+
+        addExerciseRoute(
+            navigateToExerciseScreen = {},
             popUpBackStack = {},
         )
     }
