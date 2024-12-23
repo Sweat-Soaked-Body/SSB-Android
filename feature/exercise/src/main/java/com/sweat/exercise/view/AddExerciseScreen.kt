@@ -93,7 +93,7 @@ fun AddExerciseScreen(
                     modifier = modifier
                         .padding(1.dp)
                         .size(24.dp)
-                        .clickableSingle(onClick = { /*TODO*/ })
+                        .clickableSingle(onClick = { handleIntent(AddExerciseIntent.PopUpBackStack) })
                 )
                 Text(
                     text = "운동 추가",
