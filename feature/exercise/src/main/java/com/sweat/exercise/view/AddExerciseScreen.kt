@@ -45,7 +45,6 @@ import kotlinx.collections.immutable.persistentListOf
 fun AddExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: AddExerciseViewModel = hiltViewModel(),
-    navigateToExercise: () -> Unit,
     popUpBackStack: () -> Unit,
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()

@@ -33,7 +33,6 @@ fun NavGraphBuilder.addExerciseRoute(
 ){
     composable(exerciseRoute){
         AddExerciseRoute(
-            navigateToExercise = navigateToExercise,
             popUpBackStack = popUpBackStack,
         )
     }
