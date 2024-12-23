@@ -43,7 +43,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
-){
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ExerciseScreen(
@@ -58,7 +58,7 @@ fun ExerciseScreen(
     modifier: Modifier = Modifier,
     state: ExerciseScreenState,
     handleIntent: (ExerciseIntent) -> Unit,
-){
+) {
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -68,10 +68,7 @@ fun ExerciseScreen(
             Row(
                 modifier = modifier
                     .height(57.dp)
-                    .padding(
-                        vertical = 13.dp,
-                        horizontal = 24.dp
-                    ),
+                    .padding(vertical = 13.dp, horizontal = 24.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -94,8 +91,7 @@ fun ExerciseScreen(
                         modifier = modifier.fillMaxWidth()
                     ) {
                         Row(
-                            modifier = modifier
-                                .align(Alignment.CenterEnd),
+                            modifier = modifier.align(Alignment.CenterEnd),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -133,19 +129,27 @@ fun ExerciseScreen(
                 }
             }
             Spacer(modifier = modifier.height(12.dp))
+
             LazyColumn(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
-                itemsIndexed(state.exerciseStateList) { index, item ->
+                val itemsToDisplay = if (state.filteredExerciseStateList.isEmpty()) {
+                    state.exerciseStateList
+                } else {
+                    state.filteredExerciseStateList
+                }
+
+                itemsIndexed(itemsToDisplay) { index, item ->
                     ExerciseItem(
                         modifier = modifier,
                         text = item.first,
-                        isSelected = item.second,
+                        isSelected = item.third,
                         onHeartClick = {
                             val updatedList = state.exerciseStateList.toMutableList()
-                            updatedList[index] = item.copy(second = !item.second)
+                            val currentItem = updatedList[index]
+                            updatedList[index] = currentItem.copy(third = !currentItem.third)
                             handleIntent(ExerciseIntent.UpdateExerciseItems(updatedList.toImmutableList()))
                         }
                     )
