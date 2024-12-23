@@ -180,43 +180,9 @@ fun ExerciseScreen(
 @DevicePreviews
 @Composable
 fun ExercisePreview() {
-    var previewState by remember {
-        mutableStateOf(
-            ExerciseScreenState(
-                exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-                selectedButton = "전체",
-                exerciseStateList = persistentListOf(
-                    "바벨 백스쿼트" to false,
-                    "바벨 백스쿼트" to false,
-                    "바벨 백스쿼트" to false,
-                    "바벨 백스쿼트" to true
-                ),
-                isSearching = false,
-                searchTextState = ""
-            )
-        )
-    }
-
     ExerciseScreen(
         modifier = Modifier,
-        state = previewState,
-        handleIntent = { intent ->
-            previewState = when (intent) {
-                is ExerciseIntent.ToggleSearchMode -> {
-                    previewState.copy(isSearching = !previewState.isSearching)
-                }
-                is ExerciseIntent.UpdateExerciseItems -> {
-                    val updatedList = intent.items
-                    previewState.copy(exerciseStateList = updatedList)
-                }
-                is ExerciseIntent.SetExerciseCategory -> {
-                    previewState.copy(selectedButton = intent.category)
-                }
-                is ExerciseIntent.SetExerciseName -> {
-                    previewState.copy(searchTextState = intent.text)
-                }
-                else -> previewState
-            }
-        },
+        state = ExerciseScreenState.getInitialState(),
+        handleIntent = { _ -> },
     )
 }
