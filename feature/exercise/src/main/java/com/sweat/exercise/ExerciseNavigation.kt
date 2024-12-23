@@ -23,7 +23,6 @@ fun NavGraphBuilder.exerciseRoute(
 ){
     composable(exerciseRoute){
         ExerciseRoute(
-            navigateToAddExercise = navigateToAddExercise,
         )
     }
 }
