@@ -69,7 +69,7 @@ fun SSBNavHost(
         )
 
         exerciseRoute(
-            navigateToAddExerciseScreen = {},
+            navigateToAddExercise = {},
         )
 
         addExerciseRoute(

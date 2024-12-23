@@ -52,7 +52,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
-    navigateToAddExerciseScreen: () -> Unit,
+    navigateToAddExercise: () -> Unit,
 ){
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
@@ -60,7 +60,7 @@ fun ExerciseRoute(
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
             viewModel.sideEffect.collect { sideEffect ->
                 when(sideEffect) {
-                    ExerciseScreenSideEffect.NavigateToAddExercise -> navigateToAddExerciseScreen()
+                    ExerciseScreenSideEffect.NavigateToAddExercise -> navigateToAddExercise()
                 }
             }
         }
