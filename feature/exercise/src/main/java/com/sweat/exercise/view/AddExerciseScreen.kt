@@ -164,37 +164,8 @@ fun AddExerciseScreen(
 @DevicePreviews
 @Composable
 fun AddExerciseScreenPreview() {
-    val previewState = remember { mutableStateOf(
-        AddExerciseScreenState(
-            exerciseTypeExpanded = false,
-            selectedCategory = "어깨",
-            textState = "",
-            exerciseStyleExpanded = false,
-            selectedStyle = ""
-        )
-    ) }
-
     AddExerciseScreen(
-        state = previewState.value,
-        handleIntent = { intent ->
-            when (intent) {
-                is AddExerciseIntent.ExerciseName -> {
-                    previewState.value = previewState.value.copy(textState = intent.name)
-                }
-                is AddExerciseIntent.ExerciseCategory -> {
-                    previewState.value = previewState.value.copy(selectedCategory = intent.category)
-                }
-                is AddExerciseIntent.ExerciseStyle -> {
-                    previewState.value = previewState.value.copy(selectedStyle = intent.style)
-                }
-                is AddExerciseIntent.ToggleExerciseTypeDropdown -> {
-                    previewState.value = previewState.value.copy(exerciseTypeExpanded = !previewState.value.exerciseTypeExpanded)
-                }
-                is AddExerciseIntent.ToggleExerciseStyleDropdown -> {
-                    previewState.value = previewState.value.copy(exerciseStyleExpanded = !previewState.value.exerciseStyleExpanded)
-                }
-                else-> {}
-            }
-        }
+        state = AddExerciseScreenState.getInitialState(),
+        handleIntent = { _ ->},
     )
 }
