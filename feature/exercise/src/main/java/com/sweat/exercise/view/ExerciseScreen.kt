@@ -53,7 +53,6 @@ fun ExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
     navigateToAddExerciseScreen: () -> Unit,
-    popUpBackStack: () -> Unit,
 ){
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
@@ -62,7 +61,6 @@ fun ExerciseRoute(
             viewModel.sideEffect.collect { sideEffect ->
                 when(sideEffect) {
                     ExerciseScreenSideEffect.NavigateToAddExercise -> navigateToAddExerciseScreen()
-                    ExerciseScreenSideEffect.PopUpBackStack -> popUpBackStack()
                 }
             }
         }

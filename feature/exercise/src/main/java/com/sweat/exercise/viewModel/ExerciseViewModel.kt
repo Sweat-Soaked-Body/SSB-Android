@@ -17,7 +17,6 @@ class ExerciseViewModel @Inject constructor(
             is ExerciseIntent.ToggleSearchMode -> setState { copy(isSearching = !isSearching) }
             is ExerciseIntent.UpdateExerciseItems -> updateExerciseItems(intent.items)
             ExerciseIntent.AddExercise -> postSideEffect(ExerciseScreenSideEffect.NavigateToAddExercise)
-            ExerciseIntent.PopUpBackStack -> postSideEffect(ExerciseScreenSideEffect.PopUpBackStack)
         }
     }
 
@@ -47,7 +46,6 @@ data class ExerciseScreenState(
 
 sealed class ExerciseScreenSideEffect {
     object NavigateToAddExercise : ExerciseScreenSideEffect()
-    object PopUpBackStack : ExerciseScreenSideEffect()
 }
 
 sealed class ExerciseIntent {
@@ -56,5 +54,4 @@ sealed class ExerciseIntent {
     data class UpdateExerciseItems(val items: ImmutableList<Pair<String, Boolean>>) : ExerciseIntent()
     object ToggleSearchMode : ExerciseIntent()
     object AddExercise : ExerciseIntent()
-    object PopUpBackStack : ExerciseIntent()
 }
