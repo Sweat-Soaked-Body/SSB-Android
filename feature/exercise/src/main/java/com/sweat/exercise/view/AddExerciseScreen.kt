@@ -45,7 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun AddExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: AddExerciseViewModel = hiltViewModel(),
-    navigateToExerciseScreen: () -> Unit,
+    navigateToExercise: () -> Unit,
     popUpBackStack: () -> Unit,
 ){
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -54,7 +54,7 @@ fun AddExerciseRoute(
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
             viewModel.sideEffect.collect { sideEffect ->
                 when(sideEffect) {
-                    AddExerciseScreenSideEffect.NavigateToExercise -> navigateToExerciseScreen()
+                    AddExerciseScreenSideEffect.NavigateToExercise -> navigateToExercise()
                     AddExerciseScreenSideEffect.PopUpBackStack -> popUpBackStack()
                 }
             }

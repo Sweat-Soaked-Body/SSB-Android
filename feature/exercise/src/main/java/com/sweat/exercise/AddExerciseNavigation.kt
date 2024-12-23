@@ -13,12 +13,12 @@ fun NavController.navigateToAddExerciseRoute(navOptions: NavOptions? = null){
 }
 
 fun NavGraphBuilder.addExerciseRoute(
-    navigateToExerciseScreen: () -> Unit,
+    navigateToExercise: () -> Unit,
     popUpBackStack: () -> Unit,
 ){
     composable(exerciseRoute){
         AddExerciseRoute(
-            navigateToExerciseScreen = navigateToExerciseScreen,
+            navigateToExercise = navigateToExercise,
             popUpBackStack = popUpBackStack,
         )
     }

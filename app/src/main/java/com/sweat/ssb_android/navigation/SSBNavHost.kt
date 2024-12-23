@@ -73,7 +73,7 @@ fun SSBNavHost(
         )
 
         addExerciseRoute(
-            navigateToExerciseScreen = {},
+            navigateToExercise = {},
             popUpBackStack = {},
         )
     }
