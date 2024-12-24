@@ -67,7 +67,7 @@ class SSBAppState(
 }
 
 fun NavController.navigateWithPopUpToLogin() {
-    this.navigate("") {
-        popUpTo("") { inclusive = true }
+    this.navigate(loginRoute) {
+        popUpTo(loginRoute) { inclusive = false }
     }
 }
