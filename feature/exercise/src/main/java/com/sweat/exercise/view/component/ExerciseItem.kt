@@ -37,7 +37,8 @@ fun ExerciseItem(
         ) {
             Text(
                 text = text,
-                style = typography.bodySmall
+                style = typography.bodySmall,
+                color = colors.black
             )
             Spacer(modifier = modifier.weight(1f))
             HeartIcon(

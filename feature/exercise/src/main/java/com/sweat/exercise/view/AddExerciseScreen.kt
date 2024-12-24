@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -53,6 +54,7 @@ fun AddExerciseRoute(
         modifier = modifier,
         state = state,
         handleIntent = viewModel::handleIntent,
+        popUpBackStack = popUpBackStack
     )
 }
 
@@ -61,12 +63,14 @@ fun AddExerciseScreen(
     modifier: Modifier = Modifier,
     state: AddExerciseScreenState,
     handleIntent: (AddExerciseIntent) -> Unit,
+    popUpBackStack: () -> Unit
 ) {
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(Color.White)
+                .statusBarsPadding()
         ) {
             Row(
                 modifier = modifier
@@ -79,7 +83,7 @@ fun AddExerciseScreen(
                     modifier = modifier
                         .padding(1.dp)
                         .size(24.dp)
-                        .clickableSingle{ handleIntent(AddExerciseIntent.PopUpBackStack) }
+                        .clickableSingle { popUpBackStack() }
                 )
                 Text(
                     text = "운동 추가",
@@ -139,7 +143,7 @@ fun AddExerciseScreen(
                 text = "추가",
                 state = if (state.textState.isNotEmpty() && state.selectedStyle.isNotEmpty()) ButtonState.Enabled
                 else ButtonState.Disabled,
-                onClick = { /*TODO*/ }
+                onClick = { popUpBackStack() }
             )
         }
     }
@@ -153,5 +157,6 @@ fun AddExerciseScreenPreview() {
     AddExerciseScreen(
         state = AddExerciseScreenState.getInitialState(),
         handleIntent = { _ ->},
+        popUpBackStack = {}
     )
 }

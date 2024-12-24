@@ -34,11 +34,15 @@ fun CheckIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun PlusIcon(modifier: Modifier = Modifier){
+fun PlusIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
     Icon(
         painter = painterResource(id = R.drawable.plus),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
@@ -64,11 +68,15 @@ fun CheckBoxSelectedIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ChevronLeftIcon(modifier: Modifier = Modifier) {
+fun ChevronLeftIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
     Icon(
         painter = painterResource(id = R.drawable.chevron_left),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
@@ -84,21 +92,29 @@ fun ChevronRightIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ChevronSmallDownLightIcon(modifier: Modifier = Modifier) {
+fun ChevronSmallDownLightIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
     Icon(
         painter = painterResource(id = R.drawable.chevron_small_down_light),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 
 @Stable
 @Composable
-fun ChevronSmallUpLightIcon(modifier: Modifier = Modifier) {
+fun ChevronSmallUpLightIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
     Icon(
         painter = painterResource(id = R.drawable.chevron_small_up_light),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
     )
 }
 

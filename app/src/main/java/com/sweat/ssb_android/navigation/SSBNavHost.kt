@@ -75,7 +75,6 @@ fun SSBNavHost(
         )
 
         addExerciseRoute(
-            navigateToExercise = navController::navigateToExerciseRoute,
             popUpBackStack = navController::popBackStack,
         )
     }

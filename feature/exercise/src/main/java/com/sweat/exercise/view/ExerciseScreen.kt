@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sweat.design_system.component.button.ButtonState
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.PlusIcon
 import com.sweat.design_system.icon.SearchIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
@@ -43,6 +45,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun ExerciseRoute(
     modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
+    navigateToAddExercise: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -50,6 +53,7 @@ fun ExerciseRoute(
         modifier = modifier,
         state = state,
         handleIntent = viewModel::handleIntent,
+        navigateToAddExercise = navigateToAddExercise
     )
 }
 
@@ -58,16 +62,17 @@ fun ExerciseScreen(
     modifier: Modifier = Modifier,
     state: ExerciseScreenState,
     handleIntent: (ExerciseIntent) -> Unit,
+    navigateToAddExercise: () -> Unit,
 ) {
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(Color.White)
+                .statusBarsPadding()
         ) {
             Row(
                 modifier = modifier
-                    .height(57.dp)
                     .padding(vertical = 13.dp, horizontal = 24.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
@@ -98,12 +103,12 @@ fun ExerciseScreen(
                             PlusIcon(
                                 modifier = modifier
                                     .size(24.dp)
-                                    .clickable(onClick = { handleIntent(ExerciseIntent.AddExercise) })
+                                    .clickableSingle { navigateToAddExercise() }
                             )
                             SearchIcon(
                                 modifier = modifier
                                     .size(24.dp)
-                                    .clickable(onClick = { handleIntent(ExerciseIntent.ToggleSearchMode) })
+                                    .clickableSingle(onClick = { handleIntent(ExerciseIntent.ToggleSearchMode) })
                             )
                         }
                     }
@@ -166,5 +171,6 @@ fun ExercisePreview() {
         modifier = Modifier,
         state = ExerciseScreenState.getInitialState(),
         handleIntent = { _ -> },
+        navigateToAddExercise = {}
     )
 }

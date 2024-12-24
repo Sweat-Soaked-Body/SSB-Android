@@ -19,19 +19,19 @@ fun NavController.navigateToAddExerciseRoute(navOptions: NavOptions? = null){
 }
 
 fun NavGraphBuilder.exerciseRoute(
-    navigateToAddExercise: () -> Unit,
+    navigateToAddExercise: () -> Unit
 ){
     composable(exerciseRoute){
         ExerciseRoute(
+            navigateToAddExercise = navigateToAddExercise
         )
     }
 }
 
 fun NavGraphBuilder.addExerciseRoute(
-    navigateToExercise: () -> Unit,
     popUpBackStack: () -> Unit,
 ){
-    composable(exerciseRoute){
+    composable(addExerciseRoute){
         AddExerciseRoute(
             popUpBackStack = popUpBackStack,
         )

@@ -46,7 +46,8 @@ fun AddExerciseSelector(
         ) {
             Text(
                 text = text,
-                style = typography.bodySmall
+                style = typography.bodySmall,
+                color = colors.black
             )
             Box(
                 modifier = Modifier
@@ -77,7 +78,8 @@ fun AddExerciseSelector(
                             ) {
                                 Text(
                                     text = item,
-                                    style = typography.bodySmall
+                                    style = typography.bodySmall,
+                                    color = colors.black
                                 )
                                 if (selectedItem.value == item) {
                                     ChevronSmallUpLightIcon(
@@ -119,7 +121,8 @@ fun AddExerciseSelector(
                             } else {
                                 Text(
                                     text = selectedItem.value,
-                                    style = typography.bodySmall
+                                    style = typography.bodySmall,
+                                    color = colors.black
                                 )
                             }
                             ChevronSmallDownLightIcon(
