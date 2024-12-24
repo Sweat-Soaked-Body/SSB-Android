@@ -27,20 +27,7 @@ fun SSBApp(
     windowSizeClass: WindowSizeClass,
     appState: SSBAppState = rememberSSBAppState(windowSizeClass = windowSizeClass)
 ) {
-    val isBottomBarVisible = remember { mutableStateOf(true) }
-
-    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
-
-    val topLevelDestinationRoute = arrayOf(
-        // homeRoute <- example code
-        TopLevelDestination.Home // temporary code
-    ).map { it.routeName }
-
-    // 현재 목적지가 topLevelDestinationRoute에 있는지 확인하고 isBottomBarVisible 변수에 저장하는 코드
-    navBackStackEntry?.destination?.route?.let {
-        isBottomBarVisible.value =
-            topLevelDestinationRoute.contains(appState.currentDestination?.route) // contains() <- example code
-    }
+    val isBottomBarVisible = appState.isTopLevelDestination
 
     SSBAndroidTheme { _, _ ->
         Scaffold(
@@ -49,7 +36,7 @@ fun SSBApp(
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             bottomBar = {
                 // BottomBar가 보여져야 하는 경우에만 표시합니다.
-                if (isBottomBarVisible.value) {
+                if (isBottomBarVisible) {
                     SSBBottomBar(
                         destinations = appState.topLevelDestination, // 최상위 목적지 목록을 전달
                         onNavigateToDestination = appState::navigationToTopLevelDestination, // 네비게이션 함수
