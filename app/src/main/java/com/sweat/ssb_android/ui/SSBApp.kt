@@ -1,6 +1,5 @@
 package com.sweat.ssb_android.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -35,11 +34,12 @@ fun SSBApp(
     val topLevelDestinationRoute = arrayOf(
         // homeRoute <- example code
         TopLevelDestination.Home // temporary code
-    )
+    ).map { it.routeName }
 
+    // 현재 목적지가 topLevelDestinationRoute에 있는지 확인하고 isBottomBarVisible 변수에 저장하는 코드
     navBackStackEntry?.destination?.route?.let {
         isBottomBarVisible.value =
-            topLevelDestinationRoute.contains(TopLevelDestination.Home) // contains() <- example code
+            topLevelDestinationRoute.contains(appState.currentDestination?.route) // contains() <- example code
     }
 
     SSBAndroidTheme { _, _ ->
