@@ -14,7 +14,7 @@ fun NavController.navigateToExerciseRoute(navOptions: NavOptions? = null){
     this.navigate(exerciseRoute, navOptions)
 }
 
-fun NavController.navigateToAddExerciseRoute(navOptions: NavOptions? = null){
+fun NavController.navigateToAddExercise(navOptions: NavOptions? = null){
     this.navigate(addExerciseRoute, navOptions)
 }
 

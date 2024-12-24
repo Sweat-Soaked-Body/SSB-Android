@@ -13,8 +13,7 @@ import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.design_system.R
 import com.sweat.exercise.addExerciseRoute
 import com.sweat.exercise.exerciseRoute
-import com.sweat.exercise.navigateToAddExerciseRoute
-import com.sweat.exercise.navigateToExerciseRoute
+import com.sweat.exercise.navigateToAddExercise
 import com.sweat.profile.friendQrGenerateRoute
 import com.sweat.ssb_android.ui.SSBAppState
 import com.sweat.ui.makeToast
@@ -72,7 +71,7 @@ fun SSBNavHost(
         )
 
         exerciseRoute(
-            navigateToAddExercise = navController::navigateToAddExerciseRoute,
+            navigateToAddExercise = navController::navigateToAddExercise,
         )
 
         addExerciseRoute(
