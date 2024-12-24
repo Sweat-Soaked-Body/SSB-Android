@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sweat.design_system.component.navigationbar.SSBBottomNavigationBar
 import com.sweat.design_system.component.navigationbar.SSBNavigationBarItem
 import com.sweat.design_system.theme.SSBAndroidTheme
+import com.sweat.exercise.exerciseRoute
 import com.sweat.ssb_android.navigation.SSBNavHost
 import com.sweat.ssb_android.navigation.TopLevelDestination
 
@@ -30,17 +31,10 @@ fun SSBApp(
 ) {
     val isBottomBarVisible = remember { mutableStateOf(true) }
 
-    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
 
     val topLevelDestinationRoute = arrayOf(
-        // homeRoute <- example code
-        TopLevelDestination.Home // temporary code
+        exerciseRoute
     )
-
-    navBackStackEntry?.destination?.route?.let {
-        isBottomBarVisible.value =
-            topLevelDestinationRoute.contains(TopLevelDestination.Home) // contains() <- example code
-    }
 
     SSBAndroidTheme { _, _ ->
         Scaffold(

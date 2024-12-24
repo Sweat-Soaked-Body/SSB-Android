@@ -15,6 +15,7 @@ import com.sweat.exercise.addExerciseRoute
 import com.sweat.exercise.exerciseRoute
 import com.sweat.exercise.navigateToAddExerciseRoute
 import com.sweat.exercise.navigateToExerciseRoute
+import com.sweat.profile.friendQrGenerateRoute
 import com.sweat.ssb_android.ui.SSBAppState
 import com.sweat.ui.makeToast
 
@@ -75,6 +76,11 @@ fun SSBNavHost(
         )
 
         addExerciseRoute(
+            popUpBackStack = navController::popBackStack,
+        )
+
+        friendQrGenerateRoute(
+            myName = "",/* todo appState와 연결 */
             popUpBackStack = navController::popBackStack,
         )
     }
