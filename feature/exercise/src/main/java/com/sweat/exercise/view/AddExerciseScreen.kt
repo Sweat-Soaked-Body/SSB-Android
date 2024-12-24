@@ -43,15 +43,14 @@ import com.sweat.ui.DevicePreviews
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
-fun AddExerciseRoute(
-    modifier: Modifier = Modifier,
+internal fun AddExerciseRoute(
     viewModel: AddExerciseViewModel = hiltViewModel(),
     popUpBackStack: () -> Unit,
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     AddExerciseScreen(
-        modifier = modifier,
+        modifier = Modifier,
         state = state,
         handleIntent = viewModel::handleIntent,
         popUpBackStack = popUpBackStack
@@ -59,7 +58,7 @@ fun AddExerciseRoute(
 }
 
 @Composable
-fun AddExerciseScreen(
+private fun AddExerciseScreen(
     modifier: Modifier = Modifier,
     state: AddExerciseScreenState,
     handleIntent: (AddExerciseIntent) -> Unit,
