@@ -1,73 +1,79 @@
-package com.sweat.ssb_android.ui
+    package com.sweat.ssb_android.ui
 
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.util.trace
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.sweat.ssb_android.navigation.TopLevelDestination
-import kotlinx.coroutines.CoroutineScope
+    import androidx.compose.material3.windowsizeclass.WindowSizeClass
+    import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+    import androidx.compose.runtime.Composable
+    import androidx.compose.runtime.Stable
+    import androidx.compose.runtime.remember
+    import androidx.compose.runtime.rememberCoroutineScope
+    import androidx.compose.ui.util.trace
+    import androidx.navigation.NavController
+    import androidx.navigation.NavDestination
+    import androidx.navigation.NavGraph.Companion.findStartDestination
+    import androidx.navigation.NavHostController
+    import androidx.navigation.compose.currentBackStackEntryAsState
+    import androidx.navigation.compose.rememberNavController
+    import androidx.navigation.navOptions
+    import com.sweat.login.loginRoute
+    import com.sweat.ssb_android.navigation.TopLevelDestination
+    import kotlinx.coroutines.CoroutineScope
 
-@Composable
-fun rememberSSBAppState(
-    windowSizeClass: WindowSizeClass,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController()
-) : SSBAppState {
-    return remember(
-        navController,
-        coroutineScope,
-        windowSizeClass
-    ) {
-        SSBAppState(
-            navController = navController,
-            windowSizeClass = windowSizeClass,
-            coroutineScope = coroutineScope
-        )
+    @Composable
+    fun rememberSSBAppState(
+        windowSizeClass: WindowSizeClass,
+        coroutineScope: CoroutineScope = rememberCoroutineScope(),
+        navController: NavHostController = rememberNavController()
+    ): SSBAppState {
+        return remember(
+            navController,
+            coroutineScope,
+            windowSizeClass
+        ) {
+            SSBAppState(
+                navController = navController,
+                windowSizeClass = windowSizeClass,
+                coroutineScope = coroutineScope
+            )
+        }
     }
-}
 
-@Stable
-class SSBAppState(
-    val navController: NavHostController,
-    val windowSizeClass: WindowSizeClass,
-    val coroutineScope: CoroutineScope
-) {
-    val currentDestination: NavDestination?
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination
+    @Stable
+    class SSBAppState(
+        val navController: NavHostController,
+        val windowSizeClass: WindowSizeClass,
+        val coroutineScope: CoroutineScope
+    ) {
+        val currentDestination: NavDestination?
+            @Composable get() = navController
+                .currentBackStackEntryAsState().value?.destination
 
-    val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+        val shouldShowBottomBar: Boolean
+            get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
-    val topLevelDestination: List<TopLevelDestination> = TopLevelDestination.values().asList()
+        val isTopLevelDestination: Boolean
+            @Composable get() = TopLevelDestination.values()
+                .any { currentDestination?.route == it.routeName }
 
-    fun navigationToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        trace("Navigation: ${topLevelDestination}") {
-            val topLevelNavOptions = navOptions {
-                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                launchSingleTop = true
-                restoreState = true
-            }
-            when (topLevelDestination) {
-                // TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions) <- example code
-                else -> null
+        val topLevelDestination: List<TopLevelDestination> = TopLevelDestination.values().asList()
+
+        fun navigationToTopLevelDestination(topLevelDestination: TopLevelDestination) {
+            trace("Navigation: $topLevelDestination") {
+                val topLevelNavOptions = navOptions {
+                    popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                when (topLevelDestination) {
+                    TopLevelDestination.Exercise -> TODO() // navController.navigateToExercise(topLevelNavOptions)
+                    TopLevelDestination.Home -> TODO() // navController.navigateToHome(topLevelNavOptions)
+                    TopLevelDestination.Profile -> TODO() // navController.navigateToProfile(topLevelNavOptions)
+                }
             }
         }
     }
-}
 
-fun NavController.navigateWithPopUpToLogin() {
-    this.navigate(loginRoute) {
-        popUpTo(loginRoute) { inclusive = false }
+    fun NavController.navigateWithPopUpToLogin() {
+        this.navigate(loginRoute) {
+            popUpTo(loginRoute) { inclusive = false }
+        }
     }
-}
