@@ -6,6 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
 import com.sweat.profile.view.ProfileRoute
+import com.sweat.ui.BottomSheetType
+import kotlinx.coroutines.CoroutineScope
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
@@ -24,6 +26,8 @@ fun NavGraphBuilder.profileRoute(
     navigateToLogin: () -> Unit,
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
+    showBottomSheet: CoroutineScope.(BottomSheetType) -> Unit,
+    hideBottomSheet: CoroutineScope.() -> Unit,
 ) {
     composable(profileRoute) {
         ProfileRoute(
@@ -32,6 +36,8 @@ fun NavGraphBuilder.profileRoute(
             navigateToLogin = navigateToLogin,
             navigateToMyQR = navigateToMyQR,
             navigateToChat = navigateToChat,
+            showBottomSheet = showBottomSheet,
+            hideBottomSheet = hideBottomSheet,
         )
     }
 }
