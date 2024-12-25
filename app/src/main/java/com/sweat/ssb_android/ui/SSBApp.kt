@@ -2,12 +2,13 @@ package com.sweat.ssb_android.ui
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,19 +16,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sweat.design_system.component.navigationbar.SSBBottomNavigationBar
 import com.sweat.design_system.component.navigationbar.SSBNavigationBarItem
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.ssb_android.navigation.SSBNavHost
 import com.sweat.ssb_android.navigation.TopLevelDestination
+import com.sweat.ui.BottomSheetType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SSBApp(
     windowSizeClass: WindowSizeClass,
     appState: SSBAppState = rememberSSBAppState(windowSizeClass = windowSizeClass)
 ) {
     val isBottomBarVisible = appState.isTopLevelDestination
+    val bottomSheetState = appState.bottomSheetState
+    val appBottomSheetType = remember { mutableStateOf<BottomSheetType>(BottomSheetType.None) }
+
+    fun CoroutineScope.showBottomSheet(type: BottomSheetType) {
+        appBottomSheetType.value = type
+        launch {
+            bottomSheetState.show()
+        }
+    }
+
+    fun CoroutineScope.hideBottomSheet() {
+        launch {
+            bottomSheetState.hide()
+            appBottomSheetType.value = BottomSheetType.None
+        }
+    }
 
     SSBAndroidTheme { _, _ ->
         Scaffold(
@@ -47,9 +67,17 @@ fun SSBApp(
         ) { paddingValues ->
             // 네비게이션 호스트
             SSBNavHost(
-                appState = appState,
-                modifier = Modifier.padding(paddingValues = paddingValues)
+                modifier = Modifier.padding(paddingValues = paddingValues),
+                navController = appState.navController,
+                showBottomSheet = CoroutineScope::showBottomSheet,
+                hideBottomSheet = CoroutineScope::hideBottomSheet,
             )
+        }
+        if (appState.bottomSheetState.isVisible) {
+            ModalBottomSheet(
+                onDismissRequest = { appState.coroutineScope.launch { bottomSheetState.hide() } }
+            ) {
+            }
         }
     }
 }
