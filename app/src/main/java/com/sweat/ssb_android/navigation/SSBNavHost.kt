@@ -11,6 +11,8 @@ import com.sweat.signup.navigation.signupRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.design_system.R
+import com.sweat.profile.chattingRoute
+import com.sweat.profile.navigateToChattingRoute
 import com.sweat.ssb_android.ui.SSBAppState
 import com.sweat.ui.makeToast
 
@@ -57,7 +59,7 @@ fun SSBNavHost(
         )
 
         loginRoute(
-            navigateToMain = {},
+            navigateToMain = {navController.navigateToChattingRoute()},
             navigateToSignup = navController::navigateToSignupRoute
         )
 
@@ -65,5 +67,7 @@ fun SSBNavHost(
             navigateToProfile = {},
             popUpBackStack = {},
         )
+
+        chattingRoute(popUpBackStack = {})
     }
 }
