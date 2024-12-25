@@ -3,29 +3,36 @@ package com.sweat.ssb_android.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.sweat.common.exception.*
+import com.sweat.common.exception.NoInternetException
+import com.sweat.common.exception.OtherHttpException
+import com.sweat.common.exception.ServerException
+import com.sweat.common.exception.TimeOutException
+import com.sweat.common.exception.UnKnownException
+import com.sweat.design_system.R
 import com.sweat.login.loginRoute
 import com.sweat.profile.addFriendWithQRRoute
-import com.sweat.signup.navigation.signupRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
-import com.sweat.design_system.R
-import com.sweat.ssb_android.ui.SSBAppState
+import com.sweat.signup.navigation.signupRoute
+import com.sweat.ui.BottomSheetType
 import com.sweat.ui.makeToast
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SSBNavHost(
     modifier: Modifier = Modifier,
-    appState: SSBAppState, // 네비게이션의 상태를 포함하는 앱의 상태
+    navController: NavHostController,
+    showBottomSheet: CoroutineScope.(BottomSheetType) -> Unit,
+    hideBottomSheet: CoroutineScope.() -> Unit,
     startDestination: String = loginRoute,
 ) {
-    val navController = appState.navController
     val context = LocalContext.current
 
     val makeErrorToast: (throwable: Throwable?, message: Int?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
-            when(it) {
+            when (it) {
                 is TimeOutException -> R.string.error_time_out
                 is ServerException -> R.string.error_server
                 is NoInternetException -> R.string.error_no_internet
@@ -48,6 +55,8 @@ fun SSBNavHost(
             navigateToLogin = {},
             navigateToMyQR = {},
             navigateToAddFriendWithNFC = {},
+            showBottomSheet = showBottomSheet,
+            hideBottomSheet = hideBottomSheet,
         )
 
         signupRoute(
