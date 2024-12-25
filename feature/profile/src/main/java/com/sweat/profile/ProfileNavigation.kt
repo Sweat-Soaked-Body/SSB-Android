@@ -5,10 +5,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
+import com.sweat.profile.view.ChattingRoute
 import com.sweat.profile.view.ProfileRoute
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
+const val chattingRoute = "chattingRoute"
 
 fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
     this.navigate(profileRoute, navOptions)
@@ -16,6 +18,10 @@ fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
     this.navigate(addFriendWithQRRoute, navOptions)
+}
+
+fun NavController.navigateToChattingRoute(navOptions: NavOptions? = null) {
+    this.navigate(chattingRoute, navOptions)
 }
 
 fun NavGraphBuilder.profileRoute(
@@ -45,5 +51,13 @@ fun NavGraphBuilder.addFriendWithQRRoute(
             navigateToProfile = navigateToProfile,
             popupBackStack = popUpBackStack,
         )
+    }
+}
+
+fun NavGraphBuilder.chattingRoute(
+    popUpBackStack: () -> Unit,
+) {
+    composable(chattingRoute) {
+        ChattingRoute()
     }
 }
