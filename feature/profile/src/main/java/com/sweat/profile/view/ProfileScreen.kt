@@ -45,7 +45,6 @@ import com.sweat.profile.component.ChatListItem
 import com.sweat.profile.component.ProfileTopAppBar
 import com.sweat.profile.component.bottomSheet.AddFriendBottomSheet
 import com.sweat.profile.component.bottomSheet.SettingsBottomSheet
-import com.sweat.profile.viewModel.BottomSheetType
 import com.sweat.profile.viewModel.ProfileIntent
 import com.sweat.profile.viewModel.ProfileScreenSideEffect
 import com.sweat.profile.viewModel.ProfileScreenState
@@ -91,7 +90,7 @@ fun ProfileRoute(
                         coroutineScope.launch { bottomSheetState.hide() }
                     }
 
-                    ProfileScreenSideEffect.ShowBottomSheet -> {
+                    is ProfileScreenSideEffect.ShowBottomSheet -> {
                         coroutineScope.launch { bottomSheetState.show() }
                     }
                 }
@@ -107,16 +106,7 @@ fun ProfileRoute(
         state = state,
         handleIntent = viewModel::handleIntent,
         bottomSheetContent = {
-            when (state.currentBottomSheetType) {
-                BottomSheetType.None -> {}
-                BottomSheetType.AddFriend -> {
-                    AddFriendBottomSheet()
-                }
 
-                BottomSheetType.Settings -> {
-                    SettingsBottomSheet()
-                }
-            }
         }
     )
 }
