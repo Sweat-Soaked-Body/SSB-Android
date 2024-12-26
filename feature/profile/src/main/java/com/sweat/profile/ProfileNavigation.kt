@@ -5,12 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
+import com.sweat.profile.view.FriendQrGenerateRoute
 import com.sweat.profile.view.ProfileRoute
 import com.sweat.ui.BottomSheetType
 import kotlinx.coroutines.CoroutineScope
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
+const val friendQrGenerateRoute = "friendQrGenerateRoute"
 
 fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
     this.navigate(profileRoute, navOptions)
@@ -18,6 +20,10 @@ fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
     this.navigate(addFriendWithQRRoute, navOptions)
+}
+
+fun NavController.navigateToFriendQrGenerate(navOptions: NavOptions? = null) {
+    this.navigate(friendQrGenerateRoute, navOptions)
 }
 
 fun NavGraphBuilder.profileRoute(
@@ -45,6 +51,18 @@ fun NavGraphBuilder.addFriendWithQRRoute(
     composable(addFriendWithQRRoute) {
         AddFriendWithQRRoute(
             navigateToProfile = navigateToProfile,
+            popupBackStack = popUpBackStack,
+        )
+    }
+}
+
+fun NavGraphBuilder.friendQrGenerateRoute(
+    myName: String,
+    popUpBackStack: () -> Unit,
+) {
+    composable(friendQrGenerateRoute) {
+        FriendQrGenerateRoute(
+            myName = myName,
             popupBackStack = popUpBackStack,
         )
     }
