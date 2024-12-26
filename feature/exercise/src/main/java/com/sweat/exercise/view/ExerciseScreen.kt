@@ -1,7 +1,6 @@
 package com.sweat.exercise.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,14 +42,13 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ExerciseRoute(
-    modifier: Modifier = Modifier,
     viewModel: ExerciseViewModel = hiltViewModel(),
     navigateToAddExercise: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ExerciseScreen(
-        modifier = modifier,
+        modifier = Modifier,
         state = state,
         handleIntent = viewModel::handleIntent,
         navigateToAddExercise = navigateToAddExercise
