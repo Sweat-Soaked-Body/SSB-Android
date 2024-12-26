@@ -11,6 +11,9 @@ import com.sweat.common.exception.ServerException
 import com.sweat.common.exception.TimeOutException
 import com.sweat.common.exception.UnKnownException
 import com.sweat.design_system.R
+import com.sweat.exercise.addExerciseRoute
+import com.sweat.exercise.exerciseRoute
+import com.sweat.exercise.navigateToAddExercise
 import com.sweat.login.loginRoute
 import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.friendQrGenerateRoute
