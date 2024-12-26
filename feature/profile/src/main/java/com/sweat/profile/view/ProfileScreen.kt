@@ -14,13 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,15 +37,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.sweat.profile.component.ChatListItem
-import com.sweat.profile.component.ProfileTopAppBar
-import com.sweat.profile.component.bottomSheet.AddFriendBottomSheet
-import com.sweat.profile.component.bottomSheet.SettingsBottomSheet
-import com.sweat.profile.viewModel.BottomSheetType
-import com.sweat.profile.viewModel.ProfileIntent
-import com.sweat.profile.viewModel.ProfileScreenSideEffect
-import com.sweat.profile.viewModel.ProfileScreenState
-import com.sweat.profile.viewModel.ProfileViewModel
 import com.sweat.common.utill.decodeBase64Image
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.AddFriendIcon
@@ -57,10 +44,14 @@ import com.sweat.design_system.icon.CheckIcon
 import com.sweat.design_system.icon.SettingIcon
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
+import com.sweat.profile.component.ChatListItem
+import com.sweat.profile.component.ProfileTopAppBar
+import com.sweat.profile.viewModel.ProfileIntent
+import com.sweat.profile.viewModel.ProfileScreenSideEffect
+import com.sweat.profile.viewModel.ProfileScreenState
+import com.sweat.profile.viewModel.ProfileViewModel
 import com.sweat.ui.DevicePreviews
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
     modifier: Modifier = Modifier,
@@ -71,7 +62,6 @@ fun ProfileRoute(
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
@@ -87,13 +77,8 @@ fun ProfileRoute(
                     is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                     ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
                     ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                    ProfileScreenSideEffect.HideBottomSheet -> {
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    }
-
-                    ProfileScreenSideEffect.ShowBottomSheet -> {
-                        coroutineScope.launch { bottomSheetState.show() }
-                    }
+                    ProfileScreenSideEffect.HideBottomSheet -> TODO()
+                    is ProfileScreenSideEffect.ShowBottomSheet -> TODO()
                 }
             }
         }
@@ -103,41 +88,17 @@ fun ProfileRoute(
 
     ProfileScreen(
         modifier = modifier,
-        bottomSheetState = bottomSheetState,
         state = state,
         handleIntent = viewModel::handleIntent,
-        bottomSheetContent = {
-            when (state.currentBottomSheetType) {
-                BottomSheetType.None -> {}
-                BottomSheetType.AddFriend -> {
-                    AddFriendBottomSheet()
-                }
-
-                BottomSheetType.Settings -> {
-                    SettingsBottomSheet()
-                }
-            }
-        }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    bottomSheetState: SheetState,
     state: ProfileScreenState,
     handleIntent: (ProfileIntent) -> Unit,
-    bottomSheetContent: @Composable () -> Unit,
 ) {
-    ModalBottomSheet(
-        sheetState = bottomSheetState,
-        onDismissRequest = {
-            handleIntent(ProfileIntent.HideBottomSheet)
-        },
-    ) {
-        bottomSheetContent()
-    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -232,15 +193,12 @@ fun ProfileScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @DevicePreviews
 @Composable
 fun ProfileScreenPreview() {
     ProfileScreen(
         state = ProfileScreenState.getInitialState(),
         handleIntent = { _ -> },
-        bottomSheetState = rememberModalBottomSheetState(),
-        bottomSheetContent = {},
     )
 }
 

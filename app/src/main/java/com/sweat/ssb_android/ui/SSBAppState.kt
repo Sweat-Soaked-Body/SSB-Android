@@ -14,7 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.sweat.exercise.navigateToExerciseRoute
+import com.sweat.login.loginRoute
 import com.sweat.ssb_android.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -22,8 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 fun rememberSSBAppState(
     windowSizeClass: WindowSizeClass,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController()
-) : SSBAppState {
+    navController: NavHostController = rememberNavController(),
+): SSBAppState {
     return remember(
         navController,
         coroutineScope,
@@ -41,7 +41,7 @@ fun rememberSSBAppState(
 class SSBAppState(
     val navController: NavHostController,
     val windowSizeClass: WindowSizeClass,
-    val coroutineScope: CoroutineScope
+    val coroutineScope: CoroutineScope,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -50,26 +50,30 @@ class SSBAppState(
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
+    val isTopLevelDestination: Boolean
+        @Composable get() = TopLevelDestination.values()
+            .any { currentDestination?.route == it.routeName }
+
     val topLevelDestination: List<TopLevelDestination> = TopLevelDestination.values().asList()
 
     fun navigationToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        trace("Navigation: ${topLevelDestination}") {
+        trace("Navigation: $topLevelDestination") {
             val topLevelNavOptions = navOptions {
                 popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                 launchSingleTop = true
                 restoreState = true
             }
             when (topLevelDestination) {
-                // TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions) <- example code
-                TopLevelDestination.Exercise -> navController.navigateToExerciseRoute(topLevelNavOptions)
-                else -> null
+                TopLevelDestination.Exercise -> TODO() // navController.navigateToExercise(topLevelNavOptions)
+                TopLevelDestination.Home -> TODO() // navController.navigateToHome(topLevelNavOptions)
+                TopLevelDestination.Profile -> TODO() // navController.navigateToProfile(topLevelNavOptions)
             }
         }
     }
 }
 
 fun NavController.navigateWithPopUpToLogin() {
-    this.navigate("") {
-        popUpTo("") { inclusive = true }
+    this.navigate(loginRoute) {
+        popUpTo(loginRoute) { inclusive = false }
     }
 }
