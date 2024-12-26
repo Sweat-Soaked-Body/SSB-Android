@@ -7,8 +7,6 @@ import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
 import com.sweat.profile.view.FriendQrGenerateRoute
 import com.sweat.profile.view.ProfileRoute
-import com.sweat.ui.BottomSheetType
-import kotlinx.coroutines.CoroutineScope
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
