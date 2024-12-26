@@ -1,8 +1,6 @@
 package com.sweat.ssb_android.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -21,22 +19,18 @@ import com.sweat.login.loginRoute
 import com.sweat.ssb_android.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun rememberSSBAppState(
     windowSizeClass: WindowSizeClass,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-    bottomSheetState: SheetState = rememberModalBottomSheetState(),
 ): SSBAppState {
     return remember(
-        bottomSheetState,
         navController,
         coroutineScope,
         windowSizeClass
     ) {
         SSBAppState(
-            bottomSheetState = bottomSheetState,
             navController = navController,
             windowSizeClass = windowSizeClass,
             coroutineScope = coroutineScope
@@ -46,7 +40,6 @@ fun rememberSSBAppState(
 
 @Stable
 class SSBAppState @OptIn(ExperimentalMaterial3Api::class) constructor(
-    val bottomSheetState: SheetState,
     val navController: NavHostController,
     val windowSizeClass: WindowSizeClass,
     val coroutineScope: CoroutineScope,
