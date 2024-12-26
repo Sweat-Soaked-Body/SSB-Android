@@ -66,8 +66,6 @@ fun ProfileRoute(
     navigateToLogin: () -> Unit,
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
-    showBottomSheet: CoroutineScope.(BottomSheetType) -> Unit,
-    hideBottomSheet: CoroutineScope.() -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -84,8 +82,8 @@ fun ProfileRoute(
                     is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                     ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
                     ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                    ProfileScreenSideEffect.HideBottomSheet -> coroutineScope.hideBottomSheet()
-                    is ProfileScreenSideEffect.ShowBottomSheet -> coroutineScope.showBottomSheet(sideEffect.bottomSheetType)
+                    ProfileScreenSideEffect.HideBottomSheet -> TODO()
+                    is ProfileScreenSideEffect.ShowBottomSheet -> TODO()
                 }
             }
         }
