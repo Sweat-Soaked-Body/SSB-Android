@@ -16,16 +16,12 @@ import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.signup.navigation.signupRoute
-import com.sweat.ui.BottomSheetType
 import com.sweat.ui.makeToast
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun SSBNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    showBottomSheet: CoroutineScope.(BottomSheetType) -> Unit,
-    hideBottomSheet: CoroutineScope.() -> Unit,
     startDestination: String = loginRoute,
 ) {
     val context = LocalContext.current
@@ -55,8 +51,6 @@ fun SSBNavHost(
             navigateToLogin = {},
             navigateToMyQR = {},
             navigateToAddFriendWithNFC = {},
-            showBottomSheet = showBottomSheet,
-            hideBottomSheet = hideBottomSheet,
         )
 
         signupRoute(

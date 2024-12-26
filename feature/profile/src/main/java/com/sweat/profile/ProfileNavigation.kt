@@ -26,8 +26,6 @@ fun NavGraphBuilder.profileRoute(
     navigateToLogin: () -> Unit,
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
-    showBottomSheet: CoroutineScope.(BottomSheetType) -> Unit,
-    hideBottomSheet: CoroutineScope.() -> Unit,
 ) {
     composable(profileRoute) {
         ProfileRoute(
@@ -36,8 +34,6 @@ fun NavGraphBuilder.profileRoute(
             navigateToLogin = navigateToLogin,
             navigateToMyQR = navigateToMyQR,
             navigateToChat = navigateToChat,
-            showBottomSheet = showBottomSheet,
-            hideBottomSheet = hideBottomSheet,
         )
     }
 }
