@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.sweat.exercise.navigateToExerciseRoute
 import com.sweat.ssb_android.navigation.TopLevelDestination
 import kotlinx.coroutines.CoroutineScope
 
@@ -60,6 +61,7 @@ class SSBAppState(
             }
             when (topLevelDestination) {
                 // TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions) <- example code
+                TopLevelDestination.Exercise -> navController.navigateToExerciseRoute(topLevelNavOptions)
                 else -> null
             }
         }
