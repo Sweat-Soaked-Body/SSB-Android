@@ -1,14 +1,7 @@
 package com.sweat.network.util
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
+import kotlinx.coroutines.*
+import okhttp3.*
 
 class WebSocketClient(
     private val baseUrl: String,
@@ -19,65 +12,88 @@ class WebSocketClient(
 ) {
     private var webSocket: WebSocket? = null
     private var retryCount = 0
-    private val maxRetries = 3
-    private val retryDelayMillis = 3000L
+    private var isConnected = false // 연결 상태 추적
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    // 상수 선언
+    companion object {
+        private const val MAX_RETRIES = 3
+        private const val RETRY_DELAY_MILLIS = 3000L
+        private const val NORMAL_CLOSURE_STATUS = 1000
+        private const val TAG = "WebSocketClient"
+    }
 
     fun connect(roomName: String) {
+        if (isConnected) {
+            logInfo("WebSocket already connected.")
+            return
+        }
+
         val url = "$baseUrl$roomName"
         val request = Request.Builder().url(url).build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                super.onOpen(webSocket, response)
                 retryCount = 0
-                println("WebSocket Opened")
+                isConnected = true
+                logInfo("WebSocket opened successfully.")
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
-                super.onMessage(webSocket, text)
+                logInfo("Message received: $text")
                 onMessageReceived(text)
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                super.onFailure(webSocket, t, response)
+                isConnected = false
+                logError("WebSocket failure: ${t.message}")
                 onError(t)
-                if (retryCount < maxRetries) {
-                    retryCount++
-                    println("WebSocket failed, retrying ($retryCount/$maxRetries)...")
-                    retryConnection(roomName)
-                } else {
-                    println("WebSocket failed, max retries reached.")
-                }
+                retryConnectionIfNeeded(roomName)
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                super.onClosed(webSocket, code, reason)
+                isConnected = false
+                logInfo("WebSocket closed: $code - $reason")
                 onClosed()
-                if (retryCount < maxRetries) {
-                    retryCount++
-                    println("WebSocket closed, retrying ($retryCount/$maxRetries)...")
-                    retryConnection(roomName)
-                } else {
-                    println("WebSocket closed, max retries reached.")
-                }
+                retryConnectionIfNeeded(roomName)
             }
         })
     }
 
-    private fun retryConnection(roomName: String) {
-        scope.launch {
-            delay(retryDelayMillis)
-            connect(roomName)
+    private fun retryConnectionIfNeeded(roomName: String) {
+        if (retryCount < MAX_RETRIES) {
+            retryCount++
+            logInfo("Retrying connection ($retryCount/$MAX_RETRIES) after $RETRY_DELAY_MILLIS ms...")
+            coroutineScope.launch {
+                delay(RETRY_DELAY_MILLIS)
+                connect(roomName)
+            }
+        } else {
+            logError("Max retries reached. WebSocket connection failed.")
         }
     }
 
     fun sendMessage(message: String) {
-        webSocket?.send(message)
+        if (isConnected) {
+            webSocket?.send(message)
+            logInfo("Message sent: $message")
+        } else {
+            logError("Cannot send message. WebSocket is not connected.")
+        }
     }
 
     fun close() {
-        webSocket?.close(1000, "Closed by client")
+        logInfo("Closing WebSocket...")
+        isConnected = false
+        webSocket?.close(NORMAL_CLOSURE_STATUS, "Closed by client")
+        coroutineScope.cancel() // 코루틴 스코프 종료
+    }
+
+    private fun logInfo(message: String) {
+        println("$TAG: $message") // Logger 사용 가능 (Log.d 등)
+    }
+
+    private fun logError(message: String) {
+        System.err.println("$TAG: $message") // Logger 사용 가능 (Log.e 등)
     }
 }
