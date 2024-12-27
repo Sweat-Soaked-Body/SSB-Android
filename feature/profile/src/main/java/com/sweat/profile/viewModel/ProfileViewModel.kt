@@ -85,12 +85,6 @@ data class ChatListItemState(
     val isReadMessage: Boolean,
 )
 
-enum class BottomSheetType {
-    None,
-    AddFriend,
-    Settings
-}
-
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
