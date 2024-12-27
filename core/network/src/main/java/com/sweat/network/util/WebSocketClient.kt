@@ -1,12 +1,15 @@
 package com.sweat.network.util
 
-import com.sweat.network.BuildConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Inject
 
 class WebSocketClient @Inject constructor(
     private val baseUrl: String,
@@ -16,28 +19,21 @@ class WebSocketClient @Inject constructor(
     private val onClosed: () -> Unit
 ) {
     private var webSocket: WebSocket? = null
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY // FULL BODY를 로그로 확인
-            }
-        ) // 인터셉터 추가
-        .build()
     private var retryCount = 0
     private val maxRetries = 3
     private val retryDelayMillis = 3000L
 
-    private val scope = CoroutineScope(Dispatchers.IO)  // CoroutineScope 생성
+    private val scope = CoroutineScope(Dispatchers.IO)
 
-    fun connect() {
-        val url = "wss://${BuildConfig.BASE_URL}/chat/$roomName"
+    fun connect(roomName: String) {
+        val url = "$baseUrl$roomName"
         val request = Request.Builder().url(url).build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 super.onOpen(webSocket, response)
-                println("WebSocket Opened")
                 retryCount = 0
+                println("WebSocket Opened")
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -48,11 +44,10 @@ class WebSocketClient @Inject constructor(
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                 super.onFailure(webSocket, t, response)
                 onError(t)
-
                 if (retryCount < maxRetries) {
                     retryCount++
                     println("WebSocket failed, retrying ($retryCount/$maxRetries)...")
-                    retryConnection()
+                    retryConnection(roomName)
                 } else {
                     println("WebSocket failed, max retries reached.")
                 }
@@ -64,6 +59,7 @@ class WebSocketClient @Inject constructor(
                 if (retryCount < maxRetries) {
                     retryCount++
                     println("WebSocket closed, retrying ($retryCount/$maxRetries)...")
+                    retryConnection(roomName)
                 } else {
                     println("WebSocket closed, max retries reached.")
                 }
@@ -71,10 +67,10 @@ class WebSocketClient @Inject constructor(
         })
     }
 
-    private fun retryConnection() {
+    private fun retryConnection(roomName: String) {
         scope.launch {
-            delay(retryDelayMillis)  // 재시도 간 대기 시간
-            connect()  // 재연결 시도
+            delay(retryDelayMillis)
+            connect(roomName)
         }
     }
 
