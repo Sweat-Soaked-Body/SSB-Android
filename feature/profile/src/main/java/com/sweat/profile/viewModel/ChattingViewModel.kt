@@ -2,15 +2,31 @@ package com.sweat.profile.viewModel
 
 import android.util.Log
 import com.sweat.common.base.BaseViewModel
+import com.sweat.network.BuildConfig
 import com.sweat.network.util.WebSocketClient
 import dagger.hilt.android.lifecycle.HiltViewModel
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
-    private val webSocketClient: WebSocketClient,
+    private val okHttpClient: OkHttpClient,
 ) : BaseViewModel<ChattingState, ChattingScreenSideEffect, ChattingIntent>(ChattingState.getInitialState()) {
+
+    private val webSocketClient = WebSocketClient(
+        baseUrl = "${BuildConfig.BASE_URL}/ws/chat/".replace("https", "wss"),
+        client = okHttpClient,
+        onMessageReceived = { message ->
+            Log.d("WebSocketClient", "Message received: $message")
+        },
+        onError = { error ->
+            Log.e("WebSocketClient", "Error: ${error.message}")
+        },
+        onClosed = {
+            Log.d("WebSocketClient", "Connection closed")
+        }
+    )
 
     // 웹소켓 클라이언트 초기화 및 연결
     private fun initializeWebSocket() {
