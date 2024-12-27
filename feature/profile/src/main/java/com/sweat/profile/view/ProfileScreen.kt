@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.AddFriendIcon
 import com.sweat.design_system.icon.CheckIcon
 import com.sweat.design_system.icon.SettingIcon
+import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.profile.component.ChatListItem
@@ -65,47 +67,62 @@ fun ProfileRoute(
     navigateToChat: (String) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                is ProfileScreenSideEffect.LaunchImagePicker -> {}
-                ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
-                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
-                ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
-                is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
-                ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
-                ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                ProfileScreenSideEffect.HideBottomSheet -> TODO()
+    SSBAndroidTheme { color, theme ->
+        LaunchedEffect(Unit) {
+            viewModel.sideEffect.collect { sideEffect ->
+                when (sideEffect) {
+                    is ProfileScreenSideEffect.LaunchImagePicker -> {}
+                    ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
+                    ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
+                    ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
+                    is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
+                    ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
+                    ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
+                    ProfileScreenSideEffect.HideBottomSheet -> TODO()
+                }
             }
         }
-    }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
-    if (state.isShowSettingBottomSheet) {
-        ModalBottomSheet(
-            sheetState = bottomSheetState,
-            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-        ) {
-            SettingsBottomSheet()
+        if (state.isShowSettingBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                SettingsBottomSheet()
+            }
         }
-    }
 
-    if (state.isShowAddFriendBottomSheet) {
-        ModalBottomSheet(
-            sheetState = bottomSheetState,
-            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-        ) {
-            AddFriendBottomSheet()
+        if (state.isShowAddFriendBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                AddFriendBottomSheet()
+            }
         }
-    }
 
-    ProfileScreen(
-        modifier = modifier,
-        state = state,
-        handleIntent = viewModel::handleIntent,
-    )
+        ProfileScreen(
+            modifier = modifier,
+            state = state,
+            handleIntent = viewModel::handleIntent,
+        )
+    }
 }
 
 @Composable
