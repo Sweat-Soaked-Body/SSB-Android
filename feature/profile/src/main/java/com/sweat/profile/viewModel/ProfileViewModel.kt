@@ -59,7 +59,8 @@ data class ProfileScreenState(
     val myIntro: String,
     val image: String,
     val isProfileEditing: Boolean,
-    val currentBottomSheetType: BottomSheetType,
+    val isShowSettingBottomSheet: Boolean,
+    val isShowAddFriendBottomSheet: Boolean,
     val chatList: ImmutableList<ChatListItemState>,
 ) {
     companion object {
@@ -69,7 +70,8 @@ data class ProfileScreenState(
             myIntro = "",
             image = "",
             isProfileEditing = false,
-            currentBottomSheetType = BottomSheetType.None,
+            isShowSettingBottomSheet = false,
+            isShowAddFriendBottomSheet = false,
             chatList = persistentListOf(),
         )
     }
