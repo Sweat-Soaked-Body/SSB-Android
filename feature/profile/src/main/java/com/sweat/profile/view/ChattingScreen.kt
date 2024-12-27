@@ -35,6 +35,7 @@ fun ChattingRoute(
         handleIntent = viewModel::handleIntent,
     )
 }
+
 @Composable
 fun ChattingScreen(
     modifier: Modifier = Modifier,
@@ -42,7 +43,6 @@ fun ChattingScreen(
     handleIntent: (ChattingIntent) -> Unit,
 ) {
     var message by remember { mutableStateOf("") }  // 보내는 메시지
-    var connectionStatus by remember { mutableStateOf("Disconnected") } // 웹소켓 연결 상태
 
     LaunchedEffect(Unit) {
         handleIntent(ChattingIntent.InitializeWebSocket)  // 웹소켓 URL 초기화
@@ -53,9 +53,6 @@ fun ChattingScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // 웹소켓 연결 상태 표시
-        Text(text = "WebSocket Status: $connectionStatus", color = Color.Black)
-
         // 받은 메시지 표시
         Text(text = "Received Message: ${state.receivedMessage}", color = Color.Black)
 
@@ -76,6 +73,7 @@ fun ChattingScreen(
         }
     }
 }
+
 @Preview
 @Composable
 fun PreviewChattingScreen() {
