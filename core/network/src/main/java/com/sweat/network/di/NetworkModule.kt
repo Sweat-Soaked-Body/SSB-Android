@@ -2,15 +2,16 @@ package com.sweat.network.di
 
 import android.content.Context
 import android.util.Log
-import com.sweat.network.BuildConfig
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sweat.network.BuildConfig
 import com.sweat.network.api.AuthApi
 import com.sweat.network.api.FriendApi
 import com.sweat.network.util.AuthInterceptor
 import com.sweat.network.util.SimpleCookieJar
 import com.sweat.network.util.TokenAuthenticator
+import com.sweat.network.util.WebSocketClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,8 +61,28 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideWebSocketClient(
+        okHttpClient: OkHttpClient
+    ): WebSocketClient {
+        return WebSocketClient(
+            baseUrl = "${BuildConfig.BASE_URL}/ws/chat/".replace("https", "wss"),
+            client = okHttpClient,
+            onMessageReceived = { message ->
+                Log.d("WebSocketClient", "Message received: $message")
+            },
+            onError = { error ->
+                Log.e("WebSocketClient", "Error: ${error.message}")
+            },
+            onClosed = {
+                Log.d("WebSocketClient", "Connection closed")
+            }
+        )
+    }
+
+    @Provides
+    @Singleton
     fun provideCookieJar(): CookieJar {
-        return SimpleCookieJar() // 쿠키 저장소
+        return SimpleCookieJar()
     }
 
     @Provides
@@ -83,13 +104,12 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL) // todo : Add BaseUrl - Use BuildConfig
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
-    // todo : Add API
     @Provides
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
@@ -97,4 +117,5 @@ object NetworkModule {
     @Provides
     fun provideFriendApi(retrofit: Retrofit): FriendApi =
         retrofit.create(FriendApi::class.java)
+
 }
