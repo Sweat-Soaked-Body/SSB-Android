@@ -8,8 +8,8 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okhttp3.logging.HttpLoggingInterceptor
 
-class WebSocketClient(
-    private val roomName: String,
+class WebSocketClient @Inject constructor(
+    private val baseUrl: String,
     private val onMessageReceived: (String) -> Unit,
     private val onError: (Throwable) -> Unit,
     private val onClosed: () -> Unit
