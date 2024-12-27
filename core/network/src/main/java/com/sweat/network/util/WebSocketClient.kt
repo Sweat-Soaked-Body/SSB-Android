@@ -9,9 +9,8 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import javax.inject.Inject
 
-class WebSocketClient @Inject constructor(
+class WebSocketClient(
     private val baseUrl: String,
     private val client: OkHttpClient,
     private val onMessageReceived: (String) -> Unit,
