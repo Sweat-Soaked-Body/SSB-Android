@@ -11,7 +11,6 @@ import com.sweat.network.api.FriendApi
 import com.sweat.network.util.AuthInterceptor
 import com.sweat.network.util.SimpleCookieJar
 import com.sweat.network.util.TokenAuthenticator
-import com.sweat.network.util.WebSocketClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,26 +56,6 @@ object NetworkModule {
                     .retainDataFor(ChuckInterceptor.Period.ONE_HOUR)
             )
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideWebSocketClient(
-        okHttpClient: OkHttpClient
-    ): WebSocketClient {
-        return WebSocketClient(
-            baseUrl = "${BuildConfig.BASE_URL}/ws/chat/".replace("https", "wss"),
-            client = okHttpClient,
-            onMessageReceived = { message ->
-                Log.d("WebSocketClient", "Message received: $message")
-            },
-            onError = { error ->
-                Log.e("WebSocketClient", "Error: ${error.message}")
-            },
-            onClosed = {
-                Log.d("WebSocketClient", "Connection closed")
-            }
-        )
     }
 
     @Provides
