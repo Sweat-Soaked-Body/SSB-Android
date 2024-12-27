@@ -15,20 +15,20 @@ class ProfileViewModel @Inject constructor(
             ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
             ProfileIntent.AddProfilePicture -> postSideEffect(ProfileScreenSideEffect.LaunchImagePicker(200))
-            ProfileIntent.StartEditProfile -> { setState { copy(isProfileEditing = true) } }
+            ProfileIntent.StartEditProfile -> setState { copy(isProfileEditing = true) }
             ProfileIntent.EndEditProfile -> postProfileEdit()
             ProfileIntent.Logout -> logout()
             ProfileIntent.Secession -> postSideEffect(ProfileScreenSideEffect.ShowSecessionPopup)
             ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR)
-            ProfileIntent.HideBottomSheet -> postSideEffect(ProfileScreenSideEffect.HideBottomSheet)
-            ProfileIntent.Setting -> {
-                setState { copy(currentBottomSheetType = BottomSheetType.Settings) }
-                postSideEffect(ProfileScreenSideEffect.ShowBottomSheet)
+            ProfileIntent.HideBottomSheet -> setState {
+                copy(
+                    isShowAddFriendBottomSheet = false,
+                    isShowSettingBottomSheet = false,
+                )
             }
-            ProfileIntent.AddFriend -> {
-                setState { copy(currentBottomSheetType = BottomSheetType.AddFriend) }
-                postSideEffect(ProfileScreenSideEffect.ShowBottomSheet)
-            }
+
+            ProfileIntent.Setting -> setState { copy(isShowSettingBottomSheet = true) }
+            ProfileIntent.AddFriend -> setState { copy(isShowAddFriendBottomSheet = true) }
             is ProfileIntent.StartChat -> postSideEffect(ProfileScreenSideEffect.NavigateToChat(id = intent.id))
             is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
             is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
@@ -88,7 +88,6 @@ data class ChatListItemState(
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
-    object ShowBottomSheet : ProfileScreenSideEffect()
     object HideBottomSheet : ProfileScreenSideEffect()
     object NavigateToLogin : ProfileScreenSideEffect()
     object NavigateToMyQR : ProfileScreenSideEffect()
@@ -100,6 +99,7 @@ sealed class ProfileScreenSideEffect {
 
 sealed class ProfileIntent {
     object Setting : ProfileIntent()
+    object AddFriend : ProfileIntent()
     object HideBottomSheet : ProfileIntent()
     data class StartChat(val id: String) : ProfileIntent()
     data class SetMyIntro(val state: String) : ProfileIntent()
@@ -110,7 +110,6 @@ sealed class ProfileIntent {
     object Secession : ProfileIntent()
     object ShowMyQR : ProfileIntent()
     object AddProfilePicture : ProfileIntent()
-    object AddFriend : ProfileIntent()
     object AddFriendWithQR : ProfileIntent()
     object AddFriendWithNFC : ProfileIntent()
 }
