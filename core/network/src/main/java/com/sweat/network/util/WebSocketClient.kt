@@ -6,8 +6,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-
-import kotlinx.coroutines.*
+import okhttp3.logging.HttpLoggingInterceptor
 
 class WebSocketClient(
     private val roomName: String,
@@ -16,7 +15,13 @@ class WebSocketClient(
     private val onClosed: () -> Unit
 ) {
     private var webSocket: WebSocket? = null
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY // FULL BODY를 로그로 확인
+            }
+        ) // 인터셉터 추가
+        .build()
     private var retryCount = 0
     private val maxRetries = 3
     private val retryDelayMillis = 3000L
