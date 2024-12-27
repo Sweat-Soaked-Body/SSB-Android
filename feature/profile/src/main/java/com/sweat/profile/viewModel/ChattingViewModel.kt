@@ -9,30 +9,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
+    private val webSocketClient: WebSocketClient,
 ) : BaseViewModel<ChattingState, ChattingScreenSideEffect, ChattingIntent>(ChattingState.getInitialState()) {
-
-    private var webSocketClient: WebSocketClient = WebSocketClient(
-        roomName = "1",
-        onMessageReceived = { message ->
-            setState { copy(receivedMessage = message) }   // 메시지 수신 시 상태 업데이트
-            Log.d("WebSocket", "Received message: $message")
-        },
-        onError = { error ->
-            Log.e("WebSocket", "Error occurred: ${error.message}")
-            // 연결 상태를 'Error'로 업데이트
-            setState { copy(receivedMessage = "Error: ${error.message}") }
-        },
-        onClosed = {
-            Log.d("WebSocket", "Connection closed")
-            // 연결 상태를 'Closed'로 업데이트
-            setState { copy(receivedMessage = "Connection closed") }
-        }
-    )
 
     // 웹소켓 클라이언트 초기화 및 연결
     private fun initializeWebSocket() {
         Log.d("WebSocket", "Initializing WebSocket...")
-        webSocketClient.connect()  // 연결 시작
+        webSocketClient.connect("1")  // 연결 시작
     }
 
     // 메시지 전송 함수
