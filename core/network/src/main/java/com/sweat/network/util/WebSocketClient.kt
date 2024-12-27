@@ -1,5 +1,6 @@
 package com.sweat.network.util
 
+import com.sweat.network.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -23,7 +24,7 @@ class WebSocketClient(
     private val scope = CoroutineScope(Dispatchers.IO)  // CoroutineScope 생성
 
     fun connect() {
-        val url = "/$roomName"
+        val url = "wss://${BuildConfig.BASE_URL}/chat/$roomName"
         val request = Request.Builder().url(url).build()
 
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
