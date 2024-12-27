@@ -8,6 +8,6 @@ data class ExerciseListResponse (
     @Json(name = "id") val id: Int,
     @Json(name = "name") val name: String,
     @Json(name = "category") val category: Int,
-    @Json(name = "service_user") val service_user: Int,
+    @Json(name = "serviceUser") val serviceUser: Int,
     @Json(name = "like") val like: Boolean
 )
