@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class WebSocketClient @Inject constructor(
     private val baseUrl: String,
+    private val client: OkHttpClient,
     private val onMessageReceived: (String) -> Unit,
     private val onError: (Throwable) -> Unit,
     private val onClosed: () -> Unit
