@@ -13,14 +13,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,29 +32,30 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.sweat.common.utill.decodeBase64Image
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.AddFriendIcon
 import com.sweat.design_system.icon.CheckIcon
 import com.sweat.design_system.icon.SettingIcon
+import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.profile.component.ChatListItem
 import com.sweat.profile.component.ProfileTopAppBar
+import com.sweat.profile.component.bottomSheet.AddFriendBottomSheet
+import com.sweat.profile.component.bottomSheet.SettingsBottomSheet
 import com.sweat.profile.viewModel.ProfileIntent
 import com.sweat.profile.viewModel.ProfileScreenSideEffect
 import com.sweat.profile.viewModel.ProfileScreenState
 import com.sweat.profile.viewModel.ProfileViewModel
 import com.sweat.ui.DevicePreviews
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
     modifier: Modifier = Modifier,
@@ -62,15 +66,12 @@ fun ProfileRoute(
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-
-    LaunchedEffect(lifecycle) {
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+    val bottomSheetState = rememberModalBottomSheetState()
+    SSBAndroidTheme { color, theme ->
+        LaunchedEffect(Unit) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     is ProfileScreenSideEffect.LaunchImagePicker -> {}
-
                     ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
                     ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
                     ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
@@ -78,19 +79,50 @@ fun ProfileRoute(
                     ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
                     ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
                     ProfileScreenSideEffect.HideBottomSheet -> TODO()
-                    is ProfileScreenSideEffect.ShowBottomSheet -> TODO()
                 }
             }
         }
+
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
+        if (state.isShowSettingBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                SettingsBottomSheet()
+            }
+        }
+
+        if (state.isShowAddFriendBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                AddFriendBottomSheet()
+            }
+        }
+
+        ProfileScreen(
+            modifier = modifier,
+            state = state,
+            handleIntent = viewModel::handleIntent,
+        )
     }
-
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    ProfileScreen(
-        modifier = modifier,
-        state = state,
-        handleIntent = viewModel::handleIntent,
-    )
 }
 
 @Composable
