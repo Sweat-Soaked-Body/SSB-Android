@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.school_of_company.main.navigation.timerRoute
 import com.sweat.common.exception.NoInternetException
 import com.sweat.common.exception.OtherHttpException
 import com.sweat.common.exception.ServerException
@@ -84,6 +85,10 @@ fun SSBNavHost(
         friendQrGenerateRoute(
             myName = "",/* todo appState와 연결 */
             popUpBackStack = navController::popBackStack,
+        )
+
+        timerRoute(
+            popUpBackStack = navController::popBackStack
         )
     }
 }
