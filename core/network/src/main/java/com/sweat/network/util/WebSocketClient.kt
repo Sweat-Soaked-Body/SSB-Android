@@ -6,6 +6,7 @@ import okhttp3.*
 class WebSocketClient(
     private val baseUrl: String,
     private val client: OkHttpClient,
+    private val onSendSuccess: () -> Unit,
     private val onMessageReceived: (String) -> Unit,
     private val onError: (Throwable) -> Unit,
     private val onClosed: () -> Unit
@@ -77,6 +78,7 @@ class WebSocketClient(
         if (isConnected) {
             webSocket?.send(message)
             logInfo("Message sent: $message")
+            onSendSuccess()
         } else {
             logError("Cannot send message. WebSocket is not connected.")
         }
