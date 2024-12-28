@@ -1,0 +1,39 @@
+package com.sweat.design_system.component.topbar
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.sweat.design_system.theme.SSBAndroidTheme
+
+@Composable
+fun SSBTopBar(
+    modifier: Modifier = Modifier,
+    startIcon: @Composable () -> Unit,
+    betweenText: String = "",
+    endIcon: @Composable () -> Unit = { Spacer(modifier = Modifier.size(24.dp)) }
+) {
+    SSBAndroidTheme { colors, typography ->
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier.fillMaxWidth()
+        ) {
+            startIcon()
+
+            Text(
+                text = betweenText,
+                style = typography.subTitle,
+                color = colors.black
+            )
+
+            endIcon()
+        }
+    }
+}
