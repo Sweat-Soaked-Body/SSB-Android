@@ -262,6 +262,16 @@ fun WomanImage(
 
 @Stable
 @Composable
+fun MultiplyImage(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.multiply),
+        contentDescription = "",
+        modifier = modifier
+    )
+}
+
+@Stable
+@Composable
 fun PencilIcon(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
@@ -399,6 +409,7 @@ fun EyeIcon(
         modifier = modifier.size(24.dp),
     )
 }
+
 
 @Composable
 fun HeartIcon(
