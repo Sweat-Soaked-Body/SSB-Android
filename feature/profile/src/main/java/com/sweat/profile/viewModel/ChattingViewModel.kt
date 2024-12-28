@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
-    private val okHttpClient: OkHttpClient,
+    okHttpClient: OkHttpClient,
 ) : BaseViewModel<ChattingState, ChattingScreenSideEffect, ChattingIntent>(ChattingState.getInitialState()) {
 
     private val webSocketClient = WebSocketClient(
@@ -25,38 +25,39 @@ class ChattingViewModel @Inject constructor(
         },
         onClosed = {
             Log.d("WebSocketClient", "Connection closed")
-        }
+        },
+        onSendSuccess = {
+            setState { copy(messageInputTextState = "") }
+        },
     )
-
-    // 웹소켓 클라이언트 초기화 및 연결
-    private fun initializeWebSocket() {
-        Log.d("WebSocket", "Initializing WebSocket...")
-        webSocketClient.connect("1")  // 연결 시작
-    }
-
-    // 메시지 전송 함수
-    private fun sendMessage(message: String) {
-        Log.d("WebSocket", "Sending message: $message")
-        webSocketClient.sendMessage(message)
-    }
 
     override fun handleIntent(intent: ChattingIntent) {
         when (intent) {
             is ChattingIntent.SetMyName -> setState { copy(myName = intent.name) }
             is ChattingIntent.SendMessage -> sendMessage(intent.message)
-            is ChattingIntent.InitializeWebSocket -> initializeWebSocket()
+            is ChattingIntent.InitializeWebSocket -> initializeWebSocket(intent.roomId)
+            is ChattingIntent.SetMessageInputTextState -> setState { copy(messageInputTextState = intent.state) }
         }
+    }
+
+    private fun initializeWebSocket(roomName: String) {
+        Log.d("WebSocket", "Initializing WebSocket...")
+        webSocketClient.connect(roomName = roomName)
+    }
+
+    private fun sendMessage(message: String) {
+        webSocketClient.sendMessage(message)
     }
 }
 
 data class ChattingState(
     val myName: String,
-    val receivedMessage: String,
+    val messageInputTextState: String,
 ) {
     companion object {
         fun getInitialState() = ChattingState(
             myName = "",
-            receivedMessage = ""
+            messageInputTextState = "",
         )
     }
 }
@@ -66,5 +67,6 @@ sealed class ChattingScreenSideEffect
 sealed class ChattingIntent {
     data class SetMyName(val name: String) : ChattingIntent()
     data class SendMessage(val message: String) : ChattingIntent()
-    object InitializeWebSocket : ChattingIntent()
+    data class InitializeWebSocket(val roomId: String) : ChattingIntent()
+    data class SetMessageInputTextState(val state: String) : ChattingIntent()
 }
