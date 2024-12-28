@@ -15,7 +15,8 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 internal fun MainTimerExerciseList(
     modifier: Modifier = Modifier,
-    data: ImmutableList<exercise> = persistentListOf()
+    data: ImmutableList<exercise> = persistentListOf(),
+    currentSet: Int
 ) {
     SSBAndroidTheme { colors, _ ->
 
@@ -26,9 +27,11 @@ internal fun MainTimerExerciseList(
                 .padding(horizontal = 16.dp)
         ) {
             itemsIndexed(data) { index, item ->
+                val isCompleted = index + 1 < currentSet
                 MainTimerExerciseListItem(
                     index = index + 1,
-                    item = item
+                    item = item,
+                    isCompleted = isCompleted
                 )
             }
         }

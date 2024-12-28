@@ -69,39 +69,39 @@ internal fun MainTimer(
 
         LaunchedEffect(timerState) {
             when (timerState) {
-                TimerState.STARTED, TimerState.REFRESH -> {
-
-                    val remainingDuration = (timerValue * 1000 * progress.value).toLong()
-
+                TimerState.STARTED -> {
                     job = coroutineScope.launch {
-                        progress.animateTo(
-                            targetValue = 0f,
-                            animationSpec = tween(durationMillis = remainingDuration.toInt())
-                        )
-                    }
+                        while (timerValue > 0 && timerState == TimerState.STARTED) {
+                            delay(1000L)
+                            timerValue -= 1
+                            progress.snapTo(timerValue.toFloat() / initialTime)
+                        }
 
-                    while (timerValue > 0 && timerState == TimerState.STARTED) {
-                        delay(1000L)
-                        timerValue -= 1
-                    }
-
-                    if (timerValue == 0) {
-                        timerState = TimerState.STOPPED
+                        if (timerValue == 0) {
+                            timerState = TimerState.REFRESH
+                            nextOnClick() // 다음 세트로 이동
+                        }
                     }
                 }
 
                 TimerState.STOPPED -> {
                     job?.cancel()
                 }
+
+                TimerState.REFRESH -> {
+                    timerValue = initialTime // 타이머 초기화
+                    progress.snapTo(1f)
+                }
             }
         }
 
+        // UI
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = if (timerState == TimerState.REFRESH) "${index}세트 휴식!" else "${index}세트 시작!",
+                text = if (timerState == TimerState.REFRESH) "${index}세트 완료!" else "${index}세트 시작!",
                 style = typography.titleSmall,
                 color = Color.Black
             )
@@ -112,42 +112,11 @@ internal fun MainTimer(
                 contentAlignment = Alignment.Center,
                 modifier = modifier
                     .size(250.dp)
-                    .pointerInput(Unit) {
-                        detectDragGestures { _, dragAmount ->
-                            val dragAngle = atan2(
-                                y = -dragAmount.y,
-                                x = dragAmount.x
-                            )
-
-                            val dragDistance = dragAmount.getDistance()
-
-                            val newTimerValue =
-                                timerValue + (dragDistance * if (dragAngle > 0) 1 else -1).toInt()
-
-                            timerValue = newTimerValue.coerceIn(0, initialTime)
-
-                            coroutineScope.launch {
-                                progress.snapTo(
-                                    (timerValue.toFloat() / initialTime).coerceIn(
-                                        0f,
-                                        1f
-                                    )
-                                )
-                            }
-                        }
-                    }
             ) {
                 CircularProgressIndicator(
-                    progress = 1f,
+                    progress = progress.value,
                     strokeWidth = 4.dp,
-                    color = Color.LightGray,
-                    modifier = Modifier.fillMaxSize()
-                )
-
-                CircularProgressIndicator(
-                    progress = 1f - progress.value,
-                    strokeWidth = 4.dp,
-                    color = when(timerState) {
+                    color = when (timerState) {
                         TimerState.STARTED -> colors.main
                         TimerState.STOPPED -> colors.gray600
                         TimerState.REFRESH -> colors.blue
@@ -158,7 +127,7 @@ internal fun MainTimer(
                 Text(
                     text = formatTimerText(timerValue),
                     style = typography.titleLarge,
-                    color = when(timerState) {
+                    color = when (timerState) {
                         TimerState.STARTED -> colors.main
                         TimerState.STOPPED -> colors.gray600
                         TimerState.REFRESH -> colors.blue
@@ -177,39 +146,38 @@ internal fun MainTimer(
                     modifier = Modifier.clickableSingle {
                         timerValue = initialTime
                         timerState = TimerState.STOPPED
-
-                        coroutineScope.launch {
-                            progress.snapTo(1f)
-                        }
+                        coroutineScope.launch { progress.snapTo(1f) }
                     }
                 )
 
                 if (timerState == TimerState.STARTED) {
-                    PlayIcon(
-                        tint = colors.gray300,
-                        modifier = Modifier.clickableSingle { timerState = TimerState.STOPPED }
-                    )
-                } else {
                     PauseIcon(
                         tint = colors.gray300,
                         modifier = Modifier.clickableSingle {
+                            timerState = TimerState.STOPPED
+                        }
+                    )
+                } else {
+                    PlayIcon(
+                        tint = colors.gray300,
+                        modifier = Modifier.clickableSingle {
                             timerState = TimerState.STARTED
-                            if (timerValue == 0) {
-                                timerValue = initialTime
-                                coroutineScope.launch { progress.snapTo(1f) }
-                            }
                         }
                     )
                 }
 
                 SkipIcon(
                     tint = colors.gray300,
-                    modifier = Modifier.clickableSingle { nextOnClick() }
+                    modifier = Modifier.clickableSingle {
+                        timerState = TimerState.REFRESH
+                        nextOnClick()
+                    }
                 )
             }
         }
     }
 }
+
 
 @Preview
 @Composable

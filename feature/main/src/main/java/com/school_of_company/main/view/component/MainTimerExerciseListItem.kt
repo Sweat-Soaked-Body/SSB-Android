@@ -1,11 +1,9 @@
 package com.school_of_company.main.view.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +21,8 @@ data class exercise(
 internal fun MainTimerExerciseListItem(
     modifier: Modifier = Modifier,
     index: Int,
-    item: exercise
+    item: exercise,
+    isCompleted: Boolean
 ) {
     SSBAndroidTheme { colors, typography ->
 
@@ -36,29 +35,27 @@ internal fun MainTimerExerciseListItem(
             Text(
                 text = "${index}세트",
                 style = typography.bodySmall,
-                color = colors.black,
+                color = if (isCompleted) colors.black else colors.gray800,
                 modifier = Modifier.weight(1f)
             )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically,) {
                 Text(
                     text = "${item.weight}kg",
                     style = typography.bodySmall,
-                    color = colors.black
+                    color = if (isCompleted) colors.black else colors.gray800,
                 )
 
                 Text(
                     text = "X",
                     style = typography.bodySmall,
-                    color = colors.black
+                    color = if (isCompleted) colors.black else colors.gray800,
                 )
 
                 Text(
                     text = "${item.time}회",
                     style = typography.bodySmall,
-                    color = colors.black
+                    color = if (isCompleted) colors.black else colors.gray800,
                 )
             }
         }
@@ -68,5 +65,5 @@ internal fun MainTimerExerciseListItem(
 @Preview
 @Composable
 private fun MainTimerExerciseListItemPreview() {
-    MainTimerExerciseListItem(index = 1, item = exercise(weight = 55, time = 4))
+    MainTimerExerciseListItem(index = 1, item = exercise(weight = 55, time = 4), isCompleted = false)
 }
