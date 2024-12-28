@@ -23,6 +23,7 @@ dependencies {
     implementation(project(":feature:login"))
     implementation(project(":feature:exercise"))
     implementation(project(":core:common"))
+    implementation(project(":feature:main"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
