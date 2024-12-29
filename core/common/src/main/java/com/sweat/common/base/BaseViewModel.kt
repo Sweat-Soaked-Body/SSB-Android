@@ -20,10 +20,12 @@ abstract class BaseViewModel<S, E, I>(initialState: S) : ViewModel() {
     val sideEffect = _sideEffect.asSharedFlow()
 
     protected fun setState(update: S.() -> S) {
+        Log.d("BaseViewModel", "setState called with: $update")
         _state.update { it.update() }
     }
 
     protected fun postSideEffect(sideEffect: E) {
+        Log.d("BaseViewModel", "postSideEffect called with: $sideEffect")
         viewModelScope.launch(Dispatchers.Main) {
             _sideEffect.emit(sideEffect)
         }
