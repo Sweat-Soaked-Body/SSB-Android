@@ -1,5 +1,6 @@
 package com.sweat.common.base
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -28,5 +29,8 @@ abstract class BaseViewModel<S, E, I>(initialState: S) : ViewModel() {
         }
     }
 
-    abstract fun handleIntent(intent: I)
+    open fun handleIntent(intent: I) {
+        // 기본적으로 로그를 찍음
+        Log.d("BaseViewModel", "handleIntent called with: $intent")
+    }
 }
