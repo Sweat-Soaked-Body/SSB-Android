@@ -66,12 +66,7 @@ data class ExerciseScreenState(
         fun getInitialState() = ExerciseScreenState(
             exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
             selectedButton = "전체",
-            exerciseStateList = persistentListOf(
-                Triple("운동 1", "어깨", false),
-                Triple("운동 2", "등", true),
-                Triple("운동 3", "가슴", false),
-                Triple("운동 4", "하체", true)
-            ),
+            exerciseStateList = persistentListOf(),
             isSearching = false,
             searchTextState = "",
             filteredExerciseStateList = persistentListOf()

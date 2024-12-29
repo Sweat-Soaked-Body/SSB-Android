@@ -69,6 +69,7 @@ fun ExerciseScreen(
                 .background(Color.White)
                 .statusBarsPadding()
         ) {
+            // 상단 UI
             Row(
                 modifier = modifier
                     .padding(vertical = 13.dp, horizontal = 24.dp),
@@ -114,6 +115,8 @@ fun ExerciseScreen(
             }
             Divider(thickness = 1.dp, color = colors.gray100)
             Spacer(modifier = modifier.height(10.dp))
+
+            // 카테고리 버튼 UI
             LazyRow(
                 modifier = modifier
                     .fillMaxWidth()
@@ -133,16 +136,14 @@ fun ExerciseScreen(
             }
             Spacer(modifier = modifier.height(12.dp))
 
+            // 운동 리스트 UI
             LazyColumn(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
-                val itemsToDisplay = if (state.filteredExerciseStateList.isEmpty()) {
-                    state.exerciseStateList
-                } else {
-                    state.filteredExerciseStateList
-                }
+                val itemsToDisplay = state.filteredExerciseStateList.takeIf { it.isNotEmpty() }
+                    ?: state.exerciseStateList
 
                 itemsIndexed(itemsToDisplay) { index, item ->
                     ExerciseItem(
@@ -161,6 +162,7 @@ fun ExerciseScreen(
         }
     }
 }
+
 
 @DevicePreviews
 @Composable
