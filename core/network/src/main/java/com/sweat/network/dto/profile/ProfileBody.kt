@@ -16,10 +16,4 @@ data class ProfileBody(
     val image: String                 // 이미지 URL
 )
 
-enum class Sex {
-    MALE,
-    FEMALE,
-    UNLABELED,
-}
-
 fun ProfileModel.toDto() = ProfileBody(id, name, sex, age, weight, createdAt, modifiedAt, serviceUser, image)
