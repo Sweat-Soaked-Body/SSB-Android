@@ -1,15 +1,21 @@
 package com.sweat.profile.viewModel
 
+import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.friend.FriendCheckUseCase
+import com.sweat.model.friend.FriendModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-
+    private val friendCheckUseCase: FriendCheckUseCase,
 ) : BaseViewModel<ProfileScreenState, ProfileScreenSideEffect, ProfileIntent>(ProfileScreenState.getInitialState()) {
+
     override fun handleIntent(intent: ProfileIntent) {
         when (intent) {
             ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
@@ -32,11 +38,19 @@ class ProfileViewModel @Inject constructor(
             is ProfileIntent.StartChat -> postSideEffect(ProfileScreenSideEffect.NavigateToChat(id = intent.id))
             is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
             is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
+            ProfileIntent.InitMyFriend -> loadChatList()
         }
     }
 
     private fun loadChatList() {
-
+        viewModelScope.launch {
+            friendCheckUseCase()
+                .onSuccess {
+                    it.collect {
+                        setState { copy(chatList = it.toPersistentList()) }
+                    }
+                }
+        }
     }
 
     private fun loadProfileData() {
@@ -61,7 +75,7 @@ data class ProfileScreenState(
     val isProfileEditing: Boolean,
     val isShowSettingBottomSheet: Boolean,
     val isShowAddFriendBottomSheet: Boolean,
-    val chatList: ImmutableList<ChatListItemState>,
+    val chatList: ImmutableList<FriendModel>,
 ) {
     companion object {
         // State의 초기값을 넣어주기위해 필수로 구현해야하는 함수
@@ -77,14 +91,6 @@ data class ProfileScreenState(
     }
 }
 
-data class ChatListItemState(
-    val name: String,
-    val message: String,
-    val date: String,
-    val image: String,
-    val isReadMessage: Boolean,
-)
-
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
@@ -98,6 +104,7 @@ sealed class ProfileScreenSideEffect {
 
 
 sealed class ProfileIntent {
+    object InitMyFriend : ProfileIntent()
     object Setting : ProfileIntent()
     object AddFriend : ProfileIntent()
     object HideBottomSheet : ProfileIntent()
