@@ -17,6 +17,7 @@ class ProfileViewModel @Inject constructor(
 ) : BaseViewModel<ProfileScreenState, ProfileScreenSideEffect, ProfileIntent>(ProfileScreenState.getInitialState()) {
 
     override fun handleIntent(intent: ProfileIntent) {
+        super.handleIntent(intent)
         when (intent) {
             ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
