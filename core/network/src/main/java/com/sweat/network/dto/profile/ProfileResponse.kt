@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 import com.sweat.model.profile.ProfileModel
 
 @JsonClass(generateAdapter = true)
-data class ProfileBody(
+data class ProfileResponse(
     val id: Int,                      // 고유 ID
     val name: String,                 // 사용자 이름
     val sex: String,                     // 성별: Male, Female, Unlabeled
@@ -16,4 +16,4 @@ data class ProfileBody(
     val image: String                 // 이미지 URL
 )
 
-fun ProfileModel.toDto() = ProfileBody(id, name, sex, age, weight, createdAt, modifiedAt, serviceUser, image)
+fun ProfileResponse.toModel() = ProfileModel(id, name, sex, age, weight, createdAt, modifiedAt, serviceUser, image)
