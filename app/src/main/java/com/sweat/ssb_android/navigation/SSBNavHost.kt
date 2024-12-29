@@ -17,6 +17,7 @@ import com.sweat.exercise.navigateToAddExercise
 import com.sweat.login.loginRoute
 import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.friendQrGenerateRoute
+import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.signup.navigation.signupRoute
@@ -64,7 +65,7 @@ fun SSBNavHost(
         )
 
         loginRoute(
-            navigateToMain = {},
+            navigateToMain = {/* navController::navigateToMainRoute */ },
             navigateToSignup = navController::navigateToSignupRoute
         )
 
