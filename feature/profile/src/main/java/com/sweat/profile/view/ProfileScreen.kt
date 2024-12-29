@@ -67,24 +67,30 @@ fun ProfileRoute(
     navigateToChat: (String) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState()
-    SSBAndroidTheme { color, theme ->
-        LaunchedEffect(Unit) {
-            viewModel.sideEffect.collect { sideEffect ->
-                when (sideEffect) {
-                    is ProfileScreenSideEffect.LaunchImagePicker -> {}
-                    ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
-                    ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
-                    ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
-                    is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
-                    ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
-                    ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                    ProfileScreenSideEffect.HideBottomSheet -> TODO()
-                }
+
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(ProfileIntent.InitMyFriend)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is ProfileScreenSideEffect.LaunchImagePicker -> {}
+                ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
+                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
+                ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
+                is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
+                ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
+                ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
+                ProfileScreenSideEffect.HideBottomSheet -> TODO()
             }
         }
+    }
 
-        val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+
+    SSBAndroidTheme { color, theme ->
         if (state.isShowSettingBottomSheet) {
             ModalBottomSheet(
                 containerColor = color.white,
