@@ -95,7 +95,6 @@ data class ProfileScreenState(
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
-    object HideBottomSheet : ProfileScreenSideEffect()
     object NavigateToLogin : ProfileScreenSideEffect()
     object NavigateToMyQR : ProfileScreenSideEffect()
     object NavigateToAddFriendWithQR : ProfileScreenSideEffect()

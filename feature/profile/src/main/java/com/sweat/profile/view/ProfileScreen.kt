@@ -79,7 +79,6 @@ fun ProfileRoute(
                 is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                 ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
                 ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
-                ProfileScreenSideEffect.HideBottomSheet -> TODO()
             }
         }
     }
