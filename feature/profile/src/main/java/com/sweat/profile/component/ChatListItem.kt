@@ -14,18 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.sweat.profile.view.getProfileImage
-import com.sweat.profile.viewModel.ChatListItemState
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
+import com.sweat.model.friend.FriendModel
 
 @Composable
 fun ChatListItem(
     modifier: Modifier = Modifier,
-    state: ChatListItemState,
+    state: FriendModel,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,7 +34,7 @@ fun ChatListItem(
     ) {
         Row {
             Image(
-                painter = getProfileImage(state.image),
+                painter = painterResource(com.sweat.design_system.R.drawable.profile_square), // getProfileImage(state.image),
                 contentDescription = "chat partner profile",
                 modifier = Modifier
                     .padding(8.dp)
@@ -42,29 +42,43 @@ fun ChatListItem(
             )
             Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 5.dp)) {
                 Text(
-                    text = state.name,
+                    text = state.friend,
                     style = SSBTypography.bodyMedium,
                     fontWeight = FontWeight(600),
                     color = Color(0xFF000000),
                 )
                 Text(
-                    text = state.message,
+                    text = "state.message",
                     style = SSBTypography.label,
                     fontWeight = FontWeight(400),
-                    color = if (state.isReadMessage) Color(0xFF000000)
-                    else SSBColor.gray600
+                    color = SSBColor.gray600
                 )
+//                Text(
+//                    text = state.message,
+//                    style = SSBTypography.label,
+//                    fontWeight = FontWeight(400),
+//                    color = if (state.isReadMessage) Color(0xFF000000)
+//                    else SSBColor.gray600
+//                )
             }
         }
         Column {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = state.date,
+                text = "오늘",
                 style = SSBTypography.label,
                 fontWeight = FontWeight(400),
                 color = SSBColor.gray500,
                 textAlign = TextAlign.Right,
             )
+
+//            Text(
+//                text = state.date,
+//                style = SSBTypography.label,
+//                fontWeight = FontWeight(400),
+//                color = SSBColor.gray500,
+//                textAlign = TextAlign.Right,
+//            )
         }
     }
 }
