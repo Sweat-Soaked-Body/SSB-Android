@@ -1,6 +1,7 @@
 package com.sweat.network.dto.profile
 
 import com.squareup.moshi.JsonClass
+import com.sweat.model.profile.ProfileModel
 
 @JsonClass(generateAdapter = true)
 data class ProfileBody(
@@ -20,3 +21,5 @@ enum class Sex {
     FEMALE,
     UNLABELED,
 }
+
+fun ProfileModel.toDto() = ProfileBody(id, name, sex, age, weight, createdAt, modifiedAt, serviceUser, image)
