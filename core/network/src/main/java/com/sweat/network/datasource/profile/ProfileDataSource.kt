@@ -1,9 +1,9 @@
 package com.sweat.network.datasource.profile
 
-import com.sweat.network.dto.profile.ProfileBody
+import com.sweat.network.dto.profile.ProfileResponse
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileDataSource {
-    fun getProfile(body: ProfileBody): Flow<Unit>
+    fun getProfile(): Flow<ProfileResponse>
     fun updateProfile(): Flow<Unit>
 }

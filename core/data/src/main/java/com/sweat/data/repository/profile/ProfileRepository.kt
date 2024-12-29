@@ -4,6 +4,6 @@ import com.sweat.model.profile.ProfileModel
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
-    fun getProfile(body: ProfileModel): Flow<Unit>
+    fun getProfile(): Flow<ProfileModel>
     fun updateProfile(): Flow<Unit>
 }
