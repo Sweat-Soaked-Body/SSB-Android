@@ -55,7 +55,6 @@ import com.sweat.profile.viewModel.ProfileScreenState
 import com.sweat.profile.viewModel.ProfileViewModel
 import com.sweat.ui.DevicePreviews
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileRoute(
     modifier: Modifier = Modifier,
@@ -66,8 +65,6 @@ fun ProfileRoute(
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
-
     LaunchedEffect(Unit) {
         viewModel.handleIntent(ProfileIntent.InitMyFriend)
     }
@@ -97,133 +94,146 @@ fun ProfileRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     state: ProfileScreenState,
     handleIntent: (ProfileIntent) -> Unit,
 ) {
-    SSBAndroidTheme { color, theme ->
+    val bottomSheetState = rememberModalBottomSheetState()
 
-    if (state.isShowSettingBottomSheet) {
-        ModalBottomSheet(
-            containerColor = color.white,
-            sheetState = bottomSheetState,
-            shape = RoundedCornerShape(
-                topStart = 20.dp,
-                topEnd = 20.dp,
-                bottomStart = 0.dp,
-                bottomEnd = 0.dp
-            ),
-            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-        ) {
-            SettingsBottomSheet()
+    SSBAndroidTheme { color, _ ->
+        if (state.isShowSettingBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                SettingsBottomSheet(
+                    onProfileEditClick = { handleIntent(ProfileIntent.StartEditProfile) },
+                    onLeaveClick = { },
+                    onLogoutClick = { handleIntent(ProfileIntent.Logout) },
+                )
+            }
         }
-    }
 
-    if (state.isShowAddFriendBottomSheet) {
-        ModalBottomSheet(
-            containerColor = color.white,
-            sheetState = bottomSheetState,
-            shape = RoundedCornerShape(
-                topStart = 20.dp,
-                topEnd = 20.dp,
-                bottomStart = 0.dp,
-                bottomEnd = 0.dp
-            ),
-            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-        ) {
-            AddFriendBottomSheet()
+        if (state.isShowAddFriendBottomSheet) {
+            ModalBottomSheet(
+                containerColor = color.white,
+                sheetState = bottomSheetState,
+                shape = RoundedCornerShape(
+                    topStart = 20.dp,
+                    topEnd = 20.dp,
+                    bottomStart = 0.dp,
+                    bottomEnd = 0.dp
+                ),
+                onDismissRequest = { handleIntent(ProfileIntent.HideBottomSheet) },
+            ) {
+                AddFriendBottomSheet(
+                    onClickMyAddFriendWithQr = { handleIntent(ProfileIntent.AddFriendWithQR) },
+                    onClickMyQr = { handleIntent(ProfileIntent.ShowMyQR) },
+                )
+            }
         }
-    }
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            ProfileTopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                startText = "프로필",
-                endIcon = {
-                    if (state.isProfileEditing) {
-                        CheckIcon(
-                            modifier = Modifier.clickableSingle { handleIntent(ProfileIntent.EndEditProfile) }
-                        )
-                    } else {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                24.dp,
-                                Alignment.CenterHorizontally
-                            ),
-                            verticalAlignment = Alignment.Top,
-                        ) {
-                            AddFriendIcon(modifier = Modifier.clickableSingle {
-                                handleIntent(ProfileIntent.AddFriend)
-                            })
-                            SettingIcon(modifier = Modifier.clickableSingle {
-                                handleIntent(ProfileIntent.Setting)
-                            })
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                ProfileTopAppBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    startText = "프로필",
+                    endIcon = {
+                        if (state.isProfileEditing) {
+                            CheckIcon(
+                                modifier = Modifier.clickableSingle { handleIntent(ProfileIntent.EndEditProfile) }
+                            )
+                        } else {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    24.dp,
+                                    Alignment.CenterHorizontally
+                                ),
+                                verticalAlignment = Alignment.Top,
+                            ) {
+                                AddFriendIcon(modifier = Modifier.clickableSingle {
+                                    handleIntent(ProfileIntent.AddFriend)
+                                })
+                                SettingIcon(modifier = Modifier.clickableSingle {
+                                    handleIntent(ProfileIntent.Setting)
+                                })
+                            }
                         }
                     }
-                }
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Image(
-                    painter = getProfileImage(state.image),
-                    contentDescription = "profileImage",
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .size(60.dp),
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 24.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(
-                        text = state.myName,
-                        style = SSBTypography.subTitle,
-                        fontWeight = FontWeight(600),
-                        color = Color(0xFF000000),
+                    Image(
+                        painter = getProfileImage(state.image),
+                        contentDescription = "profileImage",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(60.dp),
                     )
-                    Spacer(modifier = Modifier.height(7.dp))
-                    BasicTextField(
-                        value = state.myIntro,
-                        onValueChange = {
-                            handleIntent(ProfileIntent.SetMyIntro(it))
-                        },
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
-                        cursorBrush = SolidColor(Color.Black),
-                        decorationBox = { innerTextField ->
-                            if (state.myIntro.isEmpty()) {
-                                Text("한 줄 소개를 적어주세요", color = SSBColor.gray200)
-                            }
-                            innerTextField()
-                        },
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 8.dp)
-                            .background(Color.Transparent, shape = RectangleShape)
-                    )
-                    Text(
-                        text = state.myIntro,
-                        style = SSBTypography.bodySmall,
-                        fontWeight = FontWeight(400),
-                        color = Color(0xFF000000),
-                    )
+                            .padding(15.dp),
+                    ) {
+                        Text(
+                            text = state.myName,
+                            style = SSBTypography.subTitle,
+                            fontWeight = FontWeight(600),
+                            color = Color(0xFF000000),
+                        )
+                        Spacer(modifier = Modifier.height(7.dp))
+                        BasicTextField(
+                            value = state.myIntro,
+                            onValueChange = {
+                                handleIntent(ProfileIntent.SetMyIntro(it))
+                            },
+                            textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
+                            cursorBrush = SolidColor(Color.Black),
+                            decorationBox = { innerTextField ->
+                                if (state.myIntro.isEmpty()) {
+                                    Text("한 줄 소개를 적어주세요", color = SSBColor.gray200)
+                                }
+                                innerTextField()
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp)
+                                .background(Color.Transparent, shape = RectangleShape)
+                        )
+                        Text(
+                            text = state.myIntro,
+                            style = SSBTypography.bodySmall,
+                            fontWeight = FontWeight(400),
+                            color = Color(0xFF000000),
+                        )
+                    }
                 }
-            }
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(state.chatList) { state ->
-                    ChatListItem(state = state)
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.chatList) { state ->
+                        ChatListItem(
+                            state = state,
+                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
+                        )
+                    }
                 }
             }
         }
