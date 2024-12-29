@@ -3,7 +3,7 @@ package com.sweat.network.dto.profile
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ProfileDto(
+data class ProfileBody(
     val id: Int,                      // 고유 ID
     val name: String,                 // 사용자 이름
     val sex: String,                     // 성별: Male, Female, Unlabeled
