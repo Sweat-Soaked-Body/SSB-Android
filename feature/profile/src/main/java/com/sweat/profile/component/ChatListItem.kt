@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
 import com.sweat.model.friend.FriendModel
@@ -26,11 +27,14 @@ import com.sweat.model.friend.FriendModel
 fun ChatListItem(
     modifier: Modifier = Modifier,
     state: FriendModel,
+    onClick: (Int) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickableSingle { onClick(state.id) }
     ) {
         Row {
             Image(
