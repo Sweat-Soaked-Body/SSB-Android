@@ -38,3 +38,4 @@ include(":feature:main")
 include(":feature:exercise")
 
 gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+include(":feature:food")
