@@ -1,14 +1,12 @@
 package com.sweat.network.dto.friend
 
 import com.squareup.moshi.JsonClass
+import com.sweat.model.friend.FriendModel
 
 @JsonClass(generateAdapter = true)
 data class FriendResponse(
-    val friend: List<FriendDto>,
-)
-
-@JsonClass(generateAdapter = true)
-data class FriendDto(
     val id: Int,
     val friend: String,
 )
+
+fun FriendResponse.toModel() = FriendModel(id, friend)
