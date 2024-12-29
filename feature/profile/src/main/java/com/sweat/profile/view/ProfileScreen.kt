@@ -60,7 +60,6 @@ fun ProfileRoute(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToAddFriendWithQR: () -> Unit,
-    navigateToAddFriendWithNFC: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
@@ -74,7 +73,6 @@ fun ProfileRoute(
             when (sideEffect) {
                 is ProfileScreenSideEffect.LaunchImagePicker -> {}
                 ProfileScreenSideEffect.ShowSecessionPopup -> TODO()
-                ProfileScreenSideEffect.NavigateToAddFriendWithNFC -> navigateToAddFriendWithNFC()
                 ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
                 is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                 ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()

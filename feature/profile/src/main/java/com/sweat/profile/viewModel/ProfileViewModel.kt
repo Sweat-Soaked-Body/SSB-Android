@@ -19,7 +19,6 @@ class ProfileViewModel @Inject constructor(
     override fun handleIntent(intent: ProfileIntent) {
         super.handleIntent(intent)
         when (intent) {
-            ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
             ProfileIntent.AddProfilePicture -> postSideEffect(ProfileScreenSideEffect.LaunchImagePicker(200))
             ProfileIntent.StartEditProfile -> setState { copy(isProfileEditing = true) }
@@ -98,7 +97,6 @@ sealed class ProfileScreenSideEffect {
     object NavigateToLogin : ProfileScreenSideEffect()
     object NavigateToMyQR : ProfileScreenSideEffect()
     object NavigateToAddFriendWithQR : ProfileScreenSideEffect()
-    object NavigateToAddFriendWithNFC : ProfileScreenSideEffect()
     data class NavigateToChat(val id: String) : ProfileScreenSideEffect()
 }
 
@@ -118,5 +116,4 @@ sealed class ProfileIntent {
     object ShowMyQR : ProfileIntent()
     object AddProfilePicture : ProfileIntent()
     object AddFriendWithQR : ProfileIntent()
-    object AddFriendWithNFC : ProfileIntent()
 }

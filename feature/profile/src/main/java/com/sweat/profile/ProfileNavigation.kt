@@ -26,7 +26,6 @@ fun NavController.navigateToFriendQrGenerate(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.profileRoute(
     navigateToAddFriendWithQR: () -> Unit,
-    navigateToAddFriendWithNFC: () -> Unit,
     navigateToLogin: () -> Unit,
     navigateToMyQR: () -> Unit,
     navigateToChat: (String) -> Unit,
@@ -34,7 +33,6 @@ fun NavGraphBuilder.profileRoute(
     composable(profileRoute) {
         ProfileRoute(
             navigateToAddFriendWithQR = navigateToAddFriendWithQR,
-            navigateToAddFriendWithNFC = navigateToAddFriendWithNFC,
             navigateToLogin = navigateToLogin,
             navigateToMyQR = navigateToMyQR,
             navigateToChat = navigateToChat,
