@@ -20,7 +20,7 @@ abstract class BaseViewModel<S, E, I>(initialState: S) : ViewModel() {
     val sideEffect = _sideEffect.asSharedFlow()
 
     protected fun setState(update: S.() -> S) {
-        Log.d("BaseViewModel", "setState called with: $update")
+        Log.d("BaseViewModel", "setState called with: ${_state.value}")
         _state.update { it.update() }
     }
 
