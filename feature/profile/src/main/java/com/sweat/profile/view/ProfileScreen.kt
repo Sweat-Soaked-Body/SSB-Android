@@ -90,45 +90,11 @@ fun ProfileRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
 
-    SSBAndroidTheme { color, theme ->
-        if (state.isShowSettingBottomSheet) {
-            ModalBottomSheet(
-                containerColor = color.white,
-                sheetState = bottomSheetState,
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                ),
-                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-            ) {
-                SettingsBottomSheet()
-            }
-        }
-
-        if (state.isShowAddFriendBottomSheet) {
-            ModalBottomSheet(
-                containerColor = color.white,
-                sheetState = bottomSheetState,
-                shape = RoundedCornerShape(
-                    topStart = 20.dp,
-                    topEnd = 20.dp,
-                    bottomStart = 0.dp,
-                    bottomEnd = 0.dp
-                ),
-                onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
-            ) {
-                AddFriendBottomSheet()
-            }
-        }
-
-        ProfileScreen(
-            modifier = modifier,
-            state = state,
-            handleIntent = viewModel::handleIntent,
-        )
-    }
+    ProfileScreen(
+        modifier = modifier,
+        state = state,
+        handleIntent = viewModel::handleIntent,
+    )
 }
 
 @Composable
@@ -137,6 +103,39 @@ fun ProfileScreen(
     state: ProfileScreenState,
     handleIntent: (ProfileIntent) -> Unit,
 ) {
+    SSBAndroidTheme { color, theme ->
+
+    if (state.isShowSettingBottomSheet) {
+        ModalBottomSheet(
+            containerColor = color.white,
+            sheetState = bottomSheetState,
+            shape = RoundedCornerShape(
+                topStart = 20.dp,
+                topEnd = 20.dp,
+                bottomStart = 0.dp,
+                bottomEnd = 0.dp
+            ),
+            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+        ) {
+            SettingsBottomSheet()
+        }
+    }
+
+    if (state.isShowAddFriendBottomSheet) {
+        ModalBottomSheet(
+            containerColor = color.white,
+            sheetState = bottomSheetState,
+            shape = RoundedCornerShape(
+                topStart = 20.dp,
+                topEnd = 20.dp,
+                bottomStart = 0.dp,
+                bottomEnd = 0.dp
+            ),
+            onDismissRequest = { viewModel.handleIntent(ProfileIntent.HideBottomSheet) },
+        ) {
+            AddFriendBottomSheet()
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
