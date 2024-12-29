@@ -114,7 +114,10 @@ fun ProfileScreen(
                 onDismissRequest = { handleIntent(ProfileIntent.HideBottomSheet) },
             ) {
                 SettingsBottomSheet(
-                    onProfileEditClick = { handleIntent(ProfileIntent.StartEditProfile) },
+                    onProfileEditClick = {
+                        handleIntent(ProfileIntent.StartEditProfile)
+                        handleIntent(ProfileIntent.HideBottomSheet)
+                    },
                     onLeaveClick = { },
                     onLogoutClick = { handleIntent(ProfileIntent.Logout) },
                 )
