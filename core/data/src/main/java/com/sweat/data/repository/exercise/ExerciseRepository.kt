@@ -10,5 +10,7 @@ interface ExerciseRepository {
 
     fun updateLike(body: ExerciseLikeRequestParam): Flow<Unit>
 
+    fun deleteLike(id: Int): Flow<Unit>
+
     fun addExercise(body: ExerciseAddRequestParam): Flow<Unit>
 }

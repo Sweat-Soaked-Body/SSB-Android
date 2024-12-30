@@ -2,6 +2,7 @@ package com.sweat.exercise.viewModel
 
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.exercise.ExerciseDeleteLikeUseCase
 import com.sweat.domain.exercise.ExerciseLikeRequestUseCase
 import com.sweat.domain.exercise.ExerciseListUseCase
 import com.sweat.model.param.exercise.ExerciseLikeRequestParam
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val exerciseListUseCase: ExerciseListUseCase,
-    private val exerciseLikeRequestUseCase: ExerciseLikeRequestUseCase
+    private val exerciseLikeRequestUseCase: ExerciseLikeRequestUseCase,
+    private val exerciseDeleteLikeUseCase: ExerciseDeleteLikeUseCase
 ) : BaseViewModel<ExerciseScreenState, ExerciseScreenSideEffect, ExerciseIntent>(ExerciseScreenState.getInitialState()) {
 
     init {
@@ -59,40 +61,72 @@ class ExerciseViewModel @Inject constructor(
             }
             is ExerciseIntent.ToggleSearchMode -> setState { copy(isSearching = !isSearching) }
             is ExerciseIntent.UpdateExerciseItems -> updateExerciseItems(intent.items)
-            is ExerciseIntent.ToggleLikeStatus -> {
-                toggleLikeStatus(ExerciseLikeRequestParam(intent.exerciseId))
-            }
+            is ExerciseIntent.ToggleLikeStatus -> toggleLikeStatus(intent.exerciseId, intent.isLiked)
             ExerciseIntent.AddExercise -> postSideEffect(ExerciseScreenSideEffect.NavigateToAddExercise)
         }
     }
 
-
-    private fun toggleLikeStatus(body: ExerciseLikeRequestParam) {
+    private fun toggleLikeStatus(exerciseId: Int, isLiked: Boolean) {
         val currentList = state.value.exerciseStateList.toMutableList()
-        val currentItemIndex = currentList.indexOfFirst { it.id == body.exercise }
+        val currentItemIndex = currentList.indexOfFirst { it.id == exerciseId }
 
         if (currentItemIndex != -1) {
             val currentItem = currentList[currentItemIndex]
-            val toggledItem = currentItem.copy(like = !currentItem.like)
+            val updatedItem = currentItem.copy(like = !isLiked)
 
-            currentList[currentItemIndex] = toggledItem
+            currentList[currentItemIndex] = updatedItem
             setState { copy(exerciseStateList = currentList.toImmutableList()) }
 
             viewModelScope.launch {
-                exerciseLikeRequestUseCase(body = body).onSuccess {
-                    it.catch {
+                if (isLiked) {
+                    exerciseDeleteLikeUseCase(exerciseId).onSuccess {
+                        it.catch {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                        }.collect {
+                            loadExercises(id = 1)
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
+                        }
+                    }.onFailure {
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
-                    }.collect {
-                        loadExercises(id = 1)
-                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                     }
+                } else {
+                    val requestParam = ExerciseLikeRequestParam(exerciseId)
+                    exerciseLikeRequestUseCase(requestParam).onSuccess {
+                        it.catch {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                        }.collect {
+                            loadExercises(id = 1)
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
+                        }
+                    }.onFailure {
+                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteLikeStatus(exerciseId: Int) {
+        val currentList = state.value.exerciseStateList.toMutableList()
+        val currentItemIndex = currentList.indexOfFirst { it.id == exerciseId }
+
+        if (currentItemIndex != -1) {
+            val currentItem = currentList[currentItemIndex]
+            val updatedItem = currentItem.copy(like = false)
+
+            currentList[currentItemIndex] = updatedItem
+            setState { copy(exerciseStateList = currentList.toImmutableList()) }
+
+            viewModelScope.launch {
+                exerciseDeleteLikeUseCase(exerciseId).onSuccess {
+                    loadExercises(id = 1)
+                    postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                 }.onFailure {
                     postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                 }
             }
         }
     }
-
 
 
     private fun filterExercises(
@@ -151,7 +185,7 @@ sealed class ExerciseIntent {
     data class SetExerciseName(val text: String) : ExerciseIntent()
     data class SetExerciseCategory(val category: Int) : ExerciseIntent()
     data class UpdateExerciseItems(val items: ImmutableList<ExerciseItem>) : ExerciseIntent()
-    data class ToggleLikeStatus(val exerciseId: Int) : ExerciseIntent()
+    data class ToggleLikeStatus(val exerciseId: Int, val isLiked: Boolean) : ExerciseIntent() // 좋아요 여부 추가
     object ToggleSearchMode : ExerciseIntent()
     object AddExercise : ExerciseIntent()
 }

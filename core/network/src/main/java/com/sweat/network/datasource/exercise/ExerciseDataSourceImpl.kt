@@ -24,4 +24,9 @@ class ExerciseDataSourceImpl @Inject constructor(
         performApiRequest {
             service.addExercise(body = body)
         }
+
+    override fun deleteLike(id: Int): Flow<Unit> =
+        performApiRequest {
+            service.deleteLike(id = id)
+        }
 }

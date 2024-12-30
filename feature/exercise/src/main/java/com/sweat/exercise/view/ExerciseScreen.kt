@@ -152,7 +152,7 @@ fun ExerciseScreen(
                             text = item.name,
                             isSelected = item.like,
                             onHeartClick = {
-                                handleIntent(ExerciseIntent.ToggleLikeStatus(item.id))
+                                handleIntent(ExerciseIntent.ToggleLikeStatus(item.id, item.like))
                             }
                         )
                     }

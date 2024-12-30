@@ -10,5 +10,7 @@ interface ExerciseDataSource {
 
     fun updateLike(body: ExerciseLikeRequest): Flow<Unit>
 
+    fun deleteLike(id: Int): Flow<Unit>
+
     fun addExercise(body: ExerciseAddRequest): Flow<Unit>
 }
