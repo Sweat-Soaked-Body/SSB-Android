@@ -62,7 +62,7 @@ fun Food(
                     modifier = Modifier
                         .width(180.dp)
                         .clip(RoundedCornerShape(8.dp)),
-                    model = state.firstOrNull()?.image,
+                    model = foodType.image,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )

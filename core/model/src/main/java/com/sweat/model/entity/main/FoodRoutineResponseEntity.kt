@@ -5,7 +5,8 @@ data class FoodRoutineResponseEntity(
     val food: List<FoodEntity>,
     val date: String, // %Y-%m-%d 형식
     val serviceUser: Int,
-    val type: String
+    val type: String,
+    val image: String
 )
 
 data class FoodEntity(
@@ -13,7 +14,6 @@ data class FoodEntity(
     val name: String,
     val weight: Int,
     val calories: Int,
-    val image: String,
     val serviceUser: Int,
     val diet: Int
 )
