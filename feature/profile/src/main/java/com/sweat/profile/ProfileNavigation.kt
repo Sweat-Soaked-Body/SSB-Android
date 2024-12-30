@@ -20,14 +20,14 @@ fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
     this.navigate(addFriendWithQRRoute, navOptions)
 }
 
-fun NavController.navigateToFriendQrGenerate(navOptions: NavOptions? = null) {
-    this.navigate(friendQrGenerateRoute, navOptions)
+fun NavController.navigateToFriendQrGenerate(name: String, navOptions: NavOptions? = null) {
+    this.navigate("${friendQrGenerateRoute}/${name}", navOptions)
 }
 
 fun NavGraphBuilder.profileRoute(
     navigateToAddFriendWithQR: () -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToMyQR: () -> Unit,
+    navigateToMyQR: (String) -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
     composable(profileRoute) {
@@ -53,12 +53,12 @@ fun NavGraphBuilder.addFriendWithQRRoute(
 }
 
 fun NavGraphBuilder.friendQrGenerateRoute(
-    myName: String,
     popUpBackStack: () -> Unit,
 ) {
-    composable(friendQrGenerateRoute) {
+    composable("${friendQrGenerateRoute}/{name}") { backStackEntry ->
+        val name = backStackEntry.arguments?.getString("name") ?: ""
         FriendQrGenerateRoute(
-            myName = myName,
+            myName = name,
             popupBackStack = popUpBackStack,
         )
     }
