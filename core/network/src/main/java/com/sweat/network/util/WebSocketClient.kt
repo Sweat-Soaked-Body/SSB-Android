@@ -2,21 +2,32 @@ package com.sweat.network.util
 
 import kotlinx.coroutines.*
 import okhttp3.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.sweat.network.dto.profile.ChatMessage
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 class WebSocketClient(
     private val baseUrl: String,
     private val client: OkHttpClient,
     private val onSendSuccess: () -> Unit,
-    private val onMessageReceived: (String) -> Unit,
+    private val onMessageReceived: (List<ChatMessage>) -> Unit,
     private val onError: (Throwable) -> Unit,
     private val onClosed: () -> Unit
 ) {
     private var webSocket: WebSocket? = null
     private var retryCount = 0
-    private var isConnected = false // 연결 상태 추적
+    private var isConnected = false
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    // 상수 선언
+    // Moshi 인스턴스 및 어댑터 설정
+    private val moshi =
+        Moshi.Builder().add(com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory()) // 추가
+            .build()
+    private val listType = Types.newParameterizedType(List::class.java, ChatMessage::class.java)
+    private val adapter = moshi.adapter<List<ChatMessage>>(listType)
+
     companion object {
         private const val MAX_RETRIES = 3
         private const val RETRY_DELAY_MILLIS = 3000L
@@ -42,7 +53,13 @@ class WebSocketClient(
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 logInfo("Message received: $text")
-                onMessageReceived(text)
+                try {
+                    val messages = parseMessages(text)
+                    onMessageReceived(messages)
+                } catch (e: Exception) {
+                    logError("Error parsing message: ${e.message}")
+                    onError(e)
+                }
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -59,6 +76,21 @@ class WebSocketClient(
                 retryConnectionIfNeeded(roomName)
             }
         })
+    }
+
+    private fun parseMessages(json: String): List<ChatMessage> {
+        val messages = adapter.fromJson(json) ?: emptyList()
+        return messages.map { it.copy(timestamp = parseTimestamp(it.timestamp).toString()) }
+    }
+
+    private fun parseTimestamp(timestamp: String?): Long {
+        return try {
+            OffsetDateTime.parse(timestamp, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant()
+                .toEpochMilli()
+        } catch (e: Exception) {
+            logError("Failed to parse timestamp: $timestamp")
+            0L
+        }
     }
 
     private fun retryConnectionIfNeeded(roomName: String) {
@@ -88,14 +120,14 @@ class WebSocketClient(
         logInfo("Closing WebSocket...")
         isConnected = false
         webSocket?.close(NORMAL_CLOSURE_STATUS, "Closed by client")
-        coroutineScope.cancel() // 코루틴 스코프 종료
+        coroutineScope.cancel()
     }
 
     private fun logInfo(message: String) {
-        println("$TAG: $message") // Logger 사용 가능 (Log.d 등)
+        println("$TAG: $message")
     }
 
     private fun logError(message: String) {
-        System.err.println("$TAG: $message") // Logger 사용 가능 (Log.e 등)
+        System.err.println("$TAG: $message")
     }
 }
