@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.school_of_company.food.navigation.addFoodRoute
+import com.school_of_company.food.navigation.navigateToFoodScreen
 import com.school_of_company.food.navigation.navigateToSearchFoodScreen
 import com.school_of_company.food.navigation.searchFoodRoute
 import com.school_of_company.main.navigation.mainRoute
@@ -77,7 +78,9 @@ fun SSBNavHost(
             navigateToSignup = navController::navigateToSignupRoute
         )
 
-        mainRoute()
+        mainRoute(
+            navigateToFood = navController::navigateToFoodScreen
+        )
 
         addFriendWithQRRoute(
             navigateToProfile = navController::navigateToProfileRoute,
