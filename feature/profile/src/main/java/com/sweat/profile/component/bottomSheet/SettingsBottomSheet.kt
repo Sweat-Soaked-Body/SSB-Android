@@ -30,11 +30,11 @@ fun SettingsBottomSheet(
             title = "로그 아웃",
             textColor = SSBColor.gray600
         )
-        BottomSheetItem(
+        /*BottomSheetItem(
             modifier = Modifier.clickableSingle { onLeaveClick() },
             icon = { TrashIcon() },
             title = "회원 탈퇴",
             textColor = SSBColor.error
-        )
+        )*/
     }
 }
