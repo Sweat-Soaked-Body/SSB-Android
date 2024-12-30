@@ -34,6 +34,7 @@ import com.sweat.exercise.view.component.AddExerciseTextField
 import com.sweat.exercise.viewModel.AddExerciseIntent
 import com.sweat.exercise.viewModel.AddExerciseScreenState
 import com.sweat.exercise.viewModel.AddExerciseViewModel
+import com.sweat.model.param.exercise.ExerciseAddRequestParam
 import com.sweat.ui.DevicePreviews
 import kotlinx.collections.immutable.persistentListOf
 
@@ -98,12 +99,12 @@ private fun AddExerciseScreen(
                 AddExerciseSelector(
                     modifier = modifier,
                     text = "운동종류",
-                    items = persistentListOf("어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-                    selectedItem = remember { mutableStateOf(state.selectedCategory) },
+                    items = state.categories, // ViewModel에서 관리되는 categories 사용
+                    selectedItem = remember { mutableStateOf(state.categories[state.selectedCategory]) },
                     expanded = remember { mutableStateOf(state.exerciseTypeExpanded) },
                     noItemText = "",
                     onItemSelected = { selectedCategory ->
-                        handleIntent(AddExerciseIntent.ExerciseCategory(selectedCategory))
+                        handleIntent(AddExerciseIntent.ExerciseCategory(state.categories.indexOf(selectedCategory)))
                     }
                 )
                 Spacer(modifier = modifier.height(2.dp))
@@ -116,18 +117,6 @@ private fun AddExerciseScreen(
                         handleIntent(AddExerciseIntent.ExerciseName(newText))
                     }
                 )
-                Spacer(modifier = modifier.height(2.dp))
-                AddExerciseSelector(
-                    modifier = modifier,
-                    text = "시간으로 운동할까요? 세트로 운동할까요?",
-                    items = persistentListOf("시간", "세트"),
-                    selectedItem = remember { mutableStateOf(state.selectedStyle) },
-                    expanded = remember { mutableStateOf(state.exerciseStyleExpanded) },
-                    noItemText = "시간/세트 선택해주세요",
-                    onItemSelected = { selectedStyle ->
-                        handleIntent(AddExerciseIntent.ExerciseStyle(selectedStyle))
-                    }
-                )
             }
             Spacer(modifier = modifier.weight(1f))
             SSBButton(
@@ -135,15 +124,20 @@ private fun AddExerciseScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 12.dp),
                 text = "추가",
-                state = if (state.textState.isNotEmpty() && state.selectedStyle.isNotEmpty()) ButtonState.Enabled
+                state = if (state.textState.isNotEmpty()) ButtonState.Enabled
                 else ButtonState.Disabled,
-                onClick = { popUpBackStack() }
+                onClick = {
+                    val exerciseAddRequest = ExerciseAddRequestParam(
+                        name = state.textState,
+                        category = state.selectedCategory + 1
+                    )
+                    handleIntent(AddExerciseIntent.AddExercise(exerciseAddRequest))
+                    popUpBackStack()
+                }
             )
         }
     }
 }
-
-
 
 @DevicePreviews
 @Composable
