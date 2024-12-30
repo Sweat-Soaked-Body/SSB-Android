@@ -24,6 +24,7 @@ class ExerciseViewModel @Inject constructor(
     }
 
     fun loadExercises(id: Int) {
+        setState { copy(isSearching = false) }
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
