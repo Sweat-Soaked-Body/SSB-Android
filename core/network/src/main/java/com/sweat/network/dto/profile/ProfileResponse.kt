@@ -1,5 +1,6 @@
 package com.sweat.network.dto.profile
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.sweat.model.profile.ProfileModel
 
@@ -10,10 +11,10 @@ data class ProfileResponse(
     val sex: String,                     // 성별: Male, Female, Unlabeled
     val age: Int,                     // 나이 (양수만 허용)
     val weight: Int,                  // 몸무게 (양수만 허용)
-    val createdAt: String,            // 생성 시간 (ISO8601 형식)
-    val modifiedAt: String,           // 수정 시간 (ISO8601 형식)
-    val serviceUser: Int,             // 서비스 사용자 ID
-    val image: String                 // 이미지 URL
+    @Json(name = "created_at") val createdAt: String, // 생성 시간 (ISO8601 형식)
+    @Json(name = "modified_at") val modifiedAt: String, // 수정 시간 (ISO8601 형식)
+    @Json(name = "service_user") val serviceUser: Int,             // 서비스 사용자 ID
+    val image: String = ""                 // 이미지 URL
 )
 
 fun ProfileResponse.toModel() = ProfileModel(id, name, sex, age, weight, createdAt, modifiedAt, serviceUser, image)
