@@ -1,6 +1,5 @@
 package com.sweat.exercise.viewModel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
 import com.sweat.domain.exercise.ExerciseDeleteLikeUseCase
@@ -27,7 +26,8 @@ class ExerciseViewModel @Inject constructor(
     }
 
     fun loadExercises(id: Int) {
-        setState { copy(isRefreshing = true) } // 새로 고침 시작 시
+        setState { copy(isRefreshing = true) }
+        setState { copy(isSearching = false) }
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
@@ -35,7 +35,7 @@ class ExerciseViewModel @Inject constructor(
                         exerciseStateList = exercises.map {
                             ExerciseItem(it.id, it.category, it.name, it.like)
                         }.toImmutableList(),
-                        isRefreshing = false // 새로 고침 완료
+                        isRefreshing = false
                     )
                 }
                 setState {
@@ -167,7 +167,7 @@ sealed class ExerciseIntent {
     data class SetExerciseName(val text: String) : ExerciseIntent()
     data class SetExerciseCategory(val category: Int) : ExerciseIntent()
     data class UpdateExerciseItems(val items: ImmutableList<ExerciseItem>) : ExerciseIntent()
-    data class ToggleLikeStatus(val exerciseId: Int, val isLiked: Boolean) : ExerciseIntent() // 좋아요 여부 추가
+    data class ToggleLikeStatus(val exerciseId: Int, val isLiked: Boolean) : ExerciseIntent()
     object ToggleSearchMode : ExerciseIntent()
     object AddExercise : ExerciseIntent()
 }
