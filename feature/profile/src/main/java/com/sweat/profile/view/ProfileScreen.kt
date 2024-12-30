@@ -45,6 +45,7 @@ import com.sweat.design_system.icon.SettingIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
+import com.sweat.model.friend.FriendModel
 import com.sweat.profile.component.ChatListItem
 import com.sweat.profile.component.ProfileTopAppBar
 import com.sweat.profile.component.bottomSheet.AddFriendBottomSheet
@@ -61,11 +62,14 @@ fun ProfileRoute(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToAddFriendWithQR: () -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToMyQR: () -> Unit,
+    navigateToMyQR: (String) -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect("InitMyFriend") {
         viewModel.handleIntent(ProfileIntent.InitMyFriend)
+    }
+    LaunchedEffect("InitMyProfile") {
+        viewModel.handleIntent(ProfileIntent.InitMyProfile)
     }
 
     LaunchedEffect(Unit) {
@@ -76,7 +80,7 @@ fun ProfileRoute(
                 ProfileScreenSideEffect.NavigateToAddFriendWithQR -> navigateToAddFriendWithQR()
                 is ProfileScreenSideEffect.NavigateToChat -> navigateToChat(sideEffect.id)
                 ProfileScreenSideEffect.NavigateToLogin -> navigateToLogin()
-                ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR()
+                is ProfileScreenSideEffect.NavigateToMyQR -> navigateToMyQR(sideEffect.id)
             }
         }
     }
@@ -119,7 +123,10 @@ fun ProfileScreen(
                         handleIntent(ProfileIntent.HideBottomSheet)
                     },
                     onLeaveClick = { },
-                    onLogoutClick = { handleIntent(ProfileIntent.Logout) },
+                    onLogoutClick = {
+                        handleIntent(ProfileIntent.Logout)
+                        handleIntent(ProfileIntent.HideBottomSheet)
+                    },
                 )
             }
         }
@@ -137,8 +144,14 @@ fun ProfileScreen(
                 onDismissRequest = { handleIntent(ProfileIntent.HideBottomSheet) },
             ) {
                 AddFriendBottomSheet(
-                    onClickMyAddFriendWithQr = { handleIntent(ProfileIntent.AddFriendWithQR) },
-                    onClickMyQr = { handleIntent(ProfileIntent.ShowMyQR) },
+                    onClickMyAddFriendWithQr = {
+                        handleIntent(ProfileIntent.AddFriendWithQR)
+                        handleIntent(ProfileIntent.HideBottomSheet)
+                    },
+                    onClickMyQr = {
+                        handleIntent(ProfileIntent.ShowMyQR(state.myName))
+                        handleIntent(ProfileIntent.HideBottomSheet)
+                    },
                 )
             }
         }
@@ -195,21 +208,21 @@ fun ProfileScreen(
                             .padding(15.dp),
                     ) {
                         Text(
-                            text = state.myName,
+                            text = "손찬형", /*state.myName*/
                             style = SSBTypography.subTitle,
                             fontWeight = FontWeight(600),
                             color = Color(0xFF000000),
                         )
                         Spacer(modifier = Modifier.height(7.dp))
                         BasicTextField(
-                            value = state.myIntro,
+                            value = """ '건강한 몸에 건강한 정신' """,
                             onValueChange = {
                                 handleIntent(ProfileIntent.SetMyIntro(it))
                             },
                             textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
                             cursorBrush = SolidColor(Color.Black),
                             decorationBox = { innerTextField ->
-                                if (state.myIntro.isEmpty()) {
+                                if (false/*state.myIntro.isEmpty()*/) {
                                     Text("한 줄 소개를 적어주세요", color = SSBColor.gray200)
                                 }
                                 innerTextField()
@@ -228,12 +241,30 @@ fun ProfileScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(state.chatList) { state ->
+                    item() {
                         ChatListItem(
-                            state = state,
+                            state = FriendModel(id = 1, friend = "오은찬"),
+                            currentMessage = "얼굴에 라면국물튐",
+                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
+                        )
+                        ChatListItem(
+                            state = FriendModel(id = 2, friend = "김주은"),
+                            currentMessage = "안녕하오",
+                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
+                        )
+                        ChatListItem(
+                            state = FriendModel(id = 3, friend = "이명훈"),
+                            currentMessage = """ 'blue labster' """,
                             onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
                         )
                     }
+//                    items(state.chatList) { state ->
+//                        ChatListItem(
+//                            state = state,
+//                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
+//                        )
+//                    }
+                    // TODO:  
                 }
             }
         }
