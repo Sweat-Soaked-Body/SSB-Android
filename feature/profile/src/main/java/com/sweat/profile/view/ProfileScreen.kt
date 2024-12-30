@@ -208,7 +208,7 @@ fun ProfileScreen(
                             .padding(15.dp),
                     ) {
                         Text(
-                            text = "손찬형", /*state.myName*/
+                            text = state.myName,
                             style = SSBTypography.subTitle,
                             fontWeight = FontWeight(600),
                             color = Color(0xFF000000),
@@ -248,13 +248,6 @@ fun ProfileScreen(
                             onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
                         )
                     }
-//                    items(state.chatList) { state ->
-//                        ChatListItem(
-//                            state = state,
-//                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
-//                        )
-//                    }
-                    // TODO:
                 }
             }
         }
