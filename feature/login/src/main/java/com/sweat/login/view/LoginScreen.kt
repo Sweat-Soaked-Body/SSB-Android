@@ -66,7 +66,7 @@ fun LoginRoute(
         onLoginClick = {
             viewModel.handleIntent(LoginIntent.Login(state.username, state.password))
         },
-        navigateToSignup = navigateToSignup
+        navigateToSignup = navigateToSignup,
     )
 }
 
@@ -79,7 +79,7 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit,
-    navigateToSignup: () -> Unit
+    navigateToSignup: () -> Unit,
 ) {
 
     SSBAndroidTheme { colors, typography ->

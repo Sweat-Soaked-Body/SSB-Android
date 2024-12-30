@@ -6,10 +6,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
 import com.sweat.profile.view.ChattingRoute
+import com.sweat.profile.view.FriendQrGenerateRoute
 import com.sweat.profile.view.ProfileRoute
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
+const val friendQrGenerateRoute = "friendQrGenerateRoute"
 const val chattingRoute = "chattingRoute"
 
 fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
@@ -24,17 +26,19 @@ fun NavController.navigateToChattingRoute(navOptions: NavOptions? = null) {
     this.navigate(chattingRoute, navOptions)
 }
 
+fun NavController.navigateToFriendQrGenerate(name: String, navOptions: NavOptions? = null) {
+    this.navigate("${friendQrGenerateRoute}/${name}", navOptions)
+}
+
 fun NavGraphBuilder.profileRoute(
     navigateToAddFriendWithQR: () -> Unit,
-    navigateToAddFriendWithNFC: () -> Unit,
     navigateToLogin: () -> Unit,
-    navigateToMyQR: () -> Unit,
+    navigateToMyQR: (String) -> Unit,
     navigateToChat: (String) -> Unit,
 ) {
     composable(profileRoute) {
         ProfileRoute(
             navigateToAddFriendWithQR = navigateToAddFriendWithQR,
-            navigateToAddFriendWithNFC = navigateToAddFriendWithNFC,
             navigateToLogin = navigateToLogin,
             navigateToMyQR = navigateToMyQR,
             navigateToChat = navigateToChat,
@@ -59,5 +63,17 @@ fun NavGraphBuilder.chattingRoute(
 ) {
     composable(chattingRoute) {
         ChattingRoute()
+    }
+}
+
+fun NavGraphBuilder.friendQrGenerateRoute(
+    popUpBackStack: () -> Unit,
+) {
+    composable("${friendQrGenerateRoute}/{name}") { backStackEntry ->
+        val name = backStackEntry.arguments?.getString("name") ?: ""
+        FriendQrGenerateRoute(
+            myName = name,
+            popupBackStack = popUpBackStack,
+        )
     }
 }

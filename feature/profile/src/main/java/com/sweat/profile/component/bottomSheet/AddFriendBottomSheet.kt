@@ -4,28 +4,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sweat.design_system.component.bottomSheet.BottomSheetItem
 import com.sweat.design_system.component.bottomSheet.SSBBottomSheet
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.OutIcon
-import com.sweat.design_system.icon.PencilIcon
-import com.sweat.design_system.icon.TrashIcon
 import com.sweat.design_system.theme.color.SSBColor
 
 @Composable
-fun AddFriendBottomSheet(modifier: Modifier = Modifier) {
+fun AddFriendBottomSheet(
+    modifier: Modifier = Modifier,
+    onClickMyQr: () -> Unit,
+    onClickMyAddFriendWithQr: () -> Unit,
+) {
     SSBBottomSheet(modifier = modifier) {
         BottomSheetItem(
-            icon = { PencilIcon() },
-            title = "프로필 수정",
+            modifier = Modifier.clickableSingle { onClickMyQr() },
+            icon = { OutIcon() }, // TODO: 아이콘 변경
+            title = "내 QR코드 보기",
             textColor = SSBColor.gray600
         )
         BottomSheetItem(
-            icon = { OutIcon() },
-            title = "로그 아웃",
+            modifier = Modifier.clickableSingle { onClickMyAddFriendWithQr() },
+            icon = { OutIcon() },// TODO: 아이콘 변경
+            title = "QR 코드로 친구 추가",
             textColor = SSBColor.gray600
-        )
-        BottomSheetItem(
-            icon = { TrashIcon() },
-            title = "프로필 삭제",
-            textColor = SSBColor.error
         )
     }
 }

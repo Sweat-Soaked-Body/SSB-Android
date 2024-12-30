@@ -35,5 +35,7 @@ include(":feature:signup")
 include(":feature:login")
 include(":feature:profile")
 include(":feature:main")
+include(":feature:exercise")
 
 gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+include(":feature:food")

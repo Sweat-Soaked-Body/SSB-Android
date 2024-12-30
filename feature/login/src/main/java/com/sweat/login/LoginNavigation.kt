@@ -8,7 +8,7 @@ import com.sweat.login.view.LoginRoute
 
 const val loginRoute = "loginRoute"
 
-fun NavController.navigateToLoginRouteRoute(navOptions: NavOptions? = null) {
+fun NavController.navigateToLoginRoute(navOptions: NavOptions? = null) {
     this.navigate(loginRoute, navOptions)
 }
 

@@ -1,6 +1,5 @@
 package com.sweat.ssb_android.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -8,15 +7,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sweat.design_system.component.navigationbar.SSBBottomNavigationBar
 import com.sweat.design_system.component.navigationbar.SSBNavigationBarItem
 import com.sweat.design_system.theme.SSBAndroidTheme
@@ -28,19 +23,7 @@ fun SSBApp(
     windowSizeClass: WindowSizeClass,
     appState: SSBAppState = rememberSSBAppState(windowSizeClass = windowSizeClass)
 ) {
-    val isBottomBarVisible = remember { mutableStateOf(true) }
-
-    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
-
-    val topLevelDestinationRoute = arrayOf(
-        // homeRoute <- example code
-        TopLevelDestination.Home // temporary code
-    )
-
-    navBackStackEntry?.destination?.route?.let {
-        isBottomBarVisible.value =
-            topLevelDestinationRoute.contains(TopLevelDestination.Home) // contains() <- example code
-    }
+    val isBottomBarVisible = appState.isTopLevelDestination
 
     SSBAndroidTheme { _, _ ->
         Scaffold(
@@ -49,7 +32,7 @@ fun SSBApp(
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             bottomBar = {
                 // BottomBar가 보여져야 하는 경우에만 표시합니다.
-                if (isBottomBarVisible.value) {
+                if (isBottomBarVisible) {
                     SSBBottomBar(
                         destinations = appState.topLevelDestination, // 최상위 목적지 목록을 전달
                         onNavigateToDestination = appState::navigationToTopLevelDestination, // 네비게이션 함수
@@ -60,9 +43,9 @@ fun SSBApp(
         ) { paddingValues ->
             // 네비게이션 호스트
             SSBNavHost(
-                appState = appState,
-                modifier = Modifier.padding(paddingValues = paddingValues)
-            )
+                modifier = Modifier.padding(paddingValues = paddingValues),
+                navController = appState.navController,
+                 )
         }
     }
 }

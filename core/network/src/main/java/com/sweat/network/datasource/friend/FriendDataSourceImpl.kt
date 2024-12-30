@@ -10,7 +10,7 @@ import javax.inject.Inject
 class FriendDataSourceImpl @Inject constructor(
     private val serviceAuth: FriendApi
 ) : FriendDataSource {
-    override fun friendCheck(): Flow<FriendResponse> =
+    override fun friendCheck(): Flow<List<FriendResponse>> =
         performApiRequest { serviceAuth.friendCheck() }
 
     override fun friendAdd(body: AddFriendRequest): Flow<Unit> =

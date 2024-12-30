@@ -34,6 +34,20 @@ fun CheckIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
+fun PlusIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Icon(
+        painter = painterResource(id = R.drawable.plus),
+        contentDescription = "",
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Stable
+@Composable
 fun CheckBoxNotSelectedIcon(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.check_box_not_selected),
@@ -54,9 +68,23 @@ fun CheckBoxSelectedIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ChevronLeftIcon(modifier: Modifier = Modifier) {
-    Image(
+fun ChevronLeftIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
         painter = painterResource(id = R.drawable.chevron_left),
+        contentDescription = "",
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Stable
+@Composable
+fun ChevronRightIcon(modifier: Modifier = Modifier) {
+    Icon(
+        painter = painterResource(id = R.drawable.chevron_right),
         contentDescription = "",
         modifier = modifier
     )
@@ -64,11 +92,29 @@ fun ChevronLeftIcon(modifier: Modifier = Modifier) {
 
 @Stable
 @Composable
-fun ChevronRightIcon(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.chevron_right),
+fun ChevronSmallDownLightIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.chevron_small_down_light),
         contentDescription = "",
-        modifier = modifier
+        modifier = modifier,
+        tint = tint
+    )
+}
+
+@Stable
+@Composable
+fun ChevronSmallUpLightIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.chevron_small_up_light),
+        contentDescription = "",
+        modifier = modifier,
+        tint = tint
     )
 }
 
@@ -211,6 +257,16 @@ fun WomanImage(
         else painterResource(id = R.drawable.woman_face),
         contentDescription = "",
         modifier = modifier,
+    )
+}
+
+@Stable
+@Composable
+fun MultiplyImage(modifier: Modifier = Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.multiply),
+        contentDescription = "",
+        modifier = modifier
     )
 }
 
@@ -367,6 +423,7 @@ fun EyeIcon(
         modifier = modifier.size(24.dp),
     )
 }
+
 
 @Composable
 fun HeartIcon(
