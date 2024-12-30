@@ -1,5 +1,6 @@
 package com.sweat.exercise.viewModel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
 import com.sweat.domain.exercise.ExerciseDeleteLikeUseCase
@@ -22,18 +23,19 @@ class ExerciseViewModel @Inject constructor(
 ) : BaseViewModel<ExerciseScreenState, ExerciseScreenSideEffect, ExerciseIntent>(ExerciseScreenState.getInitialState()) {
 
     init {
-        loadExercises(id = 1)
+        loadExercises(id = 0)
     }
 
     fun loadExercises(id: Int) {
-        setState { copy(isSearching = false) }
+        setState { copy(isRefreshing = true) } // 새로 고침 시작 시
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
                     copy(
                         exerciseStateList = exercises.map {
                             ExerciseItem(it.id, it.category, it.name, it.like)
-                        }.toImmutableList()
+                        }.toImmutableList(),
+                        isRefreshing = false // 새로 고침 완료
                     )
                 }
                 setState {
@@ -46,6 +48,7 @@ class ExerciseViewModel @Inject constructor(
             }
         }
     }
+
 
     override fun handleIntent(intent: ExerciseIntent) {
         when (intent) {
@@ -83,7 +86,6 @@ class ExerciseViewModel @Inject constructor(
                         it.catch {
                             postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                         }.collect {
-                            loadExercises(id = 1)
                             postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                         }
                     }.onFailure {
@@ -95,34 +97,11 @@ class ExerciseViewModel @Inject constructor(
                         it.catch {
                             postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                         }.collect {
-                            loadExercises(id = 1)
                             postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                         }
                     }.onFailure {
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                     }
-                }
-            }
-        }
-    }
-
-    private fun deleteLikeStatus(exerciseId: Int) {
-        val currentList = state.value.exerciseStateList.toMutableList()
-        val currentItemIndex = currentList.indexOfFirst { it.id == exerciseId }
-
-        if (currentItemIndex != -1) {
-            val currentItem = currentList[currentItemIndex]
-            val updatedItem = currentItem.copy(like = false)
-
-            currentList[currentItemIndex] = updatedItem
-            setState { copy(exerciseStateList = currentList.toImmutableList()) }
-
-            viewModelScope.launch {
-                exerciseDeleteLikeUseCase(exerciseId).onSuccess {
-                    loadExercises(id = 1)
-                    postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
-                }.onFailure {
-                    postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                 }
             }
         }
@@ -154,7 +133,8 @@ data class ExerciseScreenState(
     val exerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(),
     val isSearching: Boolean,
     val searchTextState: String,
-    val filteredExerciseStateList: ImmutableList<ExerciseItem> = persistentListOf()
+    val filteredExerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(),
+    val isRefreshing: Boolean = false // 새로 고침 상태 추가
 ) {
     companion object {
         fun getInitialState() = ExerciseScreenState(
@@ -163,10 +143,12 @@ data class ExerciseScreenState(
             exerciseStateList = persistentListOf(),
             isSearching = false,
             searchTextState = "",
-            filteredExerciseStateList = persistentListOf()
+            filteredExerciseStateList = persistentListOf(),
+            isRefreshing = false // 초기값은 false
         )
     }
 }
+
 
 sealed class ExerciseScreenSideEffect {
     object NavigateToAddExercise : ExerciseScreenSideEffect()

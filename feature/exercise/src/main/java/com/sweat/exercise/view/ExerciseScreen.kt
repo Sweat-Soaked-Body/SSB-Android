@@ -1,17 +1,7 @@
 package com.sweat.exercise.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -26,6 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.PlusIcon
@@ -65,6 +58,8 @@ fun ExerciseScreen(
     handleIntent: (ExerciseIntent) -> Unit,
     navigateToAddExercise: () -> Unit,
 ) {
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
+
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -138,23 +133,40 @@ fun ExerciseScreen(
             }
             Spacer(modifier = modifier.height(12.dp))
 
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = { handleIntent(ExerciseIntent.UpdateExerciseItems(state.exerciseStateList)) },
+                indicator = { state, refreshTrigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTrigger,
+                        contentColor = colors.main
+                    )
+                }
             ) {
-                val itemsToDisplay = state.filteredExerciseStateList
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp)
+                ) {
+                    val itemsToDisplay = state.filteredExerciseStateList
 
-                if (itemsToDisplay.isNotEmpty()) {
-                    items(itemsToDisplay) { item ->
-                        ExerciseItem(
-                            modifier = modifier,
-                            text = item.name,
-                            isSelected = item.like,
-                            onHeartClick = {
-                                handleIntent(ExerciseIntent.ToggleLikeStatus(item.id, item.like))
-                            }
-                        )
+                    if (itemsToDisplay.isNotEmpty()) {
+                        items(itemsToDisplay) { item ->
+                            ExerciseItem(
+                                modifier = modifier,
+                                text = item.name,
+                                isSelected = item.like,
+                                onHeartClick = {
+                                    handleIntent(
+                                        ExerciseIntent.ToggleLikeStatus(
+                                            item.id,
+                                            item.like
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
