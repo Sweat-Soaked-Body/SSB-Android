@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class  ExerciseRoutineResponse(
     @Json(name = "id") val id: Int,
-    @Json(name = "exercise") val exercise: Int,
+    @Json(name = "exercise") val exercise: String,
     @Json(name = "sets") val sets: List<ExerciseSet>
 )
 
