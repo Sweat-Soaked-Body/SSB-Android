@@ -1,6 +1,5 @@
 package com.sweat.exercise.viewModel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
 import com.sweat.domain.exercise.ExerciseLikeRequestUseCase
@@ -25,7 +24,6 @@ class ExerciseViewModel @Inject constructor(
     }
 
     private fun loadExercises(id: Int) {
-        // 운동 목록 로딩
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
