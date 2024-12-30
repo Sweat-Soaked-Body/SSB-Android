@@ -27,6 +27,7 @@ import com.sweat.model.friend.FriendModel
 fun ChatListItem(
     modifier: Modifier = Modifier,
     state: FriendModel,
+    currentMessage: String,  // TODO:
     onClick: (Int) -> Unit,
 ) {
     Row(
@@ -52,7 +53,7 @@ fun ChatListItem(
                     color = Color(0xFF000000),
                 )
                 Text(
-                    text = "state.message",
+                    text = currentMessage,
                     style = SSBTypography.label,
                     fontWeight = FontWeight(400),
                     color = SSBColor.gray600
