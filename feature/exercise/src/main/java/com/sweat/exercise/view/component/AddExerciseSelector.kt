@@ -63,7 +63,6 @@ fun AddExerciseSelector(
                             .background(Color.White)
                     ) {
                         items.forEachIndexed { index, item ->
-
                             Row(
                                 modifier = modifier
                                     .fillMaxWidth()
@@ -81,7 +80,7 @@ fun AddExerciseSelector(
                                     style = typography.bodySmall,
                                     color = colors.black
                                 )
-                                if (selectedItem.value == item) {
+                                if (index == 0) {
                                     ChevronSmallUpLightIcon(
                                         modifier = Modifier
                                             .size(24.dp)

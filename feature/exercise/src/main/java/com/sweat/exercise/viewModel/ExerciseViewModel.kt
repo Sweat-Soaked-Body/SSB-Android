@@ -1,8 +1,8 @@
 package com.sweat.exercise.viewModel
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.exercise.ExerciseDeleteLikeUseCase
 import com.sweat.domain.exercise.ExerciseLikeRequestUseCase
 import com.sweat.domain.exercise.ExerciseListUseCase
 import com.sweat.model.param.exercise.ExerciseLikeRequestParam
@@ -10,34 +10,38 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ExerciseViewModel @Inject constructor(
     private val exerciseListUseCase: ExerciseListUseCase,
-    private val exerciseLikeRequestUseCase: ExerciseLikeRequestUseCase
+    private val exerciseLikeRequestUseCase: ExerciseLikeRequestUseCase,
+    private val exerciseDeleteLikeUseCase: ExerciseDeleteLikeUseCase
 ) : BaseViewModel<ExerciseScreenState, ExerciseScreenSideEffect, ExerciseIntent>(ExerciseScreenState.getInitialState()) {
 
     init {
-        loadExercises(1)  // 초기 데이터 로딩
+        loadExercises(id = 0)
     }
 
-    private fun loadExercises(id: Int) {
-        // 운동 목록 로딩
+    fun loadExercises(id: Int) {
+        setState { copy(isRefreshing = true) }
+        setState { copy(isSearching = false) }
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
                     copy(
                         exerciseStateList = exercises.map {
-                            ExerciseItem(it.id, it.category, it.name, it.like)  // ExerciseItem 사용
-                        }.toImmutableList()
+                            ExerciseItem(it.id, it.category, it.name, it.like)
+                        }.toImmutableList(),
+                        isRefreshing = false
                     )
                 }
                 setState {
                     copy(
                         filteredExerciseStateList = exercises.map {
-                            ExerciseItem(it.id, it.category, it.name, it.like)  // ExerciseItem 사용
+                            ExerciseItem(it.id, it.category, it.name, it.like)
                         }.toImmutableList()
                     )
                 }
@@ -45,66 +49,73 @@ class ExerciseViewModel @Inject constructor(
         }
     }
 
+
     override fun handleIntent(intent: ExerciseIntent) {
         when (intent) {
             is ExerciseIntent.SetExerciseName -> {
                 setState { copy(searchTextState = intent.text) }
-                // 검색어를 기준으로 필터링
                 val filteredList = filterExercises(state.value.selectedButton, intent.text, state.value.exerciseStateList)
                 setState { copy(filteredExerciseStateList = filteredList) }
             }
             is ExerciseIntent.SetExerciseCategory -> {
                 setState { copy(selectedButton = intent.category) }
-                // 카테고리 변경 시 검색어가 비어있으면 카테고리만 필터링
                 val filteredList = filterExercises(intent.category, state.value.searchTextState, state.value.exerciseStateList)
                 setState { copy(filteredExerciseStateList = filteredList) }
             }
             is ExerciseIntent.ToggleSearchMode -> setState { copy(isSearching = !isSearching) }
             is ExerciseIntent.UpdateExerciseItems -> updateExerciseItems(intent.items)
-            is ExerciseIntent.ToggleLikeStatus -> {
-                toggleLikeStatus(ExerciseLikeRequestParam(intent.exerciseId))
-            }
+            is ExerciseIntent.ToggleLikeStatus -> toggleLikeStatus(intent.exerciseId, intent.isLiked)
             ExerciseIntent.AddExercise -> postSideEffect(ExerciseScreenSideEffect.NavigateToAddExercise)
         }
     }
 
-    private fun toggleLikeStatus(body: ExerciseLikeRequestParam) {
-        val updatedList = state.value.exerciseStateList.toMutableList()
-        val currentItemIndex = updatedList.indexOfFirst { it.id == body.exercise }
+    private fun toggleLikeStatus(exerciseId: Int, isLiked: Boolean) {
+        val currentList = state.value.exerciseStateList.toMutableList()
+        val currentItemIndex = currentList.indexOfFirst { it.id == exerciseId }
 
         if (currentItemIndex != -1) {
-            val currentItem = updatedList[currentItemIndex]
-            val toggledItem = currentItem.copy(like = !currentItem.like)
+            val currentItem = currentList[currentItemIndex]
+            val updatedItem = currentItem.copy(like = !isLiked)
 
-            // 상태 업데이트
-            updatedList[currentItemIndex] = toggledItem
-            setState { copy(exerciseStateList = updatedList.toImmutableList()) }
+            currentList[currentItemIndex] = updatedItem
+            setState { copy(exerciseStateList = currentList.toImmutableList()) }
 
-            // 서버 요청
             viewModelScope.launch {
-                Log.d("ViewModel", "좋아요 요청 시작")
-                val result = runCatching { exerciseLikeRequestUseCase(body) }
-                result.onSuccess {
-                    Log.d("ViewModel", "POST 요청 성공")
-                }.onFailure { e ->
-                    Log.e("ViewModel", "POST 요청 실패: ${e.message}")
-                    updatedList[currentItemIndex] = currentItem // 상태 롤백
-                    setState { copy(exerciseStateList = updatedList.toImmutableList()) }
-                    postSideEffect(ExerciseScreenSideEffect.ShowError(e.message ?: "요청 실패"))
+                if (isLiked) {
+                    exerciseDeleteLikeUseCase(exerciseId).onSuccess {
+                        it.catch {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                        }.collect {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
+                        }
+                    }.onFailure {
+                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                    }
+                } else {
+                    val requestParam = ExerciseLikeRequestParam(exerciseId)
+                    exerciseLikeRequestUseCase(requestParam).onSuccess {
+                        it.catch {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                        }.collect {
+                            postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
+                        }
+                    }.onFailure {
+                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                    }
                 }
             }
         }
     }
 
+
     private fun filterExercises(
         selectedCategory: Int,
         searchText: String,
-        exerciseStateList: ImmutableList<ExerciseItem> // ExerciseItem 사용
+        exerciseStateList: ImmutableList<ExerciseItem>
     ): ImmutableList<ExerciseItem> {
         return exerciseStateList.filter { exercise ->
-            // 카테고리와 검색어 필터링
-            val matchesCategory = selectedCategory == -1 || exercise.category == selectedCategory // category 비교
-            val matchesSearchText = if (searchText.isEmpty()) true else exercise.name.contains(searchText, ignoreCase = true) // name 비교
+            val matchesCategory = selectedCategory == -1 || exercise.category == selectedCategory
+            val matchesSearchText = if (searchText.isEmpty()) true else exercise.name.contains(searchText, ignoreCase = true)
             matchesCategory && matchesSearchText
         }.toImmutableList()
     }
@@ -118,27 +129,31 @@ class ExerciseViewModel @Inject constructor(
 
 data class ExerciseScreenState(
     val exerciseList: ImmutableList<String>,
-    val selectedButton: Int,  // selectedButton을 Int로 설정
-    val exerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(), // ExerciseItem 사용
+    val selectedButton: Int,
+    val exerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(),
     val isSearching: Boolean,
     val searchTextState: String,
-    val filteredExerciseStateList: ImmutableList<ExerciseItem> = persistentListOf() // ExerciseItem 사용
+    val filteredExerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(),
+    val isRefreshing: Boolean = false
 ) {
     companion object {
         fun getInitialState() = ExerciseScreenState(
             exerciseList = persistentListOf("전체", "어깨", "등", "가슴", "하체", "팔", "역도", "복근", "유산소", "기타"),
-            selectedButton = -1,  // "전체" 카테고리 기본값 설정
+            selectedButton = -1,
             exerciseStateList = persistentListOf(),
             isSearching = false,
             searchTextState = "",
-            filteredExerciseStateList = persistentListOf()
+            filteredExerciseStateList = persistentListOf(),
+            isRefreshing = false
         )
     }
 }
 
+
 sealed class ExerciseScreenSideEffect {
     object NavigateToAddExercise : ExerciseScreenSideEffect()
-    data class ShowError(val message: String) : ExerciseScreenSideEffect()
+    object ExerciseLikeSuccess : ExerciseScreenSideEffect()
+    object ExerciseLikeFailed : ExerciseScreenSideEffect()
 }
 
 data class ExerciseItem(
@@ -150,9 +165,9 @@ data class ExerciseItem(
 
 sealed class ExerciseIntent {
     data class SetExerciseName(val text: String) : ExerciseIntent()
-    data class SetExerciseCategory(val category: Int) : ExerciseIntent() // category는 Int로 처리
-    data class UpdateExerciseItems(val items: ImmutableList<ExerciseItem>) : ExerciseIntent()  // ExerciseItem 사용
-    data class ToggleLikeStatus(val exerciseId: Int) : ExerciseIntent()  // exerciseId로 좋아요 상태 변경
+    data class SetExerciseCategory(val category: Int) : ExerciseIntent()
+    data class UpdateExerciseItems(val items: ImmutableList<ExerciseItem>) : ExerciseIntent()
+    data class ToggleLikeStatus(val exerciseId: Int, val isLiked: Boolean) : ExerciseIntent()
     object ToggleSearchMode : ExerciseIntent()
     object AddExercise : ExerciseIntent()
 }

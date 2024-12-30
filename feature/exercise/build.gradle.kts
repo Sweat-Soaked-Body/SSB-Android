@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.sweat.exercise"
 }
+
+dependencies{
+    implementation(libs.swiperefresh)
+}
