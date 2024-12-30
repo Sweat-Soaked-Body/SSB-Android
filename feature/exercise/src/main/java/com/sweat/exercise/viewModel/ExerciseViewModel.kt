@@ -134,7 +134,7 @@ data class ExerciseScreenState(
     val isSearching: Boolean,
     val searchTextState: String,
     val filteredExerciseStateList: ImmutableList<ExerciseItem> = persistentListOf(),
-    val isRefreshing: Boolean = false // 새로 고침 상태 추가
+    val isRefreshing: Boolean = false
 ) {
     companion object {
         fun getInitialState() = ExerciseScreenState(
@@ -144,7 +144,7 @@ data class ExerciseScreenState(
             isSearching = false,
             searchTextState = "",
             filteredExerciseStateList = persistentListOf(),
-            isRefreshing = false // 초기값은 false
+            isRefreshing = false
         )
     }
 }

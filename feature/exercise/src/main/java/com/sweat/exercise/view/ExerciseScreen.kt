@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.modifier.clickableSingle
@@ -38,6 +39,7 @@ fun ExerciseRoute(
     navigateToAddExercise: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
 
     LaunchedEffect(key1 = true) {
         viewModel.loadExercises(id = 1)
@@ -46,6 +48,7 @@ fun ExerciseRoute(
     ExerciseScreen(
         modifier = Modifier,
         state = state,
+        swipeRefreshState = swipeRefreshState,
         handleIntent = viewModel::handleIntent,
         navigateToAddExercise = navigateToAddExercise
     )
@@ -55,10 +58,11 @@ fun ExerciseRoute(
 fun ExerciseScreen(
     modifier: Modifier = Modifier,
     state: ExerciseScreenState,
+    swipeRefreshState: SwipeRefreshState,
     handleIntent: (ExerciseIntent) -> Unit,
     navigateToAddExercise: () -> Unit,
 ) {
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
+
 
     SSBAndroidTheme { colors, typography ->
         Column(
@@ -196,6 +200,7 @@ fun ExercisePreview() {
     ExerciseScreen(
         modifier = Modifier,
         state = ExerciseScreenState.getInitialState(),
+        swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false),
         handleIntent = { _ -> },
         navigateToAddExercise = {}
     )
