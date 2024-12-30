@@ -67,7 +67,6 @@ fun ExerciseScreen(
                 .background(Color.White)
                 .statusBarsPadding()
         ) {
-            // 상단 UI
             Row(
                 modifier = modifier
                     .padding(vertical = 13.dp, horizontal = 24.dp),
