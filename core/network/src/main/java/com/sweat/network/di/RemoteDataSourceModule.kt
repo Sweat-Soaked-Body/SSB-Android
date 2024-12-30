@@ -2,6 +2,8 @@ package com.sweat.network.di
 
 import com.sweat.network.datasource.auth.AuthDataSource
 import com.sweat.network.datasource.auth.AuthDataSourceImpl
+import com.sweat.network.datasource.exercise.ExerciseDataSource
+import com.sweat.network.datasource.exercise.ExerciseDataSourceImpl
 import com.sweat.network.datasource.friend.FriendDataSource
 import com.sweat.network.datasource.friend.FriendDataSourceImpl
 import com.sweat.network.datasource.profile.ProfileDataSource
@@ -29,4 +31,9 @@ abstract class RemoteDataSourceModule {
     abstract fun bindProfileRemoteDataSource(
         profileDataSourceImpl: ProfileDataSourceImpl
     ): ProfileDataSource
+
+    @Binds
+    abstract fun bindExerciseDataSource(
+        exerciseDataSourceImpl: ExerciseDataSourceImpl
+    ): ExerciseDataSource
 }

@@ -2,6 +2,8 @@ package com.sweat.data.di
 
 import com.sweat.data.repository.auth.AuthRepository
 import com.sweat.data.repository.auth.AuthRepositoryImpl
+import com.sweat.data.repository.exercise.ExerciseRepository
+import com.sweat.data.repository.exercise.ExerciseRepositoryImpl
 import com.sweat.data.repository.friend.FriendRepository
 import com.sweat.data.repository.friend.FriendRepositoryImpl
 import com.sweat.data.repository.profile.ProfileRepository
@@ -30,4 +32,9 @@ abstract class RepositoryModule {
     abstract fun bindProfileRepository(
         profileRepositoryImpl: ProfileRepositoryImpl
     ): ProfileRepository
+
+    @Binds
+    abstract fun bindExerciseRepository(
+        exerciseRepositoryImpl: ExerciseRepositoryImpl
+    ): ExerciseRepository
 }

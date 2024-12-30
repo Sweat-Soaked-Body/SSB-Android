@@ -1,5 +1,6 @@
 package com.sweat.exercise.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -69,6 +70,7 @@ fun ExerciseScreen(
                 .background(Color.White)
                 .statusBarsPadding()
         ) {
+            // 상단 UI
             Row(
                 modifier = modifier
                     .padding(vertical = 13.dp, horizontal = 24.dp),
@@ -114,6 +116,8 @@ fun ExerciseScreen(
             }
             Divider(thickness = 1.dp, color = colors.gray100)
             Spacer(modifier = modifier.height(10.dp))
+
+            // 카테고리 버튼 UI
             LazyRow(
                 modifier = modifier
                     .fillMaxWidth()
@@ -122,12 +126,13 @@ fun ExerciseScreen(
                 verticalAlignment = Alignment.Top,
             ) {
                 items(state.exerciseList) { text ->
-                    val isSelected = state.selectedButton == text
+                    val category = mapCategoryToInt(text)
+                    val isSelected = state.selectedButton == category
                     ExerciseButton(
                         modifier = modifier,
                         text = text,
                         state = if (isSelected) ButtonState.Disabled else ButtonState.Enabled,
-                        onClick = { handleIntent(ExerciseIntent.SetExerciseCategory(text)) }
+                        onClick = { handleIntent(ExerciseIntent.SetExerciseCategory(category)) }
                     )
                 }
             }
@@ -138,27 +143,38 @@ fun ExerciseScreen(
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
-                val itemsToDisplay = if (state.filteredExerciseStateList.isEmpty()) {
-                    state.exerciseStateList
-                } else {
-                    state.filteredExerciseStateList
-                }
+                val itemsToDisplay = state.filteredExerciseStateList
 
-                itemsIndexed(itemsToDisplay) { index, item ->
-                    ExerciseItem(
-                        modifier = modifier,
-                        text = item.first,
-                        isSelected = item.third,
-                        onHeartClick = {
-                            val updatedList = state.exerciseStateList.toMutableList()
-                            val currentItem = updatedList[index]
-                            updatedList[index] = currentItem.copy(third = !currentItem.third)
-                            handleIntent(ExerciseIntent.UpdateExerciseItems(updatedList.toImmutableList()))
-                        }
-                    )
+                if (itemsToDisplay.isNotEmpty()) {
+                    items(itemsToDisplay) { item ->
+                        ExerciseItem(
+                            modifier = modifier,
+                            text = item.name,
+                            isSelected = item.like,
+                            onHeartClick = {
+                                handleIntent(ExerciseIntent.ToggleLikeStatus(item.id))
+                            }
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+fun mapCategoryToInt(category: String): Int {
+    return when (category) {
+        "전체" -> -1
+        "어깨" -> 1
+        "등" -> 2
+        "가슴" -> 3
+        "하체" -> 4
+        "팔" -> 5
+        "역도" -> 6
+        "복근" -> 7
+        "유산소" -> 8
+        "기타" -> 9
+        else -> -1
     }
 }
 

@@ -7,6 +7,7 @@ import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.sweat.network.api.AuthApi
+import com.sweat.network.api.ExerciseApi
 import com.sweat.network.api.FriendApi
 import com.sweat.network.api.ProfileApi
 import com.sweat.network.util.AuthInterceptor
@@ -102,4 +103,8 @@ object NetworkModule {
     @Provides
     fun provideProfileApi(retrofit: Retrofit): ProfileApi =
         retrofit.create(ProfileApi::class.java)
+
+    @Provides
+    fun provideExerciseApi(retrofit: Retrofit): ExerciseApi =
+        retrofit.create(ExerciseApi::class.java)
 }
