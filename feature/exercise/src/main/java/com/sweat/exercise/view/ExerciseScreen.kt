@@ -1,6 +1,5 @@
 package com.sweat.exercise.view
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +37,6 @@ import com.sweat.exercise.viewModel.ExerciseIntent
 import com.sweat.exercise.viewModel.ExerciseScreenState
 import com.sweat.exercise.viewModel.ExerciseViewModel
 import com.sweat.ui.DevicePreviews
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ExerciseRoute(
@@ -117,7 +114,6 @@ fun ExerciseScreen(
             Divider(thickness = 1.dp, color = colors.gray100)
             Spacer(modifier = modifier.height(10.dp))
 
-            // 카테고리 버튼 UI
             LazyRow(
                 modifier = modifier
                     .fillMaxWidth()

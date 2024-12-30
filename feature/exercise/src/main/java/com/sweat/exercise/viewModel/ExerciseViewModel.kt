@@ -50,13 +50,11 @@ class ExerciseViewModel @Inject constructor(
         when (intent) {
             is ExerciseIntent.SetExerciseName -> {
                 setState { copy(searchTextState = intent.text) }
-                // 검색어를 기준으로 필터링
                 val filteredList = filterExercises(state.value.selectedButton, intent.text, state.value.exerciseStateList)
                 setState { copy(filteredExerciseStateList = filteredList) }
             }
             is ExerciseIntent.SetExerciseCategory -> {
                 setState { copy(selectedButton = intent.category) }
-                // 카테고리 변경 시 검색어가 비어있으면 카테고리만 필터링
                 val filteredList = filterExercises(intent.category, state.value.searchTextState, state.value.exerciseStateList)
                 setState { copy(filteredExerciseStateList = filteredList) }
             }
@@ -69,6 +67,7 @@ class ExerciseViewModel @Inject constructor(
         }
     }
 
+
     private fun toggleLikeStatus(body: ExerciseLikeRequestParam) {
         val updatedList = state.value.exerciseStateList.toMutableList()
         val currentItemIndex = updatedList.indexOfFirst { it.id == body.exercise }
@@ -77,7 +76,7 @@ class ExerciseViewModel @Inject constructor(
             val currentItem = updatedList[currentItemIndex]
             val toggledItem = currentItem.copy(like = !currentItem.like)
 
-            // 상태 업데이트
+            // UI 상태 즉시 업데이트
             updatedList[currentItemIndex] = toggledItem
             setState { copy(exerciseStateList = updatedList.toImmutableList()) }
 
@@ -86,7 +85,7 @@ class ExerciseViewModel @Inject constructor(
                 exerciseLikeRequestUseCase(body = body).onSuccess {
                     it.catch {
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
-                    }.collect{
+                    }.collect {
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                     }
                 }.onFailure {
