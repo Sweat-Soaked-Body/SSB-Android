@@ -1,6 +1,6 @@
 package com.sweat.ssb_android.navigation
 
-import com.school_of_company.main.navigation.mainRoute
+import com.school_of_company.main.navigation.homeRoute
 import com.sweat.design_system.R
 import com.sweat.exercise.exerciseRoute
 import com.sweat.profile.profileRoute
@@ -19,7 +19,7 @@ enum class TopLevelDestination(
     Home(
         unselectedIcon = R.drawable.home,
         iconText = "홈",
-        routeName = mainRoute
+        routeName = homeRoute
     ),
 
     Profile(
