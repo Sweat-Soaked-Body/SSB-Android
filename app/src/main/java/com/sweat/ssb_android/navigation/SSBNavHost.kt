@@ -85,7 +85,6 @@ fun SSBNavHost(
         )
 
         friendQrGenerateRoute(
-            myName = "",/* todo appState와 연결 */
             popUpBackStack = navController::popBackStack,
         )
     }
