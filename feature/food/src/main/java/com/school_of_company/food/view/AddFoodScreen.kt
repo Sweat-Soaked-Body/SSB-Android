@@ -33,7 +33,10 @@ internal fun AddFoodRoute(
     popUpBackStack: () -> Unit,
     navigateToFoodSearch: () -> Unit
 ) {
-
+    AddFoodScreen(
+        popUpBackStack = popUpBackStack,
+        navigateToFoodSearch = navigateToFoodSearch
+    )
 }
 
 @Composable

@@ -25,6 +25,7 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":core:common"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:food"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
