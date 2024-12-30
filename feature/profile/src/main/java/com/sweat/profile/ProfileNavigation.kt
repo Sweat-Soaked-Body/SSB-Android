@@ -22,8 +22,8 @@ fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
     this.navigate(addFriendWithQRRoute, navOptions)
 }
 
-fun NavController.navigateToChattingRoute(navOptions: NavOptions? = null) {
-    this.navigate(chattingRoute, navOptions)
+fun NavController.navigateToChattingRoute(id: String, navOptions: NavOptions? = null) {
+    this.navigate("${chattingRoute}/${id}", navOptions)
 }
 
 fun NavController.navigateToFriendQrGenerate(name: String, navOptions: NavOptions? = null) {
@@ -61,8 +61,9 @@ fun NavGraphBuilder.addFriendWithQRRoute(
 fun NavGraphBuilder.chattingRoute(
     popUpBackStack: () -> Unit,
 ) {
-    composable(chattingRoute) {
-        ChattingRoute()
+    composable("${chattingRoute}/{id}") { backStackEntry ->
+        val id = backStackEntry.arguments?.getString("id") ?: ""
+        ChattingRoute(id = id, popUpBackStack = popUpBackStack)
     }
 }
 
