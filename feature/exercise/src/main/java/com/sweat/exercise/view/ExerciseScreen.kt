@@ -1,25 +1,14 @@
 package com.sweat.exercise.view
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.SwipeRefreshState
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.sweat.design_system.component.button.ButtonState
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.PlusIcon
@@ -39,7 +32,6 @@ import com.sweat.exercise.viewModel.ExerciseIntent
 import com.sweat.exercise.viewModel.ExerciseScreenState
 import com.sweat.exercise.viewModel.ExerciseViewModel
 import com.sweat.ui.DevicePreviews
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun ExerciseRoute(
@@ -47,10 +39,16 @@ fun ExerciseRoute(
     navigateToAddExercise: () -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
+
+    LaunchedEffect(key1 = true) {
+        viewModel.loadExercises(id = 1)
+    }
 
     ExerciseScreen(
         modifier = Modifier,
         state = state,
+        swipeRefreshState = swipeRefreshState,
         handleIntent = viewModel::handleIntent,
         navigateToAddExercise = navigateToAddExercise
     )
@@ -60,9 +58,12 @@ fun ExerciseRoute(
 fun ExerciseScreen(
     modifier: Modifier = Modifier,
     state: ExerciseScreenState,
+    swipeRefreshState: SwipeRefreshState,
     handleIntent: (ExerciseIntent) -> Unit,
     navigateToAddExercise: () -> Unit,
 ) {
+
+
     SSBAndroidTheme { colors, typography ->
         Column(
             modifier = modifier
@@ -70,7 +71,6 @@ fun ExerciseScreen(
                 .background(Color.White)
                 .statusBarsPadding()
         ) {
-            // 상단 UI
             Row(
                 modifier = modifier
                     .padding(vertical = 13.dp, horizontal = 24.dp),
@@ -117,7 +117,6 @@ fun ExerciseScreen(
             Divider(thickness = 1.dp, color = colors.gray100)
             Spacer(modifier = modifier.height(10.dp))
 
-            // 카테고리 버튼 UI
             LazyRow(
                 modifier = modifier
                     .fillMaxWidth()
@@ -138,23 +137,40 @@ fun ExerciseScreen(
             }
             Spacer(modifier = modifier.height(12.dp))
 
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = { handleIntent(ExerciseIntent.UpdateExerciseItems(state.exerciseStateList)) },
+                indicator = { state, refreshTrigger ->
+                    SwipeRefreshIndicator(
+                        state = state,
+                        refreshTriggerDistance = refreshTrigger,
+                        contentColor = colors.main
+                    )
+                }
             ) {
-                val itemsToDisplay = state.filteredExerciseStateList
+                LazyColumn(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp)
+                ) {
+                    val itemsToDisplay = state.filteredExerciseStateList
 
-                if (itemsToDisplay.isNotEmpty()) {
-                    items(itemsToDisplay) { item ->
-                        ExerciseItem(
-                            modifier = modifier,
-                            text = item.name,
-                            isSelected = item.like,
-                            onHeartClick = {
-                                handleIntent(ExerciseIntent.ToggleLikeStatus(item.id))
-                            }
-                        )
+                    if (itemsToDisplay.isNotEmpty()) {
+                        items(itemsToDisplay) { item ->
+                            ExerciseItem(
+                                modifier = modifier,
+                                text = item.name,
+                                isSelected = item.like,
+                                onHeartClick = {
+                                    handleIntent(
+                                        ExerciseIntent.ToggleLikeStatus(
+                                            item.id,
+                                            item.like
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -184,6 +200,7 @@ fun ExercisePreview() {
     ExerciseScreen(
         modifier = Modifier,
         state = ExerciseScreenState.getInitialState(),
+        swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false),
         handleIntent = { _ -> },
         navigateToAddExercise = {}
     )

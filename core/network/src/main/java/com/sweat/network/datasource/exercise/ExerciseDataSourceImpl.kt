@@ -1,7 +1,7 @@
 package com.sweat.network.datasource.exercise
 
-import android.util.Log
 import com.sweat.network.api.ExerciseApi
+import com.sweat.network.dto.exercise.ExerciseAddRequest
 import com.sweat.network.dto.exercise.ExerciseLikeRequest
 import com.sweat.network.dto.exercise.ExerciseListResponse
 import com.sweat.network.util.performApiRequest
@@ -15,11 +15,18 @@ class ExerciseDataSourceImpl @Inject constructor(
     override fun exerciseList(): Flow<List<ExerciseListResponse>> =
         performApiRequest { service.exerciseList() }
 
-    override fun updateLike(body: ExerciseLikeRequest): Flow<Unit> {
-        Log.d("ExerciseDataSource", "updateLike 호출 전")
-        return performApiRequest {
-            Log.d("ExerciseDataSource", "API 요청: ${body.exercise}")
+    override fun updateLike(body: ExerciseLikeRequest): Flow<Unit> =
+        performApiRequest {
             service.updateLike(body = body)
         }
-    }
+
+    override fun addExercise(body: ExerciseAddRequest): Flow<Unit> =
+        performApiRequest {
+            service.addExercise(body = body)
+        }
+
+    override fun deleteLike(id: Int): Flow<Unit> =
+        performApiRequest {
+            service.deleteLike(id = id)
+        }
 }
