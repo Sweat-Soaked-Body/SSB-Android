@@ -1,6 +1,7 @@
 package com.sweat.profile.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ fun ChattingTextField(
     modifier: Modifier = Modifier,
     textState: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onclick: () -> Unit,
     updateTextValue: (String) -> Unit,
 ) {
     Row(
@@ -46,7 +48,12 @@ fun ChattingTextField(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        SendIcon(modifier = Modifier.size(32.dp).padding(0.dp))
+        SendIcon(
+            modifier = Modifier
+                .size(32.dp)
+                .padding(0.dp)
+                .clickable { onclick() },
+        )
     }
 }
 
@@ -56,6 +63,7 @@ fun ChattingTextField(
 fun ChattingTextFieldPreview() {
     ChattingTextField(
         textState = "가나다",
-        updateTextValue = { _ -> }
+        updateTextValue = { _ -> },
+        onclick = {}
     )
 }
