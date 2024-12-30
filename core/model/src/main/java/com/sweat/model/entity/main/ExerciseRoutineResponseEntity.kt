@@ -7,6 +7,7 @@ data class ExerciseRoutineResponseEntity(
 )
 
 data class ExerciseSetEntity(
+    val id: Int,
     val set: Int,
     val routine: Int,
     val weight: Int?,

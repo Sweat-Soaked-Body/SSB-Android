@@ -12,4 +12,7 @@ interface MainRepository {
 
     suspend fun exerciseSetAdd(body: ExerciseSetRequestParam): Flow<Unit>
 
+    suspend fun deleteExerciseSet(setId: Int): Flow<Unit>
+
+    suspend fun deleteExerciseRoutine(routineId: Int): Flow<Unit>
 }

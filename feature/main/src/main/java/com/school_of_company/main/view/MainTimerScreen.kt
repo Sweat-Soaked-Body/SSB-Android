@@ -59,7 +59,7 @@ private fun MainTimerScreen(
         ) {
             SSBTopBar(
                 startIcon = { ChevronLeftIcon(modifier = Modifier.clickableSingle { popUpBackStack() }) },
-                betweenText = "Exercise Timer",
+                betweenText = "바벨 벡스쿼트",
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
 

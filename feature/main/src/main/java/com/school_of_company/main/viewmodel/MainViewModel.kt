@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.school_of_company.main.util.updateAtIndex
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.main.DeleteExerciseRoutineUseCase
+import com.sweat.domain.main.DeleteExerciseSetUseCase
 import com.sweat.domain.main.ExerciseRoutineCheckUseCase
 import com.sweat.domain.main.ExerciseSetAddUseCase
 import com.sweat.domain.main.FoodRoutineCheckUseCase
@@ -15,9 +17,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.nio.file.Files.copy
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -26,17 +30,21 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val exerciseRoutineCheckUseCase: ExerciseRoutineCheckUseCase,
     private val foodRoutineCheckUseCase: FoodRoutineCheckUseCase,
-    private val exerciseSetAddUseCase: ExerciseSetAddUseCase
+    private val exerciseSetAddUseCase: ExerciseSetAddUseCase,
+    private val deleteExerciseSetUseCase: DeleteExerciseSetUseCase,
+    private val deleteExerciseRoutineUseCase: DeleteExerciseRoutineUseCase
 ) : BaseViewModel<MainState, MainSideEffect, MainIntent>(MainState.getDefaultState()) {
-    override fun handleIntent(intent: MainIntent) {
-        val currentDate = getCurrentDate()
 
+    val swipeRefreshLoading = MutableStateFlow(false)
+    private val currentDate = getCurrentDate()
+
+    override fun handleIntent(intent: MainIntent) {
         when (intent) {
             is MainIntent.UpdateSet -> setState {
                 copy(
                     setList = setList.updateAtIndex(intent.id) { setStateList ->
                         setStateList.copy(
-                            sets = setStateList.sets.toImmutableList().updateAtIndex(intent.set + 1) { setState ->
+                            sets = setStateList.sets.toImmutableList().updateAtIndex(intent.set) { setState ->
                                 setState.copy(
                                     min = intent.minute,
                                     sec = intent.second,
@@ -68,8 +76,30 @@ class MainViewModel @Inject constructor(
                     min = intent.minute,
                     sec = intent.second
                 )
-                exerciseSetAdd(body = body)
-                exerciseRoutineCheck(date = currentDate)
+                viewModelScope.launch {
+                    exerciseSetAdd(body = body)
+                    exerciseRoutineCheck(date = currentDate)
+                }
+            }
+            is MainIntent.DeleteExerciseSet -> {
+                viewModelScope.launch {
+                    deleteExerciseSet(setId = intent.setId)
+                    exerciseRoutineCheck(date = currentDate)
+                }
+            }
+            is MainIntent.DeleteExerciseRoutine -> {
+                viewModelScope.launch {
+                    deleteExerciseRoutine(routineId = intent.routineId)
+                    exerciseRoutineCheck(date = currentDate)
+                    setState { copy(isShowExerciseBottomSheet = false) }
+                }
+            }
+            is MainIntent.Setting -> {
+                setState { copy(isShowExerciseBottomSheet = true) }
+                setState { copy(currentRoutineId = intent.routineId) }
+            }
+            is MainIntent.HideBottomSheet -> {
+                setState { copy(isShowExerciseBottomSheet = false) }
             }
         }
     }
@@ -132,17 +162,60 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun deleteExerciseSet(setId: Int) {
+        viewModelScope.launch {
+            deleteExerciseSetUseCase(setId = setId).onSuccess {
+                it.catch {
+                    Log.e("MainViewModel", "Error during request: ${it.message}")
+                    postSideEffect(MainSideEffect.ExerciseRoutineCheckFailed)
+                }.collect {
+                    Log.d("MainViewModel", "delete check success")
+                    postSideEffect(MainSideEffect.ExerciseRoutineCheckSuccess)
+                }
+            }.onFailure {
+                postSideEffect(MainSideEffect.ExerciseRoutineCheckFailed)
+            }
+        }
+    }
+
+    private fun deleteExerciseRoutine(routineId: Int) {
+        viewModelScope.launch {
+            deleteExerciseRoutineUseCase(routineId = routineId).onSuccess {
+                it.catch {
+                    Log.e("MainViewModel", "Error during request: ${it.message}")
+                    postSideEffect(MainSideEffect.ExerciseRoutineCheckFailed)
+                }.collect {
+                    Log.d("MainViewModel", "delete routine check success")
+                    postSideEffect(MainSideEffect.ExerciseRoutineCheckSuccess)
+                }
+            }.onFailure {
+                postSideEffect(MainSideEffect.ExerciseRoutineCheckFailed)
+            }
+        }
+    }
+
     private fun getCurrentDate(): String {
-        val currentDate = LocalDate.now()
+        val currentDate = LocalDate.now(java.time.ZoneId.of("Asia/Seoul"))
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return currentDate.format(formatter)
+    }
+
+    fun loadStuff() {
+        viewModelScope.launch {
+            swipeRefreshLoading.value = true
+            exerciseRoutineCheck(date = currentDate)
+            foodRoutineCheck(date = currentDate)
+            swipeRefreshLoading.value = false
+        }
     }
 }
 
 data class MainState(
     val setList: ImmutableList<ExerciseRoutineResponseEntity>,
     val foodList: ImmutableList<FoodRoutineResponseEntity>,
-    val addSet: ExerciseSetRequestParam
+    val addSet: ExerciseSetRequestParam,
+    val isShowExerciseBottomSheet: Boolean,
+    val currentRoutineId: Int
 ) {
     companion object {
         fun getDefaultState() = MainState(
@@ -154,7 +227,9 @@ data class MainState(
                 count = null,
                 min = null,
                 sec = null
-            )
+            ),
+            isShowExerciseBottomSheet = false,
+            currentRoutineId = 0
         )
     }
 }
@@ -168,10 +243,15 @@ data class CalendarState(
 
 sealed class MainSideEffect {
     object ExerciseRoutineCheckSuccess : MainSideEffect()
+
     object ExerciseRoutineCheckFailed : MainSideEffect()
 }
 
 sealed class MainIntent {
+    object HideBottomSheet : MainIntent()
+
+    data class Setting(val routineId: Int) : MainIntent()
+
     data class ExerciseRoutineCheck(val date: String) : MainIntent()
 
     data class ExerciseRoutineDelete(val routineId: Int): MainIntent()
@@ -187,6 +267,10 @@ sealed class MainIntent {
     ): MainIntent()
 
     data class FoodRoutineCheck(val date: String): MainIntent()
+
+    data class DeleteExerciseSet(val setId: Int): MainIntent()
+
+    data class DeleteExerciseRoutine(val routineId: Int): MainIntent()
 
     data class UpdateSet(
         val id: Int,

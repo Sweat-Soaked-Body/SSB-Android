@@ -20,4 +20,10 @@ class MainDataSourceImpl @Inject constructor(
     override suspend fun exerciseSetAdd(body: ExerciseSetRequest): Flow<Unit> =
         performApiRequest { service.exerciseSetAdd(body = body) }
 
+
+    override suspend fun deleteExerciseSet(setId: Int): Flow<Unit> =
+        performApiRequest { service.deleteExerciseSet(setId = setId) }
+
+    override suspend fun deleteExerciseRoutine(routineId: Int): Flow<Unit> =
+        performApiRequest { service.deleteExerciseRoutine(routineId = routineId) }
 }

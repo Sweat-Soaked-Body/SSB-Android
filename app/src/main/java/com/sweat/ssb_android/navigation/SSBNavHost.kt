@@ -11,6 +11,7 @@ import com.school_of_company.food.navigation.navigateToSearchFoodScreen
 import com.school_of_company.food.navigation.searchFoodRoute
 import com.school_of_company.main.navigation.homeRoute
 import com.school_of_company.main.navigation.navigateToHomeRoute
+import com.school_of_company.main.navigation.navigateToTimerScreenRoute
 import com.school_of_company.main.navigation.timerRoute
 import com.sweat.common.exception.NoInternetException
 import com.sweat.common.exception.OtherHttpException
@@ -79,7 +80,8 @@ fun SSBNavHost(
         )
 
         homeRoute(
-            navigateToFood = navController::navigateToFoodScreen
+            navigateToFood = navController::navigateToFoodScreen,
+            navigateToTimer = navController::navigateToTimerScreenRoute
         )
 
         addFriendWithQRRoute(

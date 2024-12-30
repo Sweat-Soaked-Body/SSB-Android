@@ -14,6 +14,7 @@ fun ExerciseRoutineResponse.toEntity(): ExerciseRoutineResponseEntity =
 
 fun ExerciseSet.toEntity(): ExerciseSetEntity {
     return ExerciseSetEntity(
+        id = this.id,
         set = this.set,
         routine = this.routine,
         weight = this.weight,

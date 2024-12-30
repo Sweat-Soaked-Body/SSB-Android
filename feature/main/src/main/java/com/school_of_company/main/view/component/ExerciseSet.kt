@@ -1,5 +1,6 @@
 package com.school_of_company.main.view.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,13 +34,16 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun ExerciseSet(
     modifier: Modifier = Modifier,
-    exerciseName: ExerciseRoutineResponseEntity,
+    exerciseState: ExerciseRoutineResponseEntity,
     state: ImmutableList<ExerciseSetEntity>,
     handleIntent: (MainIntent) -> Unit,
     onSetChange: (Int, Int?, Int?, Int?, Int?) -> Unit
 ) {
     var exerciseActionType  by remember { mutableStateOf(ExerciseActionType.ADDSET) }
     var exerciseSetState  by remember { mutableStateOf(ExerciseSetState.VIEW) }
+
+    val lastSetNumber = state.lastOrNull()?.set ?: 0
+    val lastWeight = state.lastOrNull()?.weight
 
     SSBAndroidTheme { colors, typography ->
         Column(
@@ -53,12 +57,12 @@ fun ExerciseSet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = exerciseName.exercise,
+                    text = exerciseState.exercise,
                     style = typography.bodyMedium,
                     color = colors.black
                 )
 
-                HamburgerIcon(modifier = Modifier.clickableSingle { /*TODO*/ })
+                HamburgerIcon(modifier = Modifier.clickableSingle { handleIntent(MainIntent.Setting(exerciseState.id)) })
             }
 
             Spacer(modifier = Modifier.height(13.dp))
@@ -109,8 +113,7 @@ fun ExerciseSet(
                             )
                         }
 
-                        val lastSetNumber = state.lastOrNull()?.set ?: 0
-                        val lastWeight = state.lastOrNull()?.weight
+
 
                         if(lastWeight == null) {
                             ExerciseSetChangeItem(
@@ -151,19 +154,22 @@ fun ExerciseSet(
                     ExerciseActionType.ADDSET -> {
                         Text(
                             modifier = Modifier.clickableSingle {
-                                val lastSet = state.lastOrNull()
-                                val newWeight = lastSet?.weight ?: 0
-                                val newCount = lastSet?.count ?: 0
-                                val newMinute = lastSet?.min ?: 0
-                                val newSecond = lastSet?.sec ?: 0
+
+                                val lastSet = state.last()
+                                val lastWeight = lastSet.weight
+                                val lastCount = lastSet.count
+                                val lastMin = lastSet.min
+                                val lastSec = lastSet.sec
+
+                                Log.d("ExerciseSet", "onStateChange called with set=${lastSet}, minute=$lastMin, second=$lastSec, weight=$lastWeight, count=$lastCount")
 
                                 handleIntent(
                                     MainIntent.ExerciseSetAdd(
-                                        routine = exerciseName.id,
-                                        weight = newWeight,
-                                        count = newCount,
-                                        minute = newMinute,
-                                        second = newSecond
+                                        routine = exerciseState.id,
+                                        weight = lastWeight,
+                                        count = lastCount,
+                                        minute = lastMin,
+                                        second = lastSec
                                     )
                                 )
 
@@ -179,7 +185,9 @@ fun ExerciseSet(
                             horizontalArrangement = Arrangement.spacedBy(52.dp)
                         ) {
                             Text(
-                                modifier = Modifier.clickableSingle { /*TODO*/ },
+                                modifier = Modifier.clickableSingle {
+                                    val lastSetId = exerciseState.sets.last().id
+                                    handleIntent(MainIntent.DeleteExerciseSet(setId = lastSetId)) },
                                 text = "- 세트 삭제",
                                 style = typography.label,
                                 color = colors.gray300
