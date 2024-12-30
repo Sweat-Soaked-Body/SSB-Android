@@ -56,7 +56,9 @@ fun LoginRoute(
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    LoginSideEffect.LoginSuccess -> {/*TODO()*/}
+                    LoginSideEffect.LoginSuccess -> {
+                        navigateToMain()
+                    }
                     LoginSideEffect.LoginFailed -> {/*TODO()*/}
                 }
             }
