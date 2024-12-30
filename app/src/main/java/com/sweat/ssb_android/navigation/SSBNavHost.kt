@@ -24,17 +24,15 @@ import com.sweat.exercise.navigateToAddExercise
 import com.sweat.login.loginRoute
 import com.sweat.login.navigateToLoginRoute
 import com.sweat.profile.addFriendWithQRRoute
+import com.sweat.profile.chattingRoute
 import com.sweat.profile.friendQrGenerateRoute
 import com.sweat.profile.navigateToAddFriendWithQR
+import com.sweat.profile.navigateToChattingRoute
 import com.sweat.profile.navigateToFriendQrGenerate
 import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.signup.navigation.signupRoute
-import com.sweat.design_system.R
-import com.sweat.profile.chattingRoute
-import com.sweat.profile.navigateToChattingRoute
-import com.sweat.ssb_android.ui.SSBAppState
 import com.sweat.ui.makeToast
 
 @Composable
@@ -66,7 +64,7 @@ fun SSBNavHost(
     ) {
         profileRoute(
             navigateToAddFriendWithQR = navController::navigateToAddFriendWithQR,
-            navigateToChat = {},//{ navController::navigateToChat },
+            navigateToChat = navController::navigateToChattingRoute,
             navigateToLogin = navController::navigateToLoginRoute,
             navigateToMyQR = navController::navigateToFriendQrGenerate,
         )
