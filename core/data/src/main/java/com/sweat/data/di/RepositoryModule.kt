@@ -8,8 +8,6 @@ import com.sweat.data.repository.friend.FriendRepository
 import com.sweat.data.repository.friend.FriendRepositoryImpl
 import com.sweat.data.repository.profile.ProfileRepository
 import com.sweat.data.repository.profile.ProfileRepositoryImpl
-import com.sweat.network.datasource.profile.ProfileDataSource
-import com.sweat.network.datasource.profile.ProfileDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
