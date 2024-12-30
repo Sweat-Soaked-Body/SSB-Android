@@ -68,7 +68,7 @@ class SSBAppState(
             }
             when (topLevelDestination) {
                 TopLevelDestination.Exercise ->  navController.navigateToExerciseRoute(topLevelNavOptions)
-                TopLevelDestination.Home ->  navController.navigateToMainRoute(topLevelNavOptions)
+                TopLevelDestination.Home ->  navController.navigateToHomeRoute(topLevelNavOptions)
                 TopLevelDestination.Profile -> navController.navigateToProfileRoute(topLevelNavOptions)
             }
         }
