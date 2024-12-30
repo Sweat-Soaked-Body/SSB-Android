@@ -4,27 +4,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sweat.design_system.component.bottomSheet.BottomSheetItem
 import com.sweat.design_system.component.bottomSheet.SSBBottomSheet
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.OutIcon
+import com.sweat.design_system.icon.PencilIcon
 import com.sweat.design_system.icon.TrashIcon
 import com.sweat.design_system.theme.color.SSBColor
 
 @Composable
-fun SettingsBottomSheet(modifier: Modifier = Modifier) {
+fun SettingsBottomSheet(
+    modifier: Modifier = Modifier,
+    onProfileEditClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onLeaveClick: () -> Unit,
+) {
     SSBBottomSheet(modifier = modifier) {
         BottomSheetItem(
-            icon = { OutIcon() }, // TODO: 아이콘 변경
-            title = "내 QR코드 보기",
+            modifier = Modifier.clickableSingle { onProfileEditClick() },
+            icon = { PencilIcon() },
+            title = "프로필 수정",
             textColor = SSBColor.gray600
         )
         BottomSheetItem(
-            icon = { OutIcon() },// TODO: 아이콘 변경
-            title = "QR 코드로 친구 추가",
+            modifier = Modifier.clickableSingle { onLogoutClick() },
+            icon = { OutIcon() },
+            title = "로그 아웃",
             textColor = SSBColor.gray600
         )
         BottomSheetItem(
-            icon = { TrashIcon() },// TODO: 아이콘 변경
-            title = "NFC로 친구 추가",
-            textColor = SSBColor.gray600
+            modifier = Modifier.clickableSingle { onLeaveClick() },
+            icon = { TrashIcon() },
+            title = "회원 탈퇴",
+            textColor = SSBColor.error
         )
     }
 }

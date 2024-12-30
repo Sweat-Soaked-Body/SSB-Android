@@ -15,10 +15,12 @@ import com.sweat.design_system.R
 import com.sweat.exercise.addExerciseRoute
 import com.sweat.exercise.exerciseRoute
 import com.sweat.exercise.navigateToAddExercise
-import com.sweat.exercise.navigateToExerciseRoute
 import com.sweat.login.loginRoute
+import com.sweat.login.navigateToLoginRoute
 import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.friendQrGenerateRoute
+import com.sweat.profile.navigateToAddFriendWithQR
+import com.sweat.profile.navigateToFriendQrGenerate
 import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
@@ -53,11 +55,10 @@ fun SSBNavHost(
         startDestination = startDestination
     ) {
         profileRoute(
-            navigateToAddFriendWithQR = {},
-            navigateToChat = {},
-            navigateToLogin = {},
-            navigateToMyQR = {},
-            navigateToAddFriendWithNFC = {},
+            navigateToAddFriendWithQR = navController::navigateToAddFriendWithQR,
+            navigateToChat = {},//{ navController::navigateToChat },
+            navigateToLogin = navController::navigateToLoginRoute,
+            navigateToMyQR = navController::navigateToFriendQrGenerate,
         )
 
         signupRoute(
@@ -67,13 +68,13 @@ fun SSBNavHost(
         )
 
         loginRoute(
-            navigateToMain = navController::navigateToExerciseRoute,
+            navigateToMain = {/* navController::navigateToMainRoute */ },
             navigateToSignup = navController::navigateToSignupRoute
         )
 
         addFriendWithQRRoute(
-            navigateToProfile = {},
-            popUpBackStack = {},
+            navigateToProfile = navController::navigateToProfileRoute,
+            popUpBackStack = navController::popBackStack,
         )
 
         exerciseRoute(
@@ -85,7 +86,6 @@ fun SSBNavHost(
         )
 
         friendQrGenerateRoute(
-            myName = "",/* todo appState와 연결 */
             popUpBackStack = navController::popBackStack,
         )
 

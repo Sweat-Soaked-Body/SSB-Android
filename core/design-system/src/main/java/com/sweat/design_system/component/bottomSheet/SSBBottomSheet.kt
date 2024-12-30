@@ -37,7 +37,7 @@ fun SSBBottomSheet(
                     bottomEnd = 0.dp
                 )
             )
-            .padding(vertical = 40.dp)
+            .padding(top = 20.dp, bottom = 80.dp)
     ) {
         bottomSheetItems()
     }

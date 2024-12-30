@@ -1,25 +1,34 @@
 package com.sweat.profile.viewModel
 
+import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.domain.friend.FriendCheckUseCase
+import com.sweat.domain.profile.ProfileGetUseCase
+import com.sweat.model.friend.FriendModel
+import com.sweat.model.profile.ProfileModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-
+    private val friendCheckUseCase: FriendCheckUseCase,
+    private val profileGetUseCase: ProfileGetUseCase
 ) : BaseViewModel<ProfileScreenState, ProfileScreenSideEffect, ProfileIntent>(ProfileScreenState.getInitialState()) {
+
     override fun handleIntent(intent: ProfileIntent) {
+        super.handleIntent(intent)
         when (intent) {
-            ProfileIntent.AddFriendWithNFC -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithNFC)
             ProfileIntent.AddFriendWithQR -> postSideEffect(ProfileScreenSideEffect.NavigateToAddFriendWithQR)
             ProfileIntent.AddProfilePicture -> postSideEffect(ProfileScreenSideEffect.LaunchImagePicker(200))
             ProfileIntent.StartEditProfile -> setState { copy(isProfileEditing = true) }
             ProfileIntent.EndEditProfile -> postProfileEdit()
             ProfileIntent.Logout -> logout()
             ProfileIntent.Secession -> postSideEffect(ProfileScreenSideEffect.ShowSecessionPopup)
-            ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR)
+            is ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR(intent.id))
             ProfileIntent.HideBottomSheet -> setState {
                 copy(
                     isShowAddFriendBottomSheet = false,
@@ -32,15 +41,30 @@ class ProfileViewModel @Inject constructor(
             is ProfileIntent.StartChat -> postSideEffect(ProfileScreenSideEffect.NavigateToChat(id = intent.id))
             is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
             is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
+            ProfileIntent.InitMyFriend -> loadChatList()
+            ProfileIntent.InitMyProfile -> loadProfileData()
+        }
+    }
+
+    private fun loadProfileData() {
+        viewModelScope.launch {
+            profileGetUseCase().onSuccess {
+                it.collect {
+                    setState { copy(myName = it.name) }
+                }
+            }
         }
     }
 
     private fun loadChatList() {
-
-    }
-
-    private fun loadProfileData() {
-
+        viewModelScope.launch {
+            friendCheckUseCase()
+                .onSuccess {
+                    it.collect {
+                        setState { copy(chatList = it.toPersistentList()) }
+                    }
+                }
+        }
     }
 
     private fun postProfileEdit() {
@@ -61,7 +85,8 @@ data class ProfileScreenState(
     val isProfileEditing: Boolean,
     val isShowSettingBottomSheet: Boolean,
     val isShowAddFriendBottomSheet: Boolean,
-    val chatList: ImmutableList<ChatListItemState>,
+    val chatList: ImmutableList<FriendModel>,
+    val profileData: ProfileModel
 ) {
     companion object {
         // State의 초기값을 넣어주기위해 필수로 구현해야하는 함수
@@ -73,31 +98,24 @@ data class ProfileScreenState(
             isShowSettingBottomSheet = false,
             isShowAddFriendBottomSheet = false,
             chatList = persistentListOf(),
+            profileData = ProfileModel()
         )
     }
 }
 
-data class ChatListItemState(
-    val name: String,
-    val message: String,
-    val date: String,
-    val image: String,
-    val isReadMessage: Boolean,
-)
-
 sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
-    object HideBottomSheet : ProfileScreenSideEffect()
     object NavigateToLogin : ProfileScreenSideEffect()
-    object NavigateToMyQR : ProfileScreenSideEffect()
+    data class NavigateToMyQR(val id: String) : ProfileScreenSideEffect()
     object NavigateToAddFriendWithQR : ProfileScreenSideEffect()
-    object NavigateToAddFriendWithNFC : ProfileScreenSideEffect()
     data class NavigateToChat(val id: String) : ProfileScreenSideEffect()
 }
 
 
 sealed class ProfileIntent {
+    object InitMyFriend : ProfileIntent()
+    object InitMyProfile : ProfileIntent()
     object Setting : ProfileIntent()
     object AddFriend : ProfileIntent()
     object HideBottomSheet : ProfileIntent()
@@ -108,8 +126,7 @@ sealed class ProfileIntent {
     object EndEditProfile : ProfileIntent()
     object Logout : ProfileIntent()
     object Secession : ProfileIntent()
-    object ShowMyQR : ProfileIntent()
+    data class ShowMyQR(val id: String) : ProfileIntent()
     object AddProfilePicture : ProfileIntent()
     object AddFriendWithQR : ProfileIntent()
-    object AddFriendWithNFC : ProfileIntent()
 }

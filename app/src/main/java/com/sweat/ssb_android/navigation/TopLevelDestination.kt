@@ -1,6 +1,8 @@
 package com.sweat.ssb_android.navigation
 
 import com.sweat.design_system.R
+import com.sweat.exercise.exerciseRoute
+import com.sweat.profile.profileRoute
 
 enum class TopLevelDestination(
     val unselectedIcon: Int,
@@ -10,18 +12,18 @@ enum class TopLevelDestination(
     Exercise(
         unselectedIcon = R.drawable.dumbbell,
         iconText = "운동",
-        routeName = "ExerciseRoute"
+        routeName = exerciseRoute
     ),
 
     Home(
         unselectedIcon = R.drawable.home,
         iconText = "홈",
-        routeName = "HomeRoute"
+        routeName = "homeRoute"
     ),
 
     Profile(
         unselectedIcon = R.drawable.profile_circle,
         iconText = "프로필",
-        routeName = "ProfileRoute",
+        routeName = profileRoute,
     )
 }
