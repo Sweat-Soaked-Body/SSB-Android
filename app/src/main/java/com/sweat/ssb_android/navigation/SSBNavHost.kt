@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.school_of_company.main.navigation.mainRoute
+import com.school_of_company.main.navigation.navigateToMainRoute
 import com.school_of_company.main.navigation.timerRoute
 import com.sweat.common.exception.NoInternetException
 import com.sweat.common.exception.OtherHttpException
@@ -16,12 +18,8 @@ import com.sweat.exercise.addExerciseRoute
 import com.sweat.exercise.exerciseRoute
 import com.sweat.exercise.navigateToAddExercise
 import com.sweat.login.loginRoute
-import com.sweat.login.navigateToLoginRoute
 import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.friendQrGenerateRoute
-import com.sweat.profile.navigateToAddFriendWithQR
-import com.sweat.profile.navigateToFriendQrGenerate
-import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
 import com.sweat.signup.navigation.signupRoute
@@ -68,9 +66,11 @@ fun SSBNavHost(
         )
 
         loginRoute(
-            navigateToMain = {/* navController::navigateToMainRoute */ },
+            navigateToMain = navController::navigateToMainRoute,
             navigateToSignup = navController::navigateToSignupRoute
         )
+
+        mainRoute()
 
         addFriendWithQRRoute(
             navigateToProfile = navController::navigateToProfileRoute,

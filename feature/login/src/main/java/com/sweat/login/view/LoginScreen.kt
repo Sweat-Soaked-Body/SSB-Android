@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +23,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -35,6 +39,8 @@ import com.sweat.login.viewModel.LoginIntent
 import com.sweat.login.viewModel.LoginSideEffect
 import com.sweat.login.viewModel.LoginState
 import com.sweat.login.viewModel.LoginViewModel
+import com.sweat.model.param.auth.LoginRequestParam
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginRoute(
@@ -50,12 +56,8 @@ fun LoginRoute(
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    LoginSideEffect.LoginSuccess -> {
-                        navigateToMain()
-                    }
-
-                    LoginSideEffect.LoginFailed -> {/*TODO()*/
-                    }
+                    LoginSideEffect.LoginSuccess -> { navigateToMain() }
+                    LoginSideEffect.LoginFailed -> {/*TODO()*/}
                 }
             }
         }
@@ -70,7 +72,8 @@ fun LoginRoute(
         onLoginClick = {
             viewModel.handleIntent(LoginIntent.Login(state.username, state.password))
         },
-        navigateToSignup = navigateToSignup
+        navigateToSignup = navigateToSignup,
+        navigateToMain = navigateToMain
     )
 }
 
@@ -83,7 +86,8 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit,
-    navigateToSignup: () -> Unit
+    navigateToSignup: () -> Unit,
+    navigateToMain: () -> Unit
 ) {
 
     SSBAndroidTheme { colors, typography ->
