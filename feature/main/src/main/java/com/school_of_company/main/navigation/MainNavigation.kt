@@ -12,20 +12,12 @@ fun NavController.navigateToHomeRoute(navOptions: NavOptions? = null) {
     this.navigate(homeRoute, navOptions)
 }
 
-<<<<<<< Updated upstream
-fun NavGraphBuilder.mainRoute(
+fun NavGraphBuilder.homeRoute(
     navigateToFood: () -> Unit
 ) {
-    composable(mainRoute) {
+    composable(homeRoute) {
         MainRoute(
             navigateToFood = navigateToFood
         )
-=======
-fun NavGraphBuilder.homeRoute(
-
-) {
-    composable(homeRoute) {
-        MainRoute()
->>>>>>> Stashed changes
     }
 }

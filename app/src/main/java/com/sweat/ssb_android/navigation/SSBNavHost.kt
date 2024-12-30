@@ -78,7 +78,7 @@ fun SSBNavHost(
             navigateToSignup = navController::navigateToSignupRoute
         )
 
-        mainRoute(
+        homeRoute(
             navigateToFood = navController::navigateToFoodScreen
         )
 
