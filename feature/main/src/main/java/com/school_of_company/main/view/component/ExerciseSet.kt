@@ -20,17 +20,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.school_of_company.main.enum.ExerciseActionType
 import com.school_of_company.main.enum.ExerciseSetState
-import com.school_of_company.main.viewmodel.SetState
+import com.school_of_company.main.viewmodel.MainIntent
 import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.HamburgerIcon
 import com.sweat.design_system.theme.SSBAndroidTheme
+import com.sweat.model.entity.main.ExerciseRoutineResponseEntity
+import com.sweat.model.entity.main.ExerciseSetEntity
+import com.sweat.model.entity.main.FoodRoutineResponseEntity
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun ExerciseSet(
     modifier: Modifier = Modifier,
-    state: ImmutableList<SetState>,
+    exerciseName: ExerciseRoutineResponseEntity,
+    state: ImmutableList<ExerciseSetEntity>,
+    handleIntent: (MainIntent) -> Unit,
     onSetChange: (Int, Int?, Int?, Int?, Int?) -> Unit
 ) {
     var exerciseActionType  by remember { mutableStateOf(ExerciseActionType.ADDSET) }
@@ -48,7 +53,7 @@ fun ExerciseSet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "바벨 백스쿼트",
+                    text = exerciseName.exercise,
                     style = typography.bodyMedium,
                     color = colors.black
                 )
@@ -66,8 +71,8 @@ fun ExerciseSet(
                         state.forEach { state ->
                             ExerciseSetItem(
                                 set = state.set,
-                                minute = state.minute,
-                                second = state.second,
+                                minute = state.min,
+                                second = state.sec,
                                 weight = state.weight,
                                 count = state.count
                             )
@@ -80,8 +85,8 @@ fun ExerciseSet(
                         state.forEach { state ->
                             ExerciseSetChangeItem(
                                 set = state.set,
-                                minute = state.minute,
-                                second = state.second,
+                                minute = state.min,
+                                second = state.sec,
                                 weight = state.weight,
                                 count = state.count,
                                 onStateChange = { minute, second, weight, count ->
@@ -97,8 +102,8 @@ fun ExerciseSet(
                         state.forEach { state ->
                             ExerciseSetItem(
                                 set = state.set,
-                                minute = state.minute,
-                                second = state.second,
+                                minute = state.min,
+                                second = state.sec,
                                 weight = state.weight,
                                 count = state.count
                             )
@@ -145,7 +150,25 @@ fun ExerciseSet(
                 when(exerciseActionType) {
                     ExerciseActionType.ADDSET -> {
                         Text(
-                            modifier = Modifier.clickableSingle { /*TODO*/ },
+                            modifier = Modifier.clickableSingle {
+                                val lastSet = state.lastOrNull()
+                                val newWeight = lastSet?.weight ?: 0
+                                val newCount = lastSet?.count ?: 0
+                                val newMinute = lastSet?.min ?: 0
+                                val newSecond = lastSet?.sec ?: 0
+
+                                handleIntent(
+                                    MainIntent.ExerciseSetAdd(
+                                        routine = exerciseName.id,
+                                        weight = newWeight,
+                                        count = newCount,
+                                        minute = newMinute,
+                                        second = newSecond
+                                    )
+                                )
+
+                                exerciseSetState = ExerciseSetState.VIEW
+                            },
                             text = "추가 완료",
                             style = typography.label,
                             color = colors.gray300

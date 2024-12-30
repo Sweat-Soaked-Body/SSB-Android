@@ -1,4 +1,4 @@
-package com.sweat.network.mapper.exerciseRoutine
+package com.sweat.network.mapper.main
 
 import com.sweat.model.entity.main.ExerciseRoutineResponseEntity
 import com.sweat.model.entity.main.ExerciseSetEntity
