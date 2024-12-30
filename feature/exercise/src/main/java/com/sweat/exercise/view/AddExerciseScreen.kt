@@ -36,7 +36,6 @@ import com.sweat.exercise.viewModel.AddExerciseScreenState
 import com.sweat.exercise.viewModel.AddExerciseViewModel
 import com.sweat.model.param.exercise.ExerciseAddRequestParam
 import com.sweat.ui.DevicePreviews
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun AddExerciseRoute(
@@ -99,7 +98,7 @@ private fun AddExerciseScreen(
                 AddExerciseSelector(
                     modifier = modifier,
                     text = "운동종류",
-                    items = state.categories, // ViewModel에서 관리되는 categories 사용
+                    items = state.categories,
                     selectedItem = remember { mutableStateOf(state.categories[state.selectedCategory]) },
                     expanded = remember { mutableStateOf(state.exerciseTypeExpanded) },
                     noItemText = "",
