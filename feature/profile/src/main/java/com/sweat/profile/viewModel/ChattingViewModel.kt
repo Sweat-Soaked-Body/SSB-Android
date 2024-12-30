@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
-
 @HiltViewModel
 class ChattingViewModel @Inject constructor(
     okHttpClient: OkHttpClient,
@@ -19,9 +18,11 @@ class ChattingViewModel @Inject constructor(
         client = okHttpClient,
         onMessageReceived = { message ->
             Log.d("WebSocketClient", "Message received: $message")
+            addMessageToList(message)
         },
         onError = { error ->
             Log.e("WebSocketClient", "Error: ${error.message}")
+            setState { copy(errorMessage = error.message ?: "Unknown error") }
         },
         onClosed = {
             Log.d("WebSocketClient", "Connection closed")
@@ -48,19 +49,38 @@ class ChattingViewModel @Inject constructor(
     private fun sendMessage(message: String) {
         webSocketClient.sendMessage(message)
     }
+
+    private fun addMessageToList(message: String) {
+        val newMessage = ChatMessage(
+            message = message,
+            sender = "Server", // 기본값으로 설정 (필요에 따라 파싱)
+            timestamp = System.currentTimeMillis() // 타임스탬프 추가
+        )
+        setState { copy(messages = messages + newMessage) }
+    }
 }
 
 data class ChattingState(
     val myName: String,
     val messageInputTextState: String,
+    val messages: List<ChatMessage>, // 메시지 리스트 추가
+    val errorMessage: String?, // 에러 메시지 상태 추가
 ) {
     companion object {
         fun getInitialState() = ChattingState(
             myName = "",
             messageInputTextState = "",
+            messages = emptyList(),
+            errorMessage = null,
         )
     }
 }
+
+data class ChatMessage(
+    val message: String,
+    val sender: String,
+    val timestamp: Long
+)
 
 sealed class ChattingScreenSideEffect
 
