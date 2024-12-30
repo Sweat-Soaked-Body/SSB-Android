@@ -56,7 +56,7 @@ fun LoginRoute(
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    LoginSideEffect.LoginSuccess -> {/*TODO()*/}
+                    LoginSideEffect.LoginSuccess -> { navigateToMain() }
                     LoginSideEffect.LoginFailed -> {/*TODO()*/}
                 }
             }
@@ -72,7 +72,8 @@ fun LoginRoute(
         onLoginClick = {
             viewModel.handleIntent(LoginIntent.Login(state.username, state.password))
         },
-        navigateToSignup = navigateToSignup
+        navigateToSignup = navigateToSignup,
+        navigateToMain = navigateToMain
     )
 }
 
@@ -85,7 +86,8 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit,
-    navigateToSignup: () -> Unit
+    navigateToSignup: () -> Unit,
+    navigateToMain: () -> Unit
 ) {
 
     SSBAndroidTheme { colors, typography ->

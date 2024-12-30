@@ -22,25 +22,27 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.school_of_company.main.view.component.ExerciseSet
+import com.school_of_company.main.view.component.Food
 import com.school_of_company.main.view.component.MainCalendar
 import com.school_of_company.main.view.component.MainTabRowItem
 import com.school_of_company.main.viewmodel.MainIntent
 import com.school_of_company.main.viewmodel.MainState
 import com.school_of_company.main.viewmodel.MainViewModel
-import com.school_of_company.main.viewmodel.SetState
-import com.school_of_company.main.viewmodel.SetStateList
 import com.sweat.design_system.theme.SSBAndroidTheme
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,6 +51,14 @@ fun MainRoute(
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val currentDate = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val formattedDate = currentDate.format(formatter)
+
+    LaunchedEffect(Unit) {
+        viewModel.handleIntent(MainIntent.ExerciseRoutineCheck(date = formattedDate))
+        viewModel.handleIntent(MainIntent.FoodRoutineCheck(date = formattedDate))
+    }
 
     MainScreen(
         modifier = modifier,
@@ -132,13 +142,15 @@ fun MainScreen(
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(horizontal = 12.dp, 16.dp),
+                                .padding(horizontal = 12.dp, vertical = 16.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             items(state.setList) { setStateList ->
                                 ExerciseSet(
-                                    state = setStateList.state,
+                                    exerciseName = setStateList,
+                                    state = setStateList.sets.toImmutableList(),
+                                    handleIntent = handleIntent,
                                     onSetChange = { set, minute, second, weight, count ->
                                         handleIntent(
                                             MainIntent.UpdateSet(
@@ -156,22 +168,22 @@ fun MainScreen(
                         }
                     }
 
-                    1 -> DietScreen()
+                    1 -> {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 12.dp, vertical = 16.dp),
+                        ) {
+                            items(state.foodList) { foodStateList ->
+                                Food(
+                                    foodType = foodStateList,
+                                    state = foodStateList.food.toImmutableList()
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun DietScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 12.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "식단 화면")
     }
 }

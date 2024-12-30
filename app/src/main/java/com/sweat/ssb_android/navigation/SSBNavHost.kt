@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.school_of_company.main.navigation.mainRoute
+import com.school_of_company.main.navigation.navigateToMainRoute
 import com.school_of_company.main.navigation.timerRoute
 import com.sweat.common.exception.NoInternetException
 import com.sweat.common.exception.OtherHttpException
@@ -65,9 +67,11 @@ fun SSBNavHost(
         )
 
         loginRoute(
-            navigateToMain = {},
+            navigateToMain = navController::navigateToMainRoute,
             navigateToSignup = navController::navigateToSignupRoute
         )
+
+        mainRoute()
 
         addFriendWithQRRoute(
             navigateToProfile = {},
