@@ -20,10 +20,10 @@ class ExerciseViewModel @Inject constructor(
 ) : BaseViewModel<ExerciseScreenState, ExerciseScreenSideEffect, ExerciseIntent>(ExerciseScreenState.getInitialState()) {
 
     init {
-        loadExercises(1)
+        loadExercises(id = 1)
     }
 
-    private fun loadExercises(id: Int) {
+    fun loadExercises(id: Int) {
         viewModelScope.launch {
             exerciseListUseCase(id).collect { exercises ->
                 setState {
@@ -67,21 +67,22 @@ class ExerciseViewModel @Inject constructor(
 
 
     private fun toggleLikeStatus(body: ExerciseLikeRequestParam) {
-        val updatedList = state.value.exerciseStateList.toMutableList()
-        val currentItemIndex = updatedList.indexOfFirst { it.id == body.exercise }
+        val currentList = state.value.exerciseStateList.toMutableList()
+        val currentItemIndex = currentList.indexOfFirst { it.id == body.exercise }
 
         if (currentItemIndex != -1) {
-            val currentItem = updatedList[currentItemIndex]
+            val currentItem = currentList[currentItemIndex]
             val toggledItem = currentItem.copy(like = !currentItem.like)
 
-            updatedList[currentItemIndex] = toggledItem
-            setState { copy(exerciseStateList = updatedList.toImmutableList()) }
+            currentList[currentItemIndex] = toggledItem
+            setState { copy(exerciseStateList = currentList.toImmutableList()) }
 
             viewModelScope.launch {
                 exerciseLikeRequestUseCase(body = body).onSuccess {
                     it.catch {
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                     }.collect {
+                        loadExercises(id = 1)
                         postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
                     }
                 }.onFailure {
@@ -90,6 +91,8 @@ class ExerciseViewModel @Inject constructor(
             }
         }
     }
+
+
 
     private fun filterExercises(
         selectedCategory: Int,
