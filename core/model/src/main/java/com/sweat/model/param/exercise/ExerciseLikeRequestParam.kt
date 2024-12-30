@@ -1,4 +1,5 @@
 package com.sweat.model.param.exercise
 
-class ExerciseLikeRequestParam {
-}
+data class ExerciseLikeRequestParam (
+    val exercise: Int
+)
