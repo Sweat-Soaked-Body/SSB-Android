@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -82,15 +83,14 @@ class ExerciseViewModel @Inject constructor(
 
             // 서버 요청
             viewModelScope.launch {
-                Log.d("ViewModel", "좋아요 요청 시작")
-                val result = runCatching { exerciseLikeRequestUseCase(body) }
-                result.onSuccess {
-                    Log.d("ViewModel", "POST 요청 성공")
-                }.onFailure { e ->
-                    Log.e("ViewModel", "POST 요청 실패: ${e.message}")
-                    updatedList[currentItemIndex] = currentItem // 상태 롤백
-                    setState { copy(exerciseStateList = updatedList.toImmutableList()) }
-                    postSideEffect(ExerciseScreenSideEffect.ShowError(e.message ?: "요청 실패"))
+                exerciseLikeRequestUseCase(body = body).onSuccess {
+                    it.catch {
+                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
+                    }.collect{
+                        postSideEffect(ExerciseScreenSideEffect.ExerciseLikeSuccess)
+                    }
+                }.onFailure {
+                    postSideEffect(ExerciseScreenSideEffect.ExerciseLikeFailed)
                 }
             }
         }
@@ -138,7 +138,8 @@ data class ExerciseScreenState(
 
 sealed class ExerciseScreenSideEffect {
     object NavigateToAddExercise : ExerciseScreenSideEffect()
-    data class ShowError(val message: String) : ExerciseScreenSideEffect()
+    object ExerciseLikeSuccess : ExerciseScreenSideEffect()
+    object ExerciseLikeFailed : ExerciseScreenSideEffect()
 }
 
 data class ExerciseItem(
