@@ -6,16 +6,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.school_of_company.main.view.MainRoute
 
-const val mainRoute = "mainRoute"
+const val homeRoute = "homeRoute"
 
-fun NavController.navigateToMainRoute(navOptions: NavOptions? = null) {
-    this.navigate(mainRoute, navOptions)
+fun NavController.navigateToHomeRoute(navOptions: NavOptions? = null) {
+    this.navigate(homeRoute, navOptions)
 }
 
-fun NavGraphBuilder.mainRoute(
-
+fun NavGraphBuilder.homeRoute(
+    navigateToFood: () -> Unit
 ) {
-    composable(mainRoute) {
-        MainRoute()
+    composable(homeRoute) {
+        MainRoute(
+            navigateToFood = navigateToFood
+        )
     }
 }
