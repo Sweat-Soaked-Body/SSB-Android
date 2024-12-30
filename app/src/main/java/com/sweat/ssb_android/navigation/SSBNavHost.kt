@@ -15,15 +15,12 @@ import com.sweat.design_system.R
 import com.sweat.exercise.addExerciseRoute
 import com.sweat.exercise.exerciseRoute
 import com.sweat.exercise.navigateToAddExercise
-import com.sweat.exercise.navigateToExerciseRoute
 import com.sweat.login.loginRoute
 import com.sweat.login.navigateToLoginRoute
 import com.sweat.profile.addFriendWithQRRoute
 import com.sweat.profile.friendQrGenerateRoute
-import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.navigateToAddFriendWithQR
 import com.sweat.profile.navigateToFriendQrGenerate
-import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
 import com.sweat.signup.navigation.navigateToSignupRoute
