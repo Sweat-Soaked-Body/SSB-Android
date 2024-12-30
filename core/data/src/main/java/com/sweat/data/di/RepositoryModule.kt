@@ -25,7 +25,7 @@ abstract class RepositoryModule {
     ): FriendRepository
 
     @Binds
-    abstract fun bindFriendRepository(
+    abstract fun bindProfileRepository(
         profileDataSourceImpl: ProfileDataSourceImpl
     ): ProfileDataSource
 }
