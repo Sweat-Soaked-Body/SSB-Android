@@ -13,9 +13,11 @@ fun NavController.navigateToMainRoute(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.mainRoute(
-
+    navigateToFood: () -> Unit
 ) {
     composable(mainRoute) {
-        MainRoute()
+        MainRoute(
+            navigateToFood = navigateToFood
+        )
     }
 }
