@@ -3,7 +3,9 @@ package com.sweat.profile.viewModel
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
 import com.sweat.domain.friend.FriendCheckUseCase
+import com.sweat.domain.profile.ProfileGetUseCase
 import com.sweat.model.friend.FriendModel
+import com.sweat.model.profile.ProfileModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -14,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val friendCheckUseCase: FriendCheckUseCase,
+    private val profileGetUseCase: ProfileGetUseCase
 ) : BaseViewModel<ProfileScreenState, ProfileScreenSideEffect, ProfileIntent>(ProfileScreenState.getInitialState()) {
 
     override fun handleIntent(intent: ProfileIntent) {
@@ -25,7 +28,7 @@ class ProfileViewModel @Inject constructor(
             ProfileIntent.EndEditProfile -> postProfileEdit()
             ProfileIntent.Logout -> logout()
             ProfileIntent.Secession -> postSideEffect(ProfileScreenSideEffect.ShowSecessionPopup)
-            ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR)
+            is ProfileIntent.ShowMyQR -> postSideEffect(ProfileScreenSideEffect.NavigateToMyQR(intent.id))
             ProfileIntent.HideBottomSheet -> setState {
                 copy(
                     isShowAddFriendBottomSheet = false,
@@ -39,6 +42,17 @@ class ProfileViewModel @Inject constructor(
             is ProfileIntent.SetMyIntro -> setState { copy(myIntro = intent.state) }
             is ProfileIntent.SetProfileImage -> setState { copy(image = intent.image) }
             ProfileIntent.InitMyFriend -> loadChatList()
+            ProfileIntent.InitMyProfile -> loadProfileData()
+        }
+    }
+
+    private fun loadProfileData() {
+        viewModelScope.launch {
+            profileGetUseCase().onSuccess {
+                it.collect {
+                    setState { copy(myName = it.name) }
+                }
+            }
         }
     }
 
@@ -51,10 +65,6 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
         }
-    }
-
-    private fun loadProfileData() {
-
     }
 
     private fun postProfileEdit() {
@@ -76,6 +86,7 @@ data class ProfileScreenState(
     val isShowSettingBottomSheet: Boolean,
     val isShowAddFriendBottomSheet: Boolean,
     val chatList: ImmutableList<FriendModel>,
+    val profileData: ProfileModel
 ) {
     companion object {
         // State의 초기값을 넣어주기위해 필수로 구현해야하는 함수
@@ -87,6 +98,7 @@ data class ProfileScreenState(
             isShowSettingBottomSheet = false,
             isShowAddFriendBottomSheet = false,
             chatList = persistentListOf(),
+            profileData = ProfileModel()
         )
     }
 }
@@ -95,7 +107,7 @@ sealed class ProfileScreenSideEffect {
     object ShowSecessionPopup : ProfileScreenSideEffect()
     data class LaunchImagePicker(val requestCode: Int) : ProfileScreenSideEffect()
     object NavigateToLogin : ProfileScreenSideEffect()
-    object NavigateToMyQR : ProfileScreenSideEffect()
+    data class NavigateToMyQR(val id: String) : ProfileScreenSideEffect()
     object NavigateToAddFriendWithQR : ProfileScreenSideEffect()
     data class NavigateToChat(val id: String) : ProfileScreenSideEffect()
 }
@@ -103,6 +115,7 @@ sealed class ProfileScreenSideEffect {
 
 sealed class ProfileIntent {
     object InitMyFriend : ProfileIntent()
+    object InitMyProfile : ProfileIntent()
     object Setting : ProfileIntent()
     object AddFriend : ProfileIntent()
     object HideBottomSheet : ProfileIntent()
@@ -113,7 +126,7 @@ sealed class ProfileIntent {
     object EndEditProfile : ProfileIntent()
     object Logout : ProfileIntent()
     object Secession : ProfileIntent()
-    object ShowMyQR : ProfileIntent()
+    data class ShowMyQR(val id: String) : ProfileIntent()
     object AddProfilePicture : ProfileIntent()
     object AddFriendWithQR : ProfileIntent()
 }
