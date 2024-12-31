@@ -5,12 +5,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.sweat.profile.view.AddFriendWithQRRoute
+import com.sweat.profile.view.ChattingRoute
 import com.sweat.profile.view.FriendQrGenerateRoute
 import com.sweat.profile.view.ProfileRoute
 
 const val profileRoute = "profileRoute"
 const val addFriendWithQRRoute = "addFriendWithQRRoute"
 const val friendQrGenerateRoute = "friendQrGenerateRoute"
+const val chattingRoute = "chattingRoute"
 
 fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
     this.navigate(profileRoute, navOptions)
@@ -18,6 +20,10 @@ fun NavController.navigateToProfileRoute(navOptions: NavOptions? = null) {
 
 fun NavController.navigateToAddFriendWithQR(navOptions: NavOptions? = null) {
     this.navigate(addFriendWithQRRoute, navOptions)
+}
+
+fun NavController.navigateToChattingRoute(id: String, navOptions: NavOptions? = null) {
+    this.navigate("${chattingRoute}/${id}", navOptions)
 }
 
 fun NavController.navigateToFriendQrGenerate(name: String, navOptions: NavOptions? = null) {
@@ -49,6 +55,15 @@ fun NavGraphBuilder.addFriendWithQRRoute(
             navigateToProfile = navigateToProfile,
             popupBackStack = popUpBackStack,
         )
+    }
+}
+
+fun NavGraphBuilder.chattingRoute(
+    popUpBackStack: () -> Unit,
+) {
+    composable("${chattingRoute}/{id}") { backStackEntry ->
+        val id = backStackEntry.arguments?.getString("id") ?: ""
+        ChattingRoute(id = id, popUpBackStack = popUpBackStack)
     }
 }
 

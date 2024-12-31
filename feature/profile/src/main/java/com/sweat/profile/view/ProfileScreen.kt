@@ -208,7 +208,7 @@ fun ProfileScreen(
                             .padding(15.dp),
                     ) {
                         Text(
-                            text = "손찬형", /*state.myName*/
+                            text = state.myName,
                             style = SSBTypography.subTitle,
                             fontWeight = FontWeight(600),
                             color = Color(0xFF000000),
@@ -219,6 +219,7 @@ fun ProfileScreen(
                             onValueChange = {
                                 handleIntent(ProfileIntent.SetMyIntro(it))
                             },
+                            enabled = state.isProfileEditing,
                             textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color.Black),
                             cursorBrush = SolidColor(Color.Black),
                             decorationBox = { innerTextField ->
@@ -241,30 +242,12 @@ fun ProfileScreen(
                     }
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    item() {
+                    items(state.chatList) { state ->
                         ChatListItem(
-                            state = FriendModel(id = 1, friend = "오은찬"),
-                            currentMessage = "얼굴에 라면국물튐",
-                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
-                        )
-                        ChatListItem(
-                            state = FriendModel(id = 2, friend = "김주은"),
-                            currentMessage = "안녕하오",
-                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
-                        )
-                        ChatListItem(
-                            state = FriendModel(id = 3, friend = "이명훈"),
-                            currentMessage = """ 'blue labster' """,
+                            state = state,
                             onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
                         )
                     }
-//                    items(state.chatList) { state ->
-//                        ChatListItem(
-//                            state = state,
-//                            onClick = { id -> handleIntent(ProfileIntent.StartChat(id.toString())) },
-//                        )
-//                    }
-                    // TODO:  
                 }
             }
         }

@@ -67,9 +67,9 @@ class SSBAppState(
                 restoreState = true
             }
             when (topLevelDestination) {
-                TopLevelDestination.Exercise -> navController.navigateToExerciseRoute(topLevelNavOptions) // navController.navigateToExercise(topLevelNavOptions)
-                TopLevelDestination.Home -> navController.navigateToHomeRoute(topLevelNavOptions) // navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.Profile -> navController.navigateToProfileRoute(topLevelNavOptions) // navController.navigateToProfile(topLevelNavOptions)
+                TopLevelDestination.Exercise ->  navController.navigateToExerciseRoute(topLevelNavOptions)
+                TopLevelDestination.Home ->  navController.navigateToHomeRoute(topLevelNavOptions)
+                TopLevelDestination.Profile -> navController.navigateToProfileRoute(topLevelNavOptions)
             }
         }
     }

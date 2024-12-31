@@ -2,10 +2,10 @@ package com.sweat.network.di
 
 import android.content.Context
 import android.util.Log
-import com.sweat.network.BuildConfig
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.sweat.network.BuildConfig
 import com.sweat.network.api.AuthApi
 import com.sweat.network.api.ExerciseApi
 import com.sweat.network.api.FriendApi
@@ -65,7 +65,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCookieJar(): CookieJar {
-        return SimpleCookieJar() // 쿠키 저장소
+        return SimpleCookieJar()
     }
 
     @Provides
@@ -87,13 +87,12 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL) // todo : Add BaseUrl - Use BuildConfig
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
-    // todo : Add API
     @Provides
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
@@ -113,4 +112,5 @@ object NetworkModule {
     @Provides
     fun provideExerciseApi(retrofit: Retrofit): ExerciseApi =
         retrofit.create(ExerciseApi::class.java)
+
 }

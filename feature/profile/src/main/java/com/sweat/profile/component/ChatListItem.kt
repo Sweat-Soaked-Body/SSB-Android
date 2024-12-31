@@ -27,7 +27,6 @@ import com.sweat.model.friend.FriendModel
 fun ChatListItem(
     modifier: Modifier = Modifier,
     state: FriendModel,
-    currentMessage: String,  // TODO:
     onClick: (Int) -> Unit,
 ) {
     Row(
@@ -53,7 +52,7 @@ fun ChatListItem(
                     color = Color(0xFF000000),
                 )
                 Text(
-                    text = currentMessage,
+                    text = "읽지 않은 메시지가 1개 있습니다", // TODO:  
                     style = SSBTypography.label,
                     fontWeight = FontWeight(400),
                     color = SSBColor.gray600

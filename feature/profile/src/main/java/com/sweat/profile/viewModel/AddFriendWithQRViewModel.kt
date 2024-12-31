@@ -1,7 +1,9 @@
 package com.sweat.profile.viewModel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.sweat.common.base.BaseViewModel
+import com.sweat.common.exception.BadRequestException
 import com.sweat.domain.friend.FriendAddUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -19,25 +21,38 @@ class AddFriendWithQRViewModel @Inject constructor(
     override fun handleIntent(intent: AddFriendWithQRIntent) {
         when (intent) {
             is AddFriendWithQRIntent.AddFriend -> addFriend(intent.name)
+            is AddFriendWithQRIntent.SetFriendName -> setState { copy(friendName = intent.name) }
         }
     }
 
     private fun addFriend(name: String) {
-        // 요청 중인 경우 새로운 요청 차단
         if (isRequestInProgress) return
 
-        // 요청 상태를 진행 중으로 설정
         isRequestInProgress = true
 
         viewModelScope.launch {
-            friendAddUseCase(name)
-                .onSuccess {
-                    setState { copy(isFinishAddFriend = true) }
-                    delay(5000)
-                    postSideEffect(AddFriendWithQRScreenSideEffect.NavigateToProfile)
-                }
+            try {
+                friendAddUseCase(name)
+                    .onSuccess {
+                        it.collect {} // 실제 데이터 스트림 처리
+                        setState { copy(isFinishAddFriend = true) }
+                        delay(5000)
+                        postSideEffect(AddFriendWithQRScreenSideEffect.NavigateToProfile)
+                    }
+            } catch (e: BadRequestException) {
+                setState { copy(isFinishAddFriend = true) }
+                delay(5000)
+                postSideEffect(AddFriendWithQRScreenSideEffect.NavigateToProfile)
+            } catch (e: Exception) {
+                setState { copy(isFinishAddFriend = true) }
+                delay(5000)
+                postSideEffect(AddFriendWithQRScreenSideEffect.NavigateToProfile)
+            } finally {
+                isRequestInProgress = false
+            }
         }
     }
+
 }
 
 data class AddFriendWithQRScreenState(
@@ -59,4 +74,5 @@ sealed class AddFriendWithQRScreenSideEffect {
 
 sealed class AddFriendWithQRIntent {
     data class AddFriend(val name: String) : AddFriendWithQRIntent()
+    data class SetFriendName(val name: String) : AddFriendWithQRIntent()
 }

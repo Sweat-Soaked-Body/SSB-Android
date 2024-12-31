@@ -25,8 +25,10 @@ import com.sweat.exercise.navigateToAddExercise
 import com.sweat.login.loginRoute
 import com.sweat.login.navigateToLoginRoute
 import com.sweat.profile.addFriendWithQRRoute
+import com.sweat.profile.chattingRoute
 import com.sweat.profile.friendQrGenerateRoute
 import com.sweat.profile.navigateToAddFriendWithQR
+import com.sweat.profile.navigateToChattingRoute
 import com.sweat.profile.navigateToFriendQrGenerate
 import com.sweat.profile.navigateToProfileRoute
 import com.sweat.profile.profileRoute
@@ -63,7 +65,7 @@ fun SSBNavHost(
     ) {
         profileRoute(
             navigateToAddFriendWithQR = navController::navigateToAddFriendWithQR,
-            navigateToChat = {},//{ navController::navigateToChat },
+            navigateToChat = navController::navigateToChattingRoute,
             navigateToLogin = navController::navigateToLoginRoute,
             navigateToMyQR = navController::navigateToFriendQrGenerate,
         )
@@ -113,5 +115,7 @@ fun SSBNavHost(
             popUpBackStack = navController::popBackStack,
             navigateToFoodSearch = navController::navigateToSearchFoodScreen
         )
+
+        chattingRoute(popUpBackStack = {})
     }
 }

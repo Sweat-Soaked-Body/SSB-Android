@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 카메라 하드웨어 기능 -->
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="true" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- NFC 기능 -->
-    <uses-permission android:name="android.permission.NFC" />
 
     <!-- 네트워크 접근 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- 플래시 권한 (카메라를 통해 조명 사용 시 필요) -->
-    <uses-feature android:name="android.hardware.camera.flash" />
+    <!-- NFC 기능 -->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
 
+    <!-- HCE 서비스 등록 -->
     <application
         android:name=".SSBApplication"
         android:allowBackup="true"
@@ -28,6 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SSBAndroid"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -35,10 +33,8 @@
             android:theme="@style/Theme.SSBAndroid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

@@ -1,6 +1,7 @@
 package com.sweat.profile.view
 
 import android.Manifest
+import android.util.Log
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -108,11 +109,8 @@ fun AddFriendWithQRScreen(
                             previewView = this,
                             lifecycleOwner = lifecycleOwner,
                             onQrcodeScanned = {
-                                handleIntent(
-                                    AddFriendWithQRIntent.AddFriend(
-                                        it ?: ""
-                                    )
-                                )
+                                handleIntent(AddFriendWithQRIntent.AddFriend(it))
+                                handleIntent(AddFriendWithQRIntent.SetFriendName(it))
                             },
                         )
                     }

@@ -356,6 +356,20 @@ fun ThunderIcon(
 
 @Stable
 @Composable
+fun SendIcon(
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+) {
+    Icon(
+        painter = painterResource(id = R.drawable.send),
+        contentDescription = "",
+        tint = color,
+        modifier = modifier
+    )
+}
+
+@Stable
+@Composable
 fun ProfileCircleIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
