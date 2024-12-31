@@ -11,4 +11,8 @@ interface MainDataSource {
     suspend fun foodRoutineCheck(date: String): Flow<List<FoodRoutineResponse>>
 
     suspend fun exerciseSetAdd(body: ExerciseSetRequest): Flow<Unit>
+
+    suspend fun deleteExerciseSet(setId: Int): Flow<Unit>
+
+    suspend fun deleteExerciseRoutine(routineId: Int): Flow<Unit>
 }

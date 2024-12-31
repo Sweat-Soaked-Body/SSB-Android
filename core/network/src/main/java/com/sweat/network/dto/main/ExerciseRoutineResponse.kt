@@ -13,6 +13,7 @@ data class  ExerciseRoutineResponse(
 
 @JsonClass(generateAdapter = true)
 data class ExerciseSet(
+    @Json(name = "id") val id: Int,
     @Json(name = "set") val set: Int,
     @Json(name = "routine") val routine: Int,
     @Json(name = "weight") val weight: Int,

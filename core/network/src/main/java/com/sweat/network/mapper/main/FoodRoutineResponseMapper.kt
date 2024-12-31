@@ -11,7 +11,8 @@ fun FoodRoutineResponse.toEntity(): FoodRoutineResponseEntity =
         food = this.food.map { it.toEntity() },
         date = this.date,
         serviceUser = this.serviceUser,
-        type = this.type
+        type = this.type,
+        image = this.image
     )
 
 fun Food.toEntity(): FoodEntity {
@@ -20,7 +21,6 @@ fun Food.toEntity(): FoodEntity {
         name = this.name,
         weight = this.weight,
         calories = this.calories,
-        image = this.image,
         serviceUser = this.serviceUser,
         diet = this.diet
     )

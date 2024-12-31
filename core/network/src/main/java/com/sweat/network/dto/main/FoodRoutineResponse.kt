@@ -9,7 +9,8 @@ data class FoodRoutineResponse(
     @Json(name = "food") val food: List<Food>,
     @Json(name = "date") val date: String,
     @Json(name = "service_user") val serviceUser: Int,
-    @Json(name = "type") val type: String
+    @Json(name = "type") val type: String,
+    @Json(name = "image") val image: String
 )
 
 @JsonClass(generateAdapter = true)
@@ -18,7 +19,6 @@ data class Food(
     @Json(name = "name") val name: String,
     @Json(name = "weight") val weight: Int,
     @Json(name = "calories") val calories: Int,
-    @Json(name = "image") val image: String,
     @Json(name = "service_user") val serviceUser: Int,
     @Json(name = "diet") val diet: Int
 )

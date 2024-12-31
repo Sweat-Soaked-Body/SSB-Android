@@ -13,11 +13,13 @@ fun NavController.navigateToHomeRoute(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeRoute(
-    navigateToFood: () -> Unit
+    navigateToFood: () -> Unit,
+    navigateToTimer: () -> Unit
 ) {
     composable(homeRoute) {
         MainRoute(
-            navigateToFood = navigateToFood
+            navigateToFood = navigateToFood,
+            navigateToTimer = navigateToTimer
         )
     }
 }

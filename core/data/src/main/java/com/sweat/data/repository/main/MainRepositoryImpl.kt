@@ -31,4 +31,12 @@ class MainRepositoryImpl @Inject constructor(
         )
         return mainDataSource.exerciseSetAdd(body = request)
     }
+
+    override suspend fun deleteExerciseSet(setId: Int): Flow<Unit> {
+        return mainDataSource.deleteExerciseSet(setId = setId)
+    }
+
+    override suspend fun deleteExerciseRoutine(routineId: Int): Flow<Unit> {
+        return mainDataSource.deleteExerciseRoutine(routineId = routineId)
+    }
 }

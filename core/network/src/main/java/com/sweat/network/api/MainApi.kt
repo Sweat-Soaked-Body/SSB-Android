@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MainApi {
@@ -23,5 +24,15 @@ interface MainApi {
     @POST("/routine/set")
     suspend fun exerciseSetAdd(
         @Body body: ExerciseSetRequest
-    ): ExerciseSetRequest
+    )
+
+    @DELETE("/routine/set/{set_id}")
+    suspend fun deleteExerciseSet(
+        @Path("set_id") setId: Int
+    )
+
+    @DELETE("/routine/{routine_id}")
+    suspend fun deleteExerciseRoutine(
+        @Path("routine_id") routineId: Int
+    )
 }
