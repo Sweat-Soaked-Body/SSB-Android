@@ -116,6 +116,6 @@ fun SSBNavHost(
             navigateToFoodSearch = navController::navigateToSearchFoodScreen
         )
 
-        chattingRoute(popUpBackStack = {})
+        chattingRoute(popUpBackStack = navController::popBackStack)
     }
 }
