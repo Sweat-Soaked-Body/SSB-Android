@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sweat.design_system.component.modifier.clickableSingle
 import com.sweat.design_system.icon.ChevronLeftIcon
 import com.sweat.design_system.theme.SSBTypography
 import com.sweat.design_system.theme.color.SSBColor
@@ -50,6 +51,7 @@ fun ChattingRoute(
         modifier = modifier,
         state = state,
         handleIntent = viewModel::handleIntent,
+        popUpBackStack = popUpBackStack,
     )
 }
 
@@ -58,6 +60,7 @@ fun ChattingScreen(
     modifier: Modifier = Modifier,
     state: ChattingState,
     handleIntent: (ChattingIntent) -> Unit,
+    popUpBackStack: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -76,7 +79,7 @@ fun ChattingScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 15.dp)
             ) {
-                ChevronLeftIcon()
+                ChevronLeftIcon(modifier = Modifier.clickableSingle { popUpBackStack() })
                 Text(
                     text = "문혜성",
                     style = SSBTypography.subTitle,
@@ -109,7 +112,7 @@ fun ChattingScreen(
         ChattingTextField(
             textState = state.messageInputTextState,
             updateTextValue = { handleIntent(ChattingIntent.SetMessageInputTextState(it)) },
-            onclick = {handleIntent(ChattingIntent.SendMessage(message = state.messageInputTextState))}
+            onclick = { handleIntent(ChattingIntent.SendMessage(message = state.messageInputTextState)) }
         )
     }
 }
@@ -120,5 +123,6 @@ fun PreviewChattingScreen() {
     ChattingScreen(
         handleIntent = { _ -> },
         state = ChattingState.getInitialState(),
+        popUpBackStack = {}
     )
 }
